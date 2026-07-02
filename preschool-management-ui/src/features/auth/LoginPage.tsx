@@ -4,10 +4,10 @@ import {
     CardContent,
     Container,
     Grid,
-    Typography,
 } from "@mui/material";
-import SchoolIcon from "@mui/icons-material/School";
+
 import LoginForm from "./LoginForm";
+import schoolImage from "../../assets/images/school-3d.png";
 
 export default function LoginPage() {
     return (
@@ -15,99 +15,61 @@ export default function LoginPage() {
             sx={{
                 minHeight: "100vh",
                 background:
-                    "linear-gradient(135deg,#2563EB 0%,#4F46E5 100%)",
+                    "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 p: 2,
             }}
         >
-            <Container maxWidth="md">
+            <Container maxWidth="lg">
                 <Card
-                    elevation={8}
+                    elevation={12}
                     sx={{
-                        borderRadius: 3,
+                        borderRadius: 4,
                         overflow: "hidden",
+                        minHeight: 600,
                     }}
                 >
-                    <Grid container>
+                    <Grid container sx={{ height: "100%" }}>
                         {/* Left Side */}
-
                         <Grid
                             size={{ xs: 12, md: 6 }}
                             sx={{
-                                background:
-                                    "linear-gradient(180deg,#2563EB,#1D4ED8)",
-                                color: "#fff",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                p: 4,
+                                background: "linear-gradient(180deg,#2563EB,#1D4ED8)",
+                                overflow: "hidden",
+                                minHeight: 600,
                             }}
                         >
-                            <Box>
-                                <SchoolIcon
-                                    sx={{
-                                        fontSize: 54,
-                                        mb: 2,
-                                    }}
-                                />
-
-                                <Typography
-                                    variant="h5"
-                                    sx={{
-                                        fontWeight: 700,
-                                    }}
-                                >
-                                    School ERP
-                                </Typography>
-
-                                <Typography
-                                    sx={{
-                                        mt: 1,
-                                        mb: 3,
-                                        opacity: 0.9,
-                                        fontSize: 14,
-                                    }}
-                                >
-                                    Smart School Management System
-                                </Typography>
-
-                                <Box
-                                    sx={{
-                                        width: 240,
-                                        height: 180,
-                                        borderRadius: 3,
-                                        background: "rgba(255,255,255,.15)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontWeight: 600,
-                                        fontSize: 16,
-                                        mx: "auto",
-                                    }}
-                                >
-                                    3D School Illustration
-                                </Box>
-                            </Box>
+                            <Box
+                                component="img"
+                                src={schoolImage}
+                                alt="School ERP"
+                                sx={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    display: "block",
+                                }}
+                            />
                         </Grid>
 
                         {/* Right Side */}
-
                         <Grid
                             size={{ xs: 12, md: 6 }}
                             sx={{
+                                backgroundColor: "#fff",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                p: 4,
-                                background: "#fff",
+                                p: 5,
+                                minHeight: 600,
                             }}
                         >
                             <CardContent
                                 sx={{
                                     width: "100%",
-                                    maxWidth: 340,
+                                    maxWidth: 360,
                                     p: "0 !important",
                                 }}
                             >
