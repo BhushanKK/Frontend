@@ -1,18 +1,49 @@
+/**
+ * Login Request
+ */
 export interface LoginRequest {
-    username: string;
-    password: string;
+  userName: string;
+  password: string;
 }
 
+/**
+ * JWT Token Data
+ */
 export interface LoginData {
-    accessToken: string;
-    refreshToken: string;
-    expiresAt: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: string;
 }
 
+/**
+ * Login API Response
+ */
 export interface LoginResponse {
-    access: boolean;
-    message: string;
-    statusCode: number;
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: LoginData;
+}
 
-    data: LoginData;
+/**
+ * Generic API Response
+ */
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: T;
+}
+
+/**
+ * Authentication Store State
+ */
+export interface AuthState {
+  isAuthenticated: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
+  expiresAt: string | null;
+
+  login: (data: LoginData) => void;
+  logout: () => void;
 }

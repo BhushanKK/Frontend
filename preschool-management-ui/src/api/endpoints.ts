@@ -1,5 +1,9 @@
 const API = {
-    LOGIN: "/api/auth/login",
-    REFRESH: "/api/auth/refresh"
-}
-export default API
+  AUTH: {
+    LOGIN: "/auth/login",
+    REFRESH_TOKEN: "/auth/refresh-token",
+    LOGOUT: "/auth/logout",
+  },
+};
+
+export default API;

@@ -1,7 +1,21 @@
-import axiosInstance from "./axiosInstance";
-import type { LoginRequest} from "../types/auth";
+import axiosInstance from "./axios";
+import API from "./endpoints";
 
-export const login = async (request: LoginRequest) => {
-    const response = await axiosInstance.post("/api/auth/login", request);
-    return response.data;
+import type {
+  LoginRequest,
+  LoginResponse,
+} from "../types/auth";
+
+/**
+ * Login API
+ */
+export const login = async (
+  request: LoginRequest
+): Promise<LoginResponse> => {
+  const response = await axiosInstance.post<LoginResponse>(
+    API.AUTH.LOGIN,
+    request
+  );
+
+  return response.data;
 };
