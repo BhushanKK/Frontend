@@ -16,7 +16,6 @@ import RecentActivity from "../Components/Dashboard/RecentActivity";
 export default function DashboardPage() {
   return (
     <Box>
-
       {/* Page Title */}
       <Typography
         variant="h5"
