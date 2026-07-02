@@ -1,5 +1,7 @@
+import { useState } from "react";
 import {
   Box,
+  Collapse,
   Divider,
   Drawer,
   List,
@@ -11,15 +13,10 @@ import {
 } from "@mui/material";
 
 import {
+  AccountTree,
   Dashboard,
-  School,
-  People,
-  Class,
-  Payments,
-  EventAvailable,
-  Quiz,
-  MenuBook,
-  Settings,
+  ExpandLess,
+  ExpandMore,
 } from "@mui/icons-material";
 
 import { NavLink } from "react-router-dom";
@@ -31,55 +28,46 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-const menus = [
+interface MenuItem {
+  text: string;
+  path?: string;
+  icon?: React.ReactNode;
+  children?: MenuItem[];
+}
+
+const menus: MenuItem[] = [
   {
     text: "Dashboard",
     icon: <Dashboard fontSize="small" />,
     path: "/dashboard",
   },
   {
-    text: "Students",
-    icon: <School fontSize="small" />,
-    path: "/students",
-  },
-  {
-    text: "Teachers",
-    icon: <People fontSize="small" />,
-    path: "/teachers",
-  },
-  {
-    text: "Classes",
-    icon: <Class fontSize="small" />,
-    path: "/classes",
-  },
-  {
-    text: "Fees",
-    icon: <Payments fontSize="small" />,
-    path: "/fees",
-  },
-  {
-    text: "Attendance",
-    icon: <EventAvailable fontSize="small" />,
-    path: "/attendance",
-  },
-  {
-    text: "Exams",
-    icon: <Quiz fontSize="small" />,
-    path: "/exams",
-  },
-  {
-    text: "Library",
-    icon: <MenuBook fontSize="small" />,
-    path: "/library",
-  },
-  {
-    text: "Settings",
-    icon: <Settings fontSize="small" />,
-    path: "/settings",
+    text: "Masters",
+    icon: <AccountTree fontSize="small" />,
+    children: [
+      { text: "Academic Year Master", path: "/masters/Academic Year" },
+      { text: "Financial Year Master", path: "/masters/Financial Year" },
+      { text: "Religion Master", path: "/masters/Commitee" },
+      { text: "Commitee Master", path: "/masters/School Details" },
+      { text: "Holidays Master", path: "/masters/Holidays" },
+      { text: "Religion Master", path: "/masters/religion" },
+      { text: "Category Master", path: "/masters/category" },
+      { text: "Caste Master", path: "/masters/caste" },
+
+    ],
   },
 ];
 
 function DrawerContent({ onClose }: { onClose: () => void }) {
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+
+  const toggleMenu = (menu: string) => {
+    setOpenMenus((prev) => ({
+      ...prev,
+      [menu]: !prev[menu],
+    }));
+  };
+
   return (
     <>
       <Toolbar
@@ -101,63 +89,105 @@ function DrawerContent({ onClose }: { onClose: () => void }) {
 
       <Divider />
 
-      <Box
-        sx={{
-          py: 1,
-        }}
-      >
-        <List>
-          {menus.map((menu) => (
-            <ListItemButton
-              key={menu.text}
-              component={NavLink}
-              to={menu.path}
-              onClick={onClose}
-              sx={{
-                mx: 1.5,
-                my: 0.5,
-                borderRadius: 2,
-                minHeight: 46,
-
-                "&.active": {
-                  bgcolor: "primary.main",
-                  color: "#fff",
-
-                  "& .MuiListItemIcon-root": {
-                    color: "#fff",
-                  },
-                },
-
-                "&:hover": {
-                  bgcolor: "#EAF3FF",
-                },
-              }}
-            >
-              <ListItemIcon
+      <List sx={{ py: 1 }}>
+        {menus.map((menu) => {
+          // Normal Menu
+          if (!menu.children) {
+            return (
+              <ListItemButton
+                key={menu.text}
+                component={NavLink}
+                to={menu.path!}
+                onClick={onClose}
                 sx={{
-                  minWidth: 38,
-                  color: "text.secondary",
+                  mx: 1.5,
+                  my: 0.5,
+                  borderRadius: 2,
+
+                  "&.active": {
+                    bgcolor: "primary.main",
+                    color: "#fff",
+
+                    "& .MuiListItemIcon-root": {
+                      color: "#fff",
+                    },
+                  },
                 }}
               >
-                {menu.icon}
-              </ListItemIcon>
+                <ListItemIcon sx={{ minWidth: 38 }}>
+                  {menu.icon}
+                </ListItemIcon>
 
-              <ListItemText
-                primary={
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                    }}
-                  >
-                    {menu.text}
-                  </Typography>
-                }
-              />
-            </ListItemButton>
-          ))}
-        </List>
-      </Box>
+                <ListItemText primary={menu.text} />
+              </ListItemButton>
+            );
+          }
+
+          // Expandable Menu
+          return (
+            <Box key={menu.text}>
+              <ListItemButton
+                onClick={() => toggleMenu(menu.text)}
+                sx={{
+                  mx: 1.5,
+                  my: 0.5,
+                  borderRadius: 2,
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 38 }}>
+                  {menu.icon}
+                </ListItemIcon>
+
+                <ListItemText primary={menu.text} />
+
+                {openMenus[menu.text] ? (
+                  <ExpandLess />
+                ) : (
+                  <ExpandMore />
+                )}
+              </ListItemButton>
+
+              <Collapse
+                in={openMenus[menu.text]}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List disablePadding>
+                  {menu.children.map((child) => (
+                    <ListItemButton
+                      key={child.text}
+                      component={NavLink}
+                      to={child.path!}
+                      onClick={onClose}
+                      sx={{
+                        pl: 6,
+                        py: 0.8,
+
+                        "&.active": {
+                          bgcolor: "#E3F2FD",
+                          color: "primary.main",
+                        },
+                      }}
+                    >
+                      <ListItemText
+                        primary={
+                          <Typography
+                            sx={{
+                              fontSize: 13,
+                            }}
+                          >
+                            {child.text}
+                          </Typography>
+                        }
+                      />
+                    </ListItemButton>
+                  ))}
+                </List>
+              </Collapse>
+            </Box>
+          );
+        })}
+      </List>
     </>
   );
 }
@@ -166,26 +196,22 @@ export default function Sidebar({
   mobileOpen,
   onClose,
 }: SidebarProps) {
+  const drawerContent = <DrawerContent onClose={onClose} />;
+
   return (
     <Box
       component="nav"
       sx={{
-        width: {
-          lg: drawerWidth,
-        },
-        flexShrink: {
-          lg: 0,
-        },
+        width: { lg: drawerWidth },
+        flexShrink: { lg: 0 },
       }}
     >
-      {/* Mobile Drawer */}
+      {/* Mobile */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
         onClose={onClose}
-        ModalProps={{
-          keepMounted: true,
-        }}
+        ModalProps={{ keepMounted: true }}
         sx={{
           display: {
             xs: "block",
@@ -193,15 +219,15 @@ export default function Sidebar({
           },
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: "border-box",
             borderRight: "1px solid #ECECEC",
+            boxSizing: "border-box",
           },
         }}
       >
-        <DrawerContent onClose={onClose} />
+        {drawerContent}
       </Drawer>
 
-      {/* Desktop Drawer */}
+      {/* Desktop */}
       <Drawer
         variant="permanent"
         open
@@ -210,16 +236,15 @@ export default function Sidebar({
             xs: "none",
             lg: "block",
           },
-
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: "border-box",
             borderRight: "1px solid #ECECEC",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "#fff",
+            boxSizing: "border-box",
           },
         }}
       >
-        <DrawerContent onClose={() => { }} />
+        {drawerContent}
       </Drawer>
     </Box>
   );
