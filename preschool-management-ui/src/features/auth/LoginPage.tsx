@@ -6,14 +6,8 @@ import {
     Grid,
     Typography,
 } from "@mui/material";
-
 import SchoolIcon from "@mui/icons-material/School";
-
 import LoginForm from "./LoginForm";
-
-// Uncomment after adding your assets
-// import Logo from "../../assets/logo.png";
-// import LoginIllustration from "../../assets/login.svg";
 
 export default function LoginPage() {
     return (
@@ -21,23 +15,23 @@ export default function LoginPage() {
             sx={{
                 minHeight: "100vh",
                 background:
-                    "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)",
+                    "linear-gradient(135deg,#2563EB 0%,#4F46E5 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                py: 4,
+                p: 2,
             }}
         >
-            <Container maxWidth="lg">
+            <Container maxWidth="md">
                 <Card
-                    elevation={10}
+                    elevation={8}
                     sx={{
-                        borderRadius: 5,
+                        borderRadius: 3,
                         overflow: "hidden",
                     }}
                 >
-                    <Grid container sx={{ minHeight: 650 }}>
-                        {/* Left Section */}
+                    <Grid container>
+                        {/* Left Side */}
 
                         <Grid
                             size={{ xs: 12, md: 6 }}
@@ -48,76 +42,49 @@ export default function LoginPage() {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                p: 6,
+                                p: 4,
                             }}
                         >
-                            <Box
-                                component="div"
-                                sx={{
-                                    textAlign: "center",
-                                }}
-                            >
-                                {/* Replace with your logo */}
-
-                                {/* <img
-    src={Logo}
-    alt="Logo"
-    width={80}
-  /> */}
-
+                            <Box>
                                 <SchoolIcon
                                     sx={{
-                                        fontSize: 80,
-                                        mb: 3,
+                                        fontSize: 54,
+                                        mb: 2,
                                     }}
                                 />
 
                                 <Typography
-                                    component="h1"
-                                    variant="h3"
+                                    variant="h5"
                                     sx={{
                                         fontWeight: 700,
-                                        mb: 2,
                                     }}
                                 >
                                     School ERP
                                 </Typography>
 
                                 <Typography
-                                    component="p"
-                                    variant="h6"
                                     sx={{
+                                        mt: 1,
+                                        mb: 3,
                                         opacity: 0.9,
-                                        mb: 4,
+                                        fontSize: 14,
                                     }}
                                 >
                                     Smart School Management System
                                 </Typography>
 
-                                {/* Replace with your illustration */}
-
-                                {/* <img
-      src={LoginIllustration}
-      alt="Illustration"
-      style={{
-        width: "100%",
-        maxWidth: 380,
-      }}
-  /> */}
-
                                 <Box
-                                    component="div"
                                     sx={{
-                                        width: "100%",
-                                        maxWidth: 380,
-                                        height: 280,
-                                        borderRadius: 4,
+                                        width: 240,
+                                        height: 180,
+                                        borderRadius: 3,
                                         background: "rgba(255,255,255,.15)",
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        fontSize: 22,
                                         fontWeight: 600,
+                                        fontSize: 16,
+                                        mx: "auto",
                                     }}
                                 >
                                     3D School Illustration
@@ -125,7 +92,7 @@ export default function LoginPage() {
                             </Box>
                         </Grid>
 
-                        {/* Right Section */}
+                        {/* Right Side */}
 
                         <Grid
                             size={{ xs: 12, md: 6 }}
@@ -133,14 +100,15 @@ export default function LoginPage() {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                background: "#ffffff",
-                                p: 6,
+                                p: 4,
+                                background: "#fff",
                             }}
                         >
                             <CardContent
                                 sx={{
                                     width: "100%",
-                                    maxWidth: 420,
+                                    maxWidth: 340,
+                                    p: "0 !important",
                                 }}
                             >
                                 <LoginForm />

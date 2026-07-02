@@ -4,13 +4,9 @@ import {
     Button,
     Checkbox,
     CircularProgress,
-    FormControl,
     FormControlLabel,
-    FormHelperText,
     IconButton,
     InputAdornment,
-    InputLabel,
-    OutlinedInput,
     Stack,
     TextField,
     Typography,
@@ -45,19 +41,21 @@ export default function LoginForm() {
             }}
         >
             <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: 700,
-                    mb: 1,
-                }}
-            >
+    variant="h5"
+    sx={{
+        fontWeight: 700,
+        mb: 0.5,
+    }}
+>
                 Welcome Back 👋
             </Typography>
 
             <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{ mb: 4 }}
+                variant="body2"
+sx={{
+    mb: 3,
+    color: "text.secondary",
+}}
             >
                 Sign in to continue to School Management System
             </Typography>
@@ -68,9 +66,10 @@ export default function LoginForm() {
                 </Alert>
             )}
 
-            <Stack spacing={3}>
+            <Stack spacing={2}>
                 <TextField
                     label="Username"
+                    size="small"
                     fullWidth
                     {...register("userName", {
                         required: "Username is required",
@@ -81,6 +80,7 @@ export default function LoginForm() {
 
                 <TextField
                     label="Password"
+                    size="small"
                     type={showPassword ? "text" : "password"}
                     fullWidth
                     {...register("password", {
@@ -131,11 +131,13 @@ export default function LoginForm() {
                 <Button
                     type="submit"
                     variant="contained"
-                    size="large"
+                    size="medium"
                     disabled={loading}
                     sx={{
-                        height: 50,
+                        height: 42,
                         borderRadius: 2,
+                        fontWeight:600,
+                        fontSize:14
                     }}
                 >
                     {loading ? (
