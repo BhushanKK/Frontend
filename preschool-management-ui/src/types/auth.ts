@@ -26,6 +26,23 @@ export interface LoginResponse {
 }
 
 /**
+ * Refresh Token Request
+ */
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+/**
+ * Refresh Token Response
+ */
+export interface RefreshTokenResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: LoginData;
+}
+
+/**
  * Generic API Response
  */
 export interface ApiResponse<T> {
@@ -45,5 +62,12 @@ export interface AuthState {
   expiresAt: string | null;
 
   login: (data: LoginData) => void;
+
+  updateTokens: (
+    accessToken: string,
+    refreshToken: string,
+    expiresAt: string
+  ) => void;
+
   logout: () => void;
 }

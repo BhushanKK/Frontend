@@ -29,6 +29,19 @@ export const isAuthenticated = (): boolean => {
 };
 
 /**
+ * Updates the stored tokens after a refresh.
+ */
+export const updateTokens = (
+  accessToken: string,
+  refreshToken: string,
+  expiresAt: string
+): void => {
+  useAuthStore
+    .getState()
+    .updateTokens(accessToken, refreshToken, expiresAt);
+};
+
+/**
  * Clears authentication state.
  */
 export const clearTokens = (): void => {
@@ -46,4 +59,23 @@ export const isTokenExpired = (): boolean => {
   }
 
   return new Date(expiresAt).getTime() <= Date.now();
+};
+
+/**
+ * Returns true if the access token will expire soon.
+ * (Useful for proactive refresh.)
+ */
+export const willTokenExpireSoon = (
+  minutes = 2
+): boolean => {
+  const expiresAt = getTokenExpiry();
+
+  if (!expiresAt) {
+    return true;
+  }
+
+  const expiry = new Date(expiresAt).getTime();
+  const now = Date.now();
+
+  return expiry - now <= minutes * 60 * 1000;
 };

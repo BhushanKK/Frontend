@@ -1,35 +1,46 @@
-  import { create } from "zustand";
-  import { persist } from "zustand/middleware";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-  import type { AuthState, LoginData } from "../types/auth";
+import type { AuthState, LoginData } from "../types/auth";
 
-  export const useAuthStore = create<AuthState>()(
-    persist(
-      (set) => ({
-        isAuthenticated: false,
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      isAuthenticated: false,
 
-        accessToken: null,
-        refreshToken: null,
-        expiresAt: null,
+      accessToken: null,
+      refreshToken: null,
+      expiresAt: null,
 
-        login: (data: LoginData) =>
-          set({
-            isAuthenticated: true,
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
-            expiresAt: data.expiresAt,
-          }),
+      login: (data: LoginData) =>
+        set({
+          isAuthenticated: true,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          expiresAt: data.expiresAt,
+        }),
 
-        logout: () =>
-          set({
-            isAuthenticated: false,
-            accessToken: null,
-            refreshToken: null,
-            expiresAt: null,
-          }),
-      }),
-      {
-        name: "auth-storage",
-      }
-    )
-  );
+      updateTokens: (
+    accessToken,
+    refreshToken,
+    expiresAt
+) =>
+    set({
+        accessToken,
+        refreshToken,
+        expiresAt,
+    }),
+
+      logout: () =>
+        set({
+          isAuthenticated: false,
+          accessToken: null,
+          refreshToken: null,
+          expiresAt: null,
+        }),
+    }),
+    {
+      name: "auth-storage",
+    }
+  )
+);
