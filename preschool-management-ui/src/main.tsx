@@ -5,6 +5,14 @@ import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import App from "./app";
 import theme from "./theme/theme";
+import { ModuleRegistry, ClientSideRowModelModule, ValidationModule, PaginationModule } from "ag-grid-community";
+import "./config/agGrid";
+
+ModuleRegistry.registerModules([
+  ClientSideRowModelModule,
+  PaginationModule,
+  ValidationModule,
+]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -16,3 +24,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
     </React.StrictMode>
 );
+
+
