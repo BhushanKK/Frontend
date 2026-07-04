@@ -70,6 +70,9 @@ export default function AcademicYearPage() {
         }
         defaultValues={{
           academicYearName: editingRow?.academicYearName ?? "",
+          fromDate: editingRow?.fromDate?.split("T")[0] ?? "",
+          toDate: editingRow?.toDate?.split("T")[0] ?? "",
+          isActive: editingRow?.isActive ?? true,
         }}
         onClose={handleCloseForm}
         onSave={handleSave}
