@@ -1,7 +1,7 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
 import type {AcademicYear,AcademicYearResponse} from "../masters/academic-year/types/academicYear";
-import type { AcademicYearFormValues } from "../masters/academic-year/pages/AcademicYearForm";
+import type { AcademicYearFormValues } from "../masters/academic-year/components/AcademicYearForm";
 
 const BASE_URL = "/AcademicYearmaster";
 
