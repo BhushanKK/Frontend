@@ -1,17 +1,6 @@
-import {
-  Grid,
-  TextField,
-  Switch,
-  FormControlLabel,
-} from "@mui/material";
+import { Grid, TextField, Switch, FormControlLabel } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
-
-export interface FinancialYearFormValues {
-  financialYearName: string;
-  fromDate: string;
-  toDate: string;
-  isActive: boolean;
-}
+import type { FinancialYearFormValues } from "../types/financialYear";
 
 export default function FinancialYearForm() {
   const { control } = useFormContext<FinancialYearFormValues>();

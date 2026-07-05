@@ -1,17 +1,6 @@
-import {
-  Grid,
-  TextField,
-  Switch,
-  FormControlLabel,
-} from "@mui/material";
+import { Grid, TextField, Switch, FormControlLabel } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
-
-export interface AcademicYearFormValues {
-  academicYearName: string;
-  fromDate: string;
-  toDate: string;
-  isActive: boolean;
-}
+import type { AcademicYearFormValues } from "../types/academicYear";
 
 export default function AcademicYearForm() {
   const { control } = useFormContext<AcademicYearFormValues>();

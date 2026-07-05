@@ -96,7 +96,7 @@ export default function MasterGrid<T>({
       <Box
         className="ag-theme-quartz"
         sx={{
-          height: 550,
+          height: 450,
           width: "100%",
           border: "1px solid",
           borderColor: "divider",
@@ -114,8 +114,8 @@ export default function MasterGrid<T>({
           pagination
           paginationPageSize={10}
           paginationPageSizeSelector={[10, 20, 50, 100]}
-          rowHeight={46}
-          headerHeight={48}
+          rowHeight={36}
+          headerHeight={38}
           loadingOverlayComponent={LoadingOverlay}
           noRowsOverlayComponent={NoRowsOverlay}
           defaultColDef={{

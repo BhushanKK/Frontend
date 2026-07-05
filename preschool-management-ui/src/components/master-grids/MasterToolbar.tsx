@@ -58,14 +58,14 @@ export default function MasterToolbar({
                     sx={{
                         width: {
                             xs: "100%",
-                            sm: 300,
-                            md: 350,
+                            sm: 200,
+                            md: 250,
                         },
                     }}
                 />
 
                 {showExport && (
-                    <Button
+                    <Button size="small"
                         variant="outlined"
                         startIcon={<DownloadIcon />}
                         onClick={onExport}
@@ -79,6 +79,7 @@ export default function MasterToolbar({
                         variant="contained"
                         startIcon={<AddIcon />}
                         onClick={onAdd}
+                        size="small"
                     >
                         {addButtonText}
                     </Button>

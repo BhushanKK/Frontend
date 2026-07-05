@@ -12,3 +12,10 @@ export interface AcademicYearResponse {
   statusCode: number;
   data: AcademicYear[];
 }
+
+export interface AcademicYearFormValues {
+  academicYearName: string;
+  fromDate: string;
+  toDate: string;
+  isActive: boolean;
+}

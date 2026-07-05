@@ -1,7 +1,4 @@
-import type {
-    ColDef,
-    ICellRendererParams,
-} from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import type { FinancialYear } from "../types/financialYear";
 import { formatDate } from "../../../utils/dateFormatter";
 import { Chip } from "@mui/material";

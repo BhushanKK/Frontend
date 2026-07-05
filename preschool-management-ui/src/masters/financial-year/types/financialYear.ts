@@ -12,3 +12,10 @@ export interface FinancialYearResponse {
   statusCode: number;
   data: FinancialYear[];
 }
+
+export interface FinancialYearFormValues {
+  financialYearName: string;
+  fromDate: string;
+  toDate: string;
+  isActive: boolean;
+}

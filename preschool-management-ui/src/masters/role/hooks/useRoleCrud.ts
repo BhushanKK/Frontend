@@ -1,21 +1,21 @@
 import { useState } from "react";
 import axios from "axios";
-import { createFinancialYear, updateFinancialYear, deleteFinancialYear } from "../../../api/financialYearApi";
-import type { FinancialYear,FinancialYearFormValues } from "../types/financialYear";
+import { createRole, deleteRole, updateRole } from "../../../api/roleApi";
+import type { Role, RoleFormValues } from "../types/role";
 import type { ApiResponse } from "../../../types/auth";
 
-type SnackbarSeverity = "success" | "error" | "warning" | "info";
+type SnackbarSeverity = "success" | "warning" | "error" | "info";
 
-interface UseFinancialYearCrudProps {
-    loadFinancialYears: () => Promise<void>;
+interface UseRoleCrudProps {
+    loadRoles: () => Promise<void>;
 }
 
-export function useFinancialYearCrud({
-    loadFinancialYears }: UseFinancialYearCrudProps) {
+export function useRoles({
+    loadRoles }: UseRoleCrudProps) {
     const [openForm, setOpenForm] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [editingRow, setEditingRow] = useState<FinancialYear | null>(null);
-    const [selectedRow, setSelectedRow] = useState<FinancialYear | null>(null);
+    const [editingRow, setEditingRow] = useState<Role | null>(null);
+    const [selectRow, setSelectRow] = useState<Role | null>(null);
 
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -39,21 +39,21 @@ export function useFinancialYearCrud({
         setOpenForm(true);
     };
 
-    const handleEdit = (row: FinancialYear) => {
+    const handleEdit = (row: Role) => {
         setEditingRow(row);
         setOpenForm(true);
-    };
+    }
 
     const handleCloseForm = () => {
         setOpenForm(false);
         setEditingRow(null);
-    };
+    }
 
-    const handleSave = async (data: FinancialYearFormValues) => {
+    const handelSave = async (data: RoleFormValues) => {
         try {
             const response = editingRow
-                ? await updateFinancialYear(editingRow.financialYearId, data)
-                : await createFinancialYear(data);
+                ? await updateRole(editingRow.roleId, data)
+                : await createRole(data);
 
             switch (response.statusCode) {
                 case 409:
@@ -67,10 +67,9 @@ export function useFinancialYearCrud({
                 case 200:
                 case 201:
                     handleCloseForm();
-                    await loadFinancialYears();
-                    showSnackbar("success", response.message);
+                    await loadRoles();
+                    showSnackbar("success", response.message)
                     break;
-
                 default:
                     showSnackbar("error", response.message);
                     break;
@@ -85,26 +84,26 @@ export function useFinancialYearCrud({
         }
     };
 
-    const handleDelete = (row: FinancialYear) => {
-        setSelectedRow(row);
+    const handleDelete = (row: Role) => {
+        setSelectRow(row);
         setDeleteOpen(true);
     };
 
     const handleCloseDelete = () => {
         setDeleteOpen(false);
-        setSelectedRow(null);
+        setSelectRow(null);
     };
 
     const handleConfirmDelete = async () => {
-        if (!selectedRow) return;
+        if (!selectRow) return;
 
         try {
-            const response = await deleteFinancialYear(
-                selectedRow.financialYearId
+            const response = await deleteRole(
+                selectRow.roleId
             );
 
             if (response.success) {
-                await loadFinancialYears();
+                await loadRoles();
                 handleCloseDelete();
                 showSnackbar("info", response.message);
             }
@@ -112,19 +111,18 @@ export function useFinancialYearCrud({
             showSnackbar("error", "Failed to delete Financial Year.");
         }
     };
-
     return {
         // Form
         openForm,
         editingRow,
         handleAdd,
         handleEdit,
-        handleSave,
+        handelSave,
         handleCloseForm,
 
         // Delete
         deleteOpen,
-        selectedRow,
+        selectRow,
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,

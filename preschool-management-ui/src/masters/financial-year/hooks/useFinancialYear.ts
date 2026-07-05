@@ -6,7 +6,8 @@ export function useFinancialYear() {
   const [financialYears, setFinancialYears] = useState<FinancialYear[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const loadFinancialYears = useCallback(async () => {
+  const loadFinancialYears = useCallback(async () => { 
+    
     setLoading(true);
 
     try {
@@ -18,7 +19,6 @@ export function useFinancialYear() {
         setFinancialYears([]);
       }
     } catch (error) {
-      console.error("Failed to load financial years:", error);
       setFinancialYears([]);
     } finally {
       setLoading(false);

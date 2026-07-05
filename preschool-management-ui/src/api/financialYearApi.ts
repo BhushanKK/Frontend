@@ -1,10 +1,6 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
-import type {
-    FinancialYear,
-    FinancialYearResponse,
-} from "../masters/financial-year/types/financialYear";
-import type { FinancialYearFormValues } from "../masters/financial-year/components/FinancialYearForm";
+import type { FinancialYear,FinancialYearResponse,FinancialYearFormValues } from "../masters/financial-year/types/financialYear";
 
 const BASE_URL = "/FinancialYearMaster";
 
