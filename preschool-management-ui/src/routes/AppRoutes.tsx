@@ -6,6 +6,7 @@ import DashboardPage from "../pages/Components/Dashboard/Dashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AcademicYearPage from "../../src/masters/academic-year/pages/AcademicYearPage";
+import FinancialYearPage from "../masters/financial-year/pages/FinancialYearPage";
 
 export default function AppRoutes() {
   return (
@@ -30,20 +31,13 @@ export default function AppRoutes() {
             path="/masters/academic-year"
             element={<AcademicYearPage />}
           />
+
+          <Route
+            path="/masters/financial-year"
+            element={<FinancialYearPage />}
+          />
         </Route>
       </Route>
-
-      {/* Default Route */}
-      <Route
-        path="/"
-        element={<Navigate to="/dashboard" replace />}
-      />
-
-      {/* 404 */}
-      <Route
-        path="*"
-        element={<Navigate to="/dashboard" replace />}
-      />
     </Routes>
   );
 }

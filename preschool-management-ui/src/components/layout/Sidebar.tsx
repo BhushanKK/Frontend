@@ -46,14 +46,10 @@ const menus: MenuItem[] = [
     icon: <AccountTree fontSize="small" />,
     children: [
       { text: "Academic Year Master", path: "/masters/academic-year" },
-      { text: "Financial Year Master", path: "/masters/Financial Year" },
-      { text: "Religion Master", path: "/masters/Commitee" },
-      { text: "Commitee Master", path: "/masters/School Details" },
-      { text: "Holidays Master", path: "/masters/Holidays" },
+      { text: "Financial Year Master", path: "/masters/financial-year" },
       { text: "Religion Master", path: "/masters/religion" },
       { text: "Category Master", path: "/masters/category" },
       { text: "Caste Master", path: "/masters/caste" },
-
     ],
   },
 ];
