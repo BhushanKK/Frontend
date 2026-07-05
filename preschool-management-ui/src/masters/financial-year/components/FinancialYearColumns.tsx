@@ -1,7 +1,5 @@
 import type {
     ColDef,
-    ValueFormatterParams,
-    CellClassParams,
     ICellRendererParams,
 } from "ag-grid-community";
 import type { FinancialYear } from "../types/financialYear";
