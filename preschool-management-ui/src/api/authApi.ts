@@ -1,9 +1,11 @@
-import axiosInstance from "./axios";
+import axiosPublic from "./axiosPublic";
 import API from "./endpoints";
 
 import type {
   LoginRequest,
   LoginResponse,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
 } from "../types/auth";
 
 /**
@@ -12,10 +14,24 @@ import type {
 export const login = async (
   request: LoginRequest
 ): Promise<LoginResponse> => {
-  const response = await axiosInstance.post<LoginResponse>(
+  const { data } = await axiosPublic.post<LoginResponse>(
     API.AUTH.LOGIN,
     request
   );
 
-  return response.data;
+  return data;
+};
+
+/**
+ * Refresh Token API
+ */
+export const refreshToken = async (
+  request: RefreshTokenRequest
+): Promise<RefreshTokenResponse> => {
+  const { data } = await axiosPublic.post<RefreshTokenResponse>(
+    API.AUTH.REFRESH_TOKEN,
+    request
+  );
+
+  return data;
 };

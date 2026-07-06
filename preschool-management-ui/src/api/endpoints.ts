@@ -1,7 +1,7 @@
 const API = {
   AUTH: {
     LOGIN: "/auth/login",
-    REFRESH_TOKEN: "/auth/refresh-token",
+    REFRESH_TOKEN: "/auth/refresh",
     LOGOUT: "/auth/logout",
   },
 };
