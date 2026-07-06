@@ -1,10 +1,4 @@
-import {
-    Box,
-    Card,
-    CardContent,
-    Container,
-    Grid,
-} from "@mui/material";
+import { Box, Card, CardContent, Container, Grid, } from "@mui/material";
 
 import LoginForm from "./LoginForm";
 import schoolImage from "../../assets/images/school-3d.png";
@@ -22,13 +16,13 @@ export default function LoginPage() {
                 p: 2,
             }}
         >
-            <Container maxWidth="lg">
+            <Container maxWidth="md">
                 <Card
                     elevation={12}
                     sx={{
                         borderRadius: 4,
                         overflow: "hidden",
-                        minHeight: 600,
+                        minHeight: 500,
                     }}
                 >
                     <Grid container sx={{ height: "100%" }}>
@@ -38,7 +32,7 @@ export default function LoginPage() {
                             sx={{
                                 background: "linear-gradient(180deg,#2563EB,#1D4ED8)",
                                 overflow: "hidden",
-                                minHeight: 600,
+                                minHeight: 500,
                             }}
                         >
                             <Box
@@ -63,7 +57,7 @@ export default function LoginPage() {
                                 alignItems: "center",
                                 justifyContent: "center",
                                 p: 5,
-                                minHeight: 600,
+                                minHeight: 500,
                             }}
                         >
                             <CardContent

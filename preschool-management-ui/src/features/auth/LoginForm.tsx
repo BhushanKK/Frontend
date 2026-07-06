@@ -131,7 +131,7 @@ sx={{
                 <Button
                     type="submit"
                     variant="contained"
-                    size="medium"
+                    size="small"
                     disabled={loading}
                     sx={{
                         height: 42,
