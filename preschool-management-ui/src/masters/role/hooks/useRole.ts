@@ -28,6 +28,6 @@ export function useRole() {
     return {
         role,
         loading,
-        setRoles
+        loadRoles
     }
 };

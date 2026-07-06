@@ -45,6 +45,7 @@ const menus: MenuItem[] = [
     text: "Masters",
     icon: <AccountTree fontSize="small" />,
     children: [
+      { text: "Role Master", path: "/masters/role" },
       { text: "Academic Year Master", path: "/masters/academic-year" },
       { text: "Financial Year Master", path: "/masters/financial-year" },
       { text: "Religion Master", path: "/masters/religion" },

@@ -75,6 +75,18 @@ export default function FinancialYearForm() {
               label={field.value ? "Active" : "Inactive"}
               control={
                 <Switch
+                  sx={{
+                    "& .MuiSwitch-switchBase.Mui-checked": {
+                      color: "success.main",
+                    },
+                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                      backgroundColor: "success.main",
+                    },
+                    "& .MuiSwitch-track": {
+                      backgroundColor: field.value ? "success.main" : "error.main",
+                      opacity: 1,
+                    },
+                  }}
                   checked={field.value}
                   onChange={(e) => field.onChange(e.target.checked)}
                 />

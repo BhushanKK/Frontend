@@ -10,7 +10,7 @@ export const getRoles = async() => {
 };
 
 export const getRoleById =async(id:number) =>{
-    const response =await api.get<RoleResponse>(`${BASE_URL}/${id}`);
+    const response = await api.get<RoleResponse>(`${BASE_URL}/${id}`);
     return response.data;
 }
 
@@ -20,11 +20,11 @@ export const createRole = async (data: RoleFormValues) => {
 }        
 
 export const updateRole = async (id: number,data: RoleFormValues) => {
-    const response = await api.put<ApiResponse<Role>>(BASE_URL,data);
+    const response = await api.put<ApiResponse<Role>>(`${BASE_URL}/${id}`,data);
     return response.data;
 }
 
 export const deleteRole = async (id: number) => {
-    const response = await api.put<ApiResponse<Role>>(`${BASE_URL}/${id}`);
+    const response = await api.delete<ApiResponse<Role>>(`${BASE_URL}/${id}`);
     return response.data;
 }

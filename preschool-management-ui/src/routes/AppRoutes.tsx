@@ -7,6 +7,7 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AcademicYearPage from "../../src/masters/academic-year/pages/AcademicYearPage";
 import FinancialYearPage from "../masters/financial-year/pages/FinancialYearPage";
+import RolePage from "../masters/role/pages/RolePage";
 
 export default function AppRoutes() {
   return (
@@ -27,6 +28,10 @@ export default function AppRoutes() {
           />
 
           {/* Masters */}
+          <Route
+            path="/masters/role"
+            element={<RolePage />}
+          />
           <Route
             path="/masters/academic-year"
             element={<AcademicYearPage />}
