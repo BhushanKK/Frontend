@@ -61,6 +61,13 @@ export default function MasterToolbar({
                             sm: 200,
                             md: 250,
                         },
+                        "& .MuiInputBase-root": {
+                            height: 36,
+                            fontSize: 14,
+                        },
+                        "& input": {
+                            padding: "10px 12px",
+                        },
                     }}
                 />
 

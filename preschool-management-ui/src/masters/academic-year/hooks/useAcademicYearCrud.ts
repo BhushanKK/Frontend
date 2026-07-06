@@ -1,8 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { createAcademicYear, updateAcademicYear, deleteAcademicYear } from "../../../api/academicYearApi";
-import type { AcademicYear } from "../types/academicYear";
-import type { AcademicYearFormValues } from "../components/AcademicYearForm";
+import type { AcademicYear, AcademicYearFormValues } from "../types/academicYear";
 import type { ApiResponse } from "../../../types/auth";
 
 type SnackbarSeverity = "success" | "error" | "warning" | "info";
