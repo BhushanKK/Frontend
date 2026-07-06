@@ -18,7 +18,6 @@ export function useAcademicYear() {
         setAcademicYears([]);
       }
     } catch (error) {
-      console.error("Failed to load academic years:", error);
       setAcademicYears([]);
     } finally {
       setLoading(false);

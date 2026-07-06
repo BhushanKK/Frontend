@@ -12,6 +12,6 @@ export interface CategoryResponse{
 }
 
 export interface CategoryFormValues{
-    roleName:string;
+    categoryName:string;
     isActive:boolean;
 }
