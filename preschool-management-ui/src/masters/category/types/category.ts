@@ -1,13 +1,13 @@
 export interface Category{
-    categoryId:number,
-    categoryName:string,
-    isActive:boolean
+    categoryId:number;
+    categoryName:string;
+    isActive:boolean;
 }
 
 export interface CategoryResponse{
-    success:boolean,
-    message:string,
-    statusCode:number,
+    success:boolean;
+    message:string;
+    statusCode:number;
     data: Category[];
 }
 

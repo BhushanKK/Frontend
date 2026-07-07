@@ -9,6 +9,7 @@ import AcademicYearPage from "../../src/masters/academic-year/pages/AcademicYear
 import FinancialYearPage from "../masters/financial-year/pages/FinancialYearPage";
 import RolePage from "../masters/role/pages/RolePage";
 import CategoryPage from "../masters/category/pages/CategoryPage";
+import CastePage from "../masters/caste/pages/CastePage";
 
 export default function AppRoutes() {
   return (
@@ -45,6 +46,10 @@ export default function AppRoutes() {
           <Route
             path="/masters/category"
             element={<CategoryPage />}
+          />
+          <Route
+            path="/masters/caste"
+            element={<CastePage />}
           />
         </Route>
       </Route>
