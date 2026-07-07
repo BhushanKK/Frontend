@@ -10,6 +10,7 @@ import FinancialYearPage from "../masters/financial-year/pages/FinancialYearPage
 import RolePage from "../masters/role/pages/RolePage";
 import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
+import MenuPage from "../masters/menu/pages/MenuPage";
 
 export default function AppRoutes() {
   return (
@@ -50,6 +51,10 @@ export default function AppRoutes() {
           <Route
             path="/masters/caste"
             element={<CastePage />}
+          />
+          <Route
+            path="/masters/menu"
+            element={<MenuPage />}
           />
         </Route>
       </Route>

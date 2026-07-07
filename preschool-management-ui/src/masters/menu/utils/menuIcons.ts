@@ -1,0 +1,21 @@
+export const menuIcons = [
+    "Dashboard",
+    "AccountTree",
+    "Category",
+    "Groups",
+    "School",
+    "Person",
+    "Payments",
+    "Assessment",
+    "CalendarMonth",
+    "CalendarToday",
+    "FactCheck",
+    "Description",
+    "Settings",
+    "People",
+    "Badge",
+    "Apartment",
+    "Event",
+    "Leaderboard",
+    "ReceiptLong"
+];

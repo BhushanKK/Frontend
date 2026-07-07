@@ -1,45 +1,35 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import {
-    AppBar,
-    Avatar,
-    Badge,
-    Box,
-    IconButton,
-    Menu,
-    MenuItem,
-    Toolbar,
-    Typography,
-} from "@mui/material";
-
-import {
-    Menu as MenuIcon,
-    NotificationsNone,
-    Logout,
-    Person,
-} from "@mui/icons-material";
-
-import { drawerWidth } from "./Sidebar";
+import { AppBar, Avatar, Badge, IconButton, Menu, MenuItem, Toolbar, Typography, Box } from "@mui/material";
+import { Menu as MenuIcon, NotificationsNone, Logout, Person } from "@mui/icons-material";
 import { useAuthStore } from "../../store/authStore";
+import { drawerWidth } from "./Sidebar";
 
 interface HeaderProps {
     onMenuClick: () => void;
 }
 
-export default function Header({ onMenuClick }: HeaderProps) {
+export default function Header({
+    onMenuClick
+}: HeaderProps) {
+
     const navigate = useNavigate();
 
-    const logout = useAuthStore((state) => state.logout);
+    const logout = useAuthStore(
+        (state) => state.logout
+    );
 
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] =
+        useState<null | HTMLElement>(null);
 
     const open = Boolean(anchorEl);
 
     const handleProfileClick = (
         event: React.MouseEvent<HTMLElement>
     ) => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(
+            event.currentTarget
+        );
     };
 
     const handleClose = () => {
@@ -47,79 +37,134 @@ export default function Header({ onMenuClick }: HeaderProps) {
     };
 
     const handleLogout = () => {
+        handleClose();
         logout();
-        navigate("/login", { replace: true });
+        navigate(
+            "/login",
+            {
+                replace: true
+            }
+        );
     };
 
     return (
         <AppBar
             position="fixed"
-            elevation={1}
             sx={{
-                backgroundColor: "#ffffff",
-                color: "#000",
                 width: {
-                    md: `calc(100% - ${drawerWidth}px)`,
+                    sm: `calc(100% - ${drawerWidth}px)`
                 },
                 ml: {
-                    md: `${drawerWidth}px`,
+                    sm: `${drawerWidth}px`
                 },
+                backgroundColor: "#ffffff",
+                color: "#111827",
+                borderBottom: "1px solid #E5E7EB",
+                boxShadow: "none",   // Remove top bar shadow
+                zIndex: (theme) =>
+                    theme.zIndex.drawer + 1
             }}
         >
-            <Toolbar>
+            <Toolbar
+                sx={{
+                    minHeight: "64px !important",
+                    px: 3,
+                    display: "flex",
+                    justifyContent: "space-between",
+                }}
+            >
+                {/* Mobile Menu */}
                 <IconButton
-                    color="inherit"
                     edge="start"
                     onClick={onMenuClick}
                     sx={{
-                        display: {
-                            md: "none",
-                        },
                         mr: 2,
+                        display: {
+                            xs: "flex",
+                            sm: "none"
+                        }
                     }}
                 >
                     <MenuIcon />
                 </IconButton>
 
+                {/* Application Name */}
                 <Typography
                     variant="h6"
-                    component="div"
                     sx={{
-                        flexGrow: 1,
-                        fontWeight: 600,
+                        fontWeight: 700,
+                        color: "#111827",
+                        fontSize: "20px",
                     }}
                 >
                     School Management System
                 </Typography>
-
-                <IconButton color="inherit">
-                    <Badge badgeContent={5} color="error">
-                        <NotificationsNone />
-                    </Badge>
-                </IconButton>
-
+                {/* Right Section */}
                 <Box
-                    component="div"
-                    sx={{ ml: 2 }}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1
+                    }}
                 >
-                    <IconButton onClick={handleProfileClick}>
-                        <Avatar sx={{ bgcolor: "primary.main" }}>
+                    {/* Notification */}
+                    <IconButton>
+                        <Badge
+                            badgeContent={5}
+                            color="error"
+                            sx={{
+                                "& .MuiBadge-badge": {
+                                    fontSize: "10px"
+                                }
+                            }}
+                        >
+                            <NotificationsNone />
+                        </Badge>
+                    </IconButton>
+
+                    {/* Profile */}
+                    <IconButton
+                        onClick={
+                            handleProfileClick
+                        }
+                    >
+                        <Avatar
+                            sx={{
+                                width: 38,
+                                height: 38,
+                                bgcolor: "#2563EB",
+                                fontSize: "16px"
+                            }}
+                        >
                             A
                         </Avatar>
                     </IconButton>
                 </Box>
+
+                {/* Profile Menu */}
                 <Menu
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem onClick={handleClose}>
-                        <Person sx={{ mr: 1 }} />
+                    <MenuItem
+                        onClick={handleClose}
+                    >
+                        <Person
+                            sx={{
+                                mr: 1
+                            }}
+                        />
                         My Profile
                     </MenuItem>
-
-                    <MenuItem onClick={handleLogout}>
-                        <Logout sx={{ mr: 1 }} />
+                    <MenuItem
+                        onClick={handleLogout}
+                    >
+                        <Logout
+                            sx={{
+                                mr: 1
+                            }}
+                        />
                         Logout
                     </MenuItem>
                 </Menu>

@@ -1,25 +1,11 @@
-import { useState } from "react";
-import {
-  Box,
-  Collapse,
-  Divider,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-
-import {
-  AccountTree,
-  Dashboard,
-  ExpandLess,
-  ExpandMore,
-} from "@mui/icons-material";
-
+import { useEffect, useState } from "react";
+import type { SidebarMenu } from "../../masters/menu/utils/SidebarMenu";
+import { getMenus } from "../../api/menuApi";
+import { buildMenuTree } from "../../utils/menuTree";
+import { Box, Collapse, Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { getIcon } from "../../utils/iconHelper";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 export const drawerWidth = 240;
 
@@ -28,221 +14,221 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-interface MenuItem {
-  text: string;
-  path?: string;
-  icon?: React.ReactNode;
-  children?: MenuItem[];
-}
+function Sidebar({ mobileOpen, onClose }: SidebarProps) {
+  const [openMenus, setOpenMenus] = useState<Record<number, boolean>>({});
+  const [menus, setMenus] = useState<SidebarMenu[]>([]);
 
-const menus: MenuItem[] = [
-  {
-    text: "Dashboard",
-    icon: <Dashboard fontSize="small" />,
-    path: "/dashboard",
-  },
-  {
-    text: "Masters",
-    icon: <AccountTree fontSize="small" />,
-    children: [
-      { text: "Role Master", path: "/masters/role" },
-      { text: "Academic Year Master", path: "/masters/academic-year" },
-      { text: "Financial Year Master", path: "/masters/financial-year" },
-      { text: "Religion Master", path: "/masters/religion" },
-      { text: "Category Master", path: "/masters/category" },
-      { text: "Caste Master", path: "/masters/caste" },
-    ],
-  },
-];
+  useEffect(() => {
+    loadMenus();
+  }, []);
 
-function DrawerContent({ onClose }: { onClose: () => void }) {
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-
-  const toggleMenu = (menu: string) => {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [menu]: !prev[menu],
+  const loadMenus = async () => {
+    try {
+      const response = await getMenus();
+      setMenus(
+        buildMenuTree(response.data)
+      );
+    }
+    catch (error) {
+      console.error(
+        "Failed to load menus",
+        error
+      );
+    }
+  };
+  const toggleMenu = (menuId: number) => {
+    setOpenMenus(previous => ({
+      ...previous,
+      [menuId]: !previous[menuId]
     }));
   };
 
-  return (
-    <>
-      <Toolbar
+  const drawerContent = (
+    <Box>
+      <Box
         sx={{
-          minHeight: "64px !important",
-          px: 3,
+          height: "64px",
+          display: "flex",
+          alignItems: "center",
+          px: 2,
+          backgroundColor: "#ffffff"
         }}
       >
         <Typography
           variant="h6"
-          color="primary"
+          noWrap
           sx={{
             fontWeight: 700,
+            fontSize: "20px",
+            flexGrow: 1,
+            letterSpacing: "0.2px",
+            color: "#2563EB"
           }}
         >
           School ERP
         </Typography>
-      </Toolbar>
-
+      </Box>
       <Divider />
-
-      <List sx={{ py: 1 }}>
-        {menus.map((menu) => {
-          // Normal Menu
-          if (!menu.children) {
-            return (
-              <ListItemButton
-                key={menu.text}
-                component={NavLink}
-                to={menu.path!}
-                onClick={onClose}
-                sx={{
-                  mx: 1.5,
-                  my: 0.5,
-                  borderRadius: 2,
-
-                  "&.active": {
-                    bgcolor: "primary.main",
-                    color: "#fff",
-
-                    "& .MuiListItemIcon-root": {
-                      color: "#fff",
-                    },
-                  },
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 38 }}>
-                  {menu.icon}
-                </ListItemIcon>
-
-                <ListItemText primary={menu.text} />
-              </ListItemButton>
-            );
-          }
-
-          // Expandable Menu
-          return (
-            <Box key={menu.text}>
-              <ListItemButton
-                onClick={() => toggleMenu(menu.text)}
-                sx={{
-                  mx: 1.5,
-                  my: 0.5,
-                  borderRadius: 2,
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 38 }}>
-                  {menu.icon}
-                </ListItemIcon>
-
-                <ListItemText primary={menu.text} />
-
-                {openMenus[menu.text] ? (
-                  <ExpandLess />
-                ) : (
-                  <ExpandMore />
-                )}
-              </ListItemButton>
-
-              <Collapse
-                in={openMenus[menu.text]}
-                timeout="auto"
-                unmountOnExit
-              >
-                <List disablePadding>
-                  {menu.children.map((child) => (
+      <List
+        sx={{
+          py: 1
+        }}
+      >
+        {
+          menus.map(menu => (
+            <Box
+              key={menu.menuId}
+            >
+              {
+                menu.children.length === 0 ?
+                  (
                     <ListItemButton
-                      key={child.text}
                       component={NavLink}
-                      to={child.path!}
+                      to={
+                        menu.menuUrl ?? "#"
+                      }
                       onClick={onClose}
-                      sx={{
-                        pl: 6,
-                        py: 0.8,
-
-                        "&.active": {
-                          bgcolor: "#E3F2FD",
-                          color: "primary.main",
-                        },
-                      }}
                     >
+                      <ListItemIcon>
+                        {
+                          getIcon(menu.icon)
+                        }
+                      </ListItemIcon>
                       <ListItemText
                         primary={
-                          <Typography
-                            sx={{
-                              fontSize: 13,
-                            }}
-                          >
-                            {child.text}
-                          </Typography>
+                          menu.menuName
                         }
                       />
                     </ListItemButton>
-                  ))}
-                </List>
-              </Collapse>
-            </Box>
-          );
-        })}
-      </List>
-    </>
-  );
-}
+                  )
+                  :
+                  (
+                    <Box>
+                      <ListItemButton
+                        onClick={() =>
+                          toggleMenu(menu.menuId)
+                        }
+                      >
+                        <ListItemIcon>
+                          {
+                            getIcon(menu.icon)
+                          }
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            menu.menuName
+                          }
+                        />
 
-export default function Sidebar({
-  mobileOpen,
-  onClose,
-}: SidebarProps) {
-  const drawerContent = <DrawerContent onClose={onClose} />;
+                        {
+                          openMenus[menu.menuId]
+                            ?
+                            <ExpandLess />
+                            :
+                            <ExpandMore />
+                        }
+                      </ListItemButton>
+
+                      <Collapse
+                        in={
+                          openMenus[menu.menuId]
+                        }
+                        timeout="auto"
+                        unmountOnExit
+                      >
+                        <List disablePadding>
+                          {
+                            menu.children.map(child => (
+                              <ListItemButton
+                                key={
+                                  child.menuId
+                                }
+                                sx={{
+                                  pl: 4
+                                }}
+                                component={NavLink}
+                                to={
+                                  child.menuUrl ?? "#"
+                                }
+                                onClick={onClose}
+                              >
+                                <ListItemIcon>
+                                  {
+                                    getIcon(child.icon)
+                                  }
+                                </ListItemIcon>
+
+                                <ListItemText
+                                  primary={
+                                    child.menuName
+                                  }
+                                />
+                              </ListItemButton>
+                            ))
+                          }
+                        </List>
+                      </Collapse>
+                    </Box>
+                  )
+              }
+            </Box>
+          ))
+        }
+      </List>
+    </Box>
+  );
 
   return (
-    <Box
-      component="nav"
-      sx={{
-        width: { lg: drawerWidth },
-        flexShrink: { lg: 0 },
-      }}
-    >
-      {/* Mobile */}
+    <>
+      {/* Mobile Sidebar */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
         onClose={onClose}
-        ModalProps={{ keepMounted: true }}
+        ModalProps={{
+          keepMounted: true
+        }}
         sx={{
           display: {
             xs: "block",
-            lg: "none",
+            sm: "none"
           },
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            borderRight: "1px solid #ECECEC",
-            boxSizing: "border-box",
-          },
+            width: drawerWidth
+          }
         }}
       >
-        {drawerContent}
+        {
+          drawerContent
+        }
       </Drawer>
 
-      {/* Desktop */}
+      {/* Desktop Sidebar */}
       <Drawer
         variant="permanent"
-        open
         sx={{
           display: {
             xs: "none",
-            lg: "block",
+            sm: "block"
           },
+          width: drawerWidth,
+          flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            borderRight: "1px solid #ECECEC",
-            backgroundColor: "#fff",
             boxSizing: "border-box",
-          },
+            top: 0,
+            height: "100vh"
+          }
         }}
+        open
+
       >
-        {drawerContent}
+        {
+          drawerContent
+        }
       </Drawer>
-    </Box>
+    </>
   );
 }
+
+export default Sidebar;
