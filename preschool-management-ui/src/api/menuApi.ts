@@ -1,6 +1,7 @@
 import api from "./axios";
 import type { Menu, MenuFormValues, MenuResponse, DropdownResponse } from "../masters/menu/types/menu";
 import type { ApiResponse } from "../types/auth";
+import { getRoles } from "./roleApi";
 
 const BASE_URL = "/MenuMaster";
 
@@ -51,4 +52,8 @@ export const getParentMenus = async () => {
     );
 
     return response.data;
+};
+
+export const getAllRoles = async () => {
+    return await getRoles();
 };

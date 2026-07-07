@@ -8,6 +8,7 @@ export interface Menu {
     displayOrder: number;
     isPublic: boolean;
     isActive: boolean;
+    roleIds?: string;
 }
 
 export interface MenuResponse {
@@ -25,6 +26,9 @@ export interface MenuFormValues {
     displayOrder: number;
     isPublic: boolean;
     isActive: boolean;
+
+    roleIds?: string;   // sent to API
+    roles?: Role[];      // used by UI only
 }
 
 export interface ParentMenu {
@@ -37,4 +41,10 @@ export interface DropdownResponse {
     message: string;
     statusCode: number;
     data: ParentMenu[];
+}
+
+export interface Role {
+    roleId: number;
+    roleName: string;
+    isActive:boolean;
 }

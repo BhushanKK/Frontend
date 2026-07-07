@@ -46,6 +46,8 @@ export function useMenuCrud({
 
     // Edit
     const handleEdit = (row: Menu) => {
+         console.log("Editing Row:", row);
+
         setEditingRow(row);
         setOpenForm(true);
     };
@@ -58,11 +60,19 @@ export function useMenuCrud({
 
     // Save
     const handleSave = async (data: MenuFormValues) => {
+
+        const payload = {
+            ...data,
+            roleIds: (data.roles ?? [])
+                .map(role => role.roleId)
+                .join(","),
+        };
+
         try {
 
             const response = editingRow
-                ? await updateMenu(editingRow.menuId, data)
-                : await createMenu(data);
+                ? await updateMenu(editingRow.menuId, payload)
+                : await createMenu(payload);
 
             switch (response.statusCode) {
 
@@ -94,10 +104,8 @@ export function useMenuCrud({
                     ? error.response?.data.message ?? "Something went wrong."
                     : "Unexpected error."
             );
-
         }
     };
-
     // Delete
     const handleDelete = (row: Menu) => {
         setSelectedRow(row);

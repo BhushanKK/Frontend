@@ -1,24 +1,16 @@
-import {
-    Autocomplete,
-    FormControlLabel,
-    Grid,
-    Switch,
-    TextField,
-} from "@mui/material";
+import { Autocomplete, FormControlLabel, Grid, Switch, TextField } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
-
-import type {
-    ParentMenu,
-    MenuFormValues,
-} from "../types/menu";
+import type { ParentMenu, MenuFormValues, Role } from "../types/menu";
 import { menuIcons } from "../utils/menuIcons";
 
 interface MenuFormProps {
     parentMenus: ParentMenu[];
+    roles: Role[];
 }
 
 export default function MenuForm({
     parentMenus,
+    roles
 }: MenuFormProps) {
 
     const { control } = useFormContext<MenuFormValues>();
@@ -75,6 +67,39 @@ export default function MenuForm({
                             size="small"
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
+            </Grid>
+            {/* Allowed Roles */}
+
+            <Grid size={12}>
+                <Controller
+                    name="roles"
+                    control={control}
+                    defaultValue={[]}
+                    render={({ field, fieldState }) => (
+                        <Autocomplete
+                            multiple
+                            options={roles}
+                            value={field.value}
+                            onChange={(_, value) => {
+                                field.onChange(value);
+                            }}
+                            getOptionLabel={(option) => option.roleName}
+                            isOptionEqualToValue={(option, value) =>
+                                option.roleId === value.roleId
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Allowed Roles"
+                                    placeholder="Select Roles"
+                                    size="small"
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                />
+                            )}
                         />
                     )}
                 />
@@ -216,7 +241,6 @@ export default function MenuForm({
                     )}
                 />
             </Grid>
-
         </Grid>
     );
 }

@@ -19,6 +19,7 @@ export default function MenuPage() {
     const {
         menus,
         parentMenus,
+        roles,
         loading,
         loadMenus,
     } = useMenu();
@@ -49,6 +50,15 @@ export default function MenuPage() {
     } = useMenuCrud({
         loadMenus,
     });
+
+    const selectedRoles =
+        editingRow?.roleIds
+            ? roles.filter(role =>
+                editingRow.roleIds!
+                    .split(",")
+                    .includes(role.roleId.toString())
+            )
+            : [];
 
     return (
         <PageContainer>
@@ -91,12 +101,16 @@ export default function MenuPage() {
                     displayOrder: editingRow?.displayOrder ?? 1,
                     isPublic: editingRow?.isPublic ?? false,
                     isActive: editingRow?.isActive ?? true,
+
+                    roleIds: editingRow?.roleIds ?? "",
+                    roles: selectedRoles,
                 }}
                 onClose={handleCloseForm}
                 onSave={handleSave}
             >
                 <MenuForm
                     parentMenus={parentMenus}
+                    roles={roles}
                 />
             </MasterDialog>
 
