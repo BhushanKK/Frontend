@@ -11,7 +11,7 @@ import type { Category } from "../types/category";
 
 export default function CategoryPage() {
 
-    const { category, loading, loadCategories } = useCategory();
+    const { category, loading, loadCategories } = useCategory(false);
 
     const {
         openForm,

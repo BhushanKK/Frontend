@@ -2,15 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import type { Category } from "../types/category";
 import { getCategories } from "../../../api/categoryApi";
 
-export function useCategory() {
+export function useCategory(filter:boolean) {
     const [category, setCategory] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
 
     const loadCategories = useCallback(async () => {
-        setLoading(true);
+        setLoading(false);
 
         try {
-            const response = await getCategories();
+            const response = await getCategories(filter);
             if (response.success)
                 setCategory(response.data);
             else

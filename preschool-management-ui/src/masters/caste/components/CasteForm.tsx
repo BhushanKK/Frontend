@@ -18,7 +18,7 @@ import { useCategory } from "../../category/hooks/useCategory";
 export default function CasteForm() {
     const { control } = useFormContext<CasteFormValues>();
 
-    const { category, loading } = useCategory();
+    const { category, loading } = useCategory(true);
 
     return (
         <Grid container spacing={2} sx={{ mt: 1 }}>

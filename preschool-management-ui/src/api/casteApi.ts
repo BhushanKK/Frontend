@@ -6,7 +6,7 @@ import type { ApiResponse } from "../types/auth";
 const BASE_URL = "/CasteMaster";
 
 export const getAllCategories = async () => {
-    return await getCategories();
+    return await getCategories(true);
 };
 
 export const getCastes = async () => {

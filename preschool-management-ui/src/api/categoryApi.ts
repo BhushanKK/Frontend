@@ -4,8 +4,8 @@ import type { ApiResponse } from "../types/auth";
 
 const BASE_URL="/CategoryMaster";
 
-export const getCategories = async() =>{
-    const response = await api.get<CategoryResponse>(BASE_URL);
+export const getCategories = async(filter:boolean) =>{
+    const response = await api.get<CategoryResponse>(`${BASE_URL}/${filter}`);
     return response.data;
 }
 export const getCategoryById= async (id:number) => {
