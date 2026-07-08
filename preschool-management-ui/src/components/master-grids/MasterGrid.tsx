@@ -18,10 +18,15 @@ interface MasterGridProps<T> {
   rowData: T[];
   columnDefs: ColDef<T>[];
   loading?: boolean;
+
   addButtonText?: string;
+
   onAdd?: () => void;
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
+
+  showActions?: boolean;
+  showToolbar?: boolean;
 }
 
 export default function MasterGrid<T>({
@@ -33,12 +38,18 @@ export default function MasterGrid<T>({
   onAdd,
   onEdit,
   onDelete,
+  showActions = true,
+  showToolbar = true, // ✅ Added
 }: MasterGridProps<T>) {
   const gridRef = useRef<AgGridReact<T>>(null);
 
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
 
   const finalColumnDefs = useMemo<ColDef<T>[]>(() => {
+    if (!showActions) {
+      return columnDefs;
+    }
+
     return [
       ...columnDefs,
       {
@@ -58,7 +69,7 @@ export default function MasterGrid<T>({
         },
       },
     ];
-  }, [columnDefs, onEdit, onDelete]);
+  }, [columnDefs, onEdit, onDelete, showActions]);
 
   const onGridReady = (params: GridReadyEvent) => {
     setGridApi(params.api);
@@ -82,16 +93,20 @@ export default function MasterGrid<T>({
         borderRadius: 3,
       }}
     >
-      <MasterToolbar
-  title={title}
-  addButtonText={addButtonText}
-  onSearch={handleSearch}
-  onExport={handleExport}
-  onAdd={onAdd}
-  showExport
-/>
+      {showToolbar && (
+        <>
+          <MasterToolbar
+            title={title}
+            addButtonText={addButtonText}
+            onSearch={handleSearch}
+            onExport={handleExport}
+            onAdd={onAdd}
+            showExport
+          />
 
-      <Divider sx={{ mb: 2 }} />
+          <Divider sx={{ mb: 2 }} />
+        </>
+      )}
 
       <Box
         className="ag-theme-quartz"

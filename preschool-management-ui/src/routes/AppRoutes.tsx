@@ -1,5 +1,5 @@
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import LoginPage from "../features/auth/LoginPage";
 import DashboardPage from "../pages/Components/Dashboard/Dashboard";
@@ -11,6 +11,7 @@ import RolePage from "../masters/role/pages/RolePage";
 import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";
+import RoleMenuPermissionPage from "../masters/rolemenu-permission/pages/RoleMenuPermissionPage";
 
 export default function AppRoutes() {
   return (
@@ -55,6 +56,10 @@ export default function AppRoutes() {
           <Route
             path="/masters/menu"
             element={<MenuPage />}
+          />
+          <Route
+            path="/masters/rolemenu-permission"
+            element={<RoleMenuPermissionPage />}
           />
         </Route>
       </Route>
