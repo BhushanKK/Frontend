@@ -11,7 +11,7 @@ export function useMenu() {
     const loadMenus = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await getMenus();
+            const response = await getMenus(false);
             if (response.success)
                 setMenus(response.data);
             else

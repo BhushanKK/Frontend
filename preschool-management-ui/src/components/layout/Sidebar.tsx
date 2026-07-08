@@ -24,7 +24,7 @@ function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   const loadMenus = async () => {
     try {
-      const response = await getMenus();
+      const response = await getMenus(true);
       setMenus(
         buildMenuTree(response.data)
       );

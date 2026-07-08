@@ -6,8 +6,8 @@ import { getRoles } from "./roleApi";
 const BASE_URL = "/MenuMaster";
 
 // Get All Menus
-export const getMenus = async () => {
-    const response = await api.get<MenuResponse>(BASE_URL);
+export const getMenus = async (filter:boolean) => {
+    const response = await api.get<MenuResponse>(`${BASE_URL}/${filter}`);
     return response.data;
 };
 
