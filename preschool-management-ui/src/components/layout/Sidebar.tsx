@@ -18,7 +18,7 @@ import { getMenus } from "../../api/menuApi";
 import { buildMenuTree } from "../../utils/menuTree";
 import { getIcon } from "../../utils/iconHelper";
 import { usePermissionStore } from "../../store/permissionStore";
-
+import logo from "../../assets/images/logo.png";
 export const drawerWidth = 240;
 
 interface SidebarProps {
@@ -74,15 +74,16 @@ export default function Sidebar({ mobileOpen,  onClose}: SidebarProps) {
           backgroundColor: "#fff",
         }}
       >
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 700,
-            color: "#2563EB",
-          }}
-        >
-          School ERP
-        </Typography>
+        <Box
+    component="img"
+    src={logo}
+    alt="Logo"
+    sx={{
+      height: 60,
+      width: "auto",
+      objectFit: "contain",
+    }}
+  />
       </Box>
 
       <Divider />
