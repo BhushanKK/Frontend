@@ -8,6 +8,7 @@ import { useFinancialYearCrud } from "../hooks/useFinancialYearCrud";
 import FinancialYearForm from "../components/FinancialYearForm";
 import { financialYearColumns } from "../components/FinancialYearColumns";
 import type { FinancialYear } from "../types/financialYear";
+import usePermission from "../../../hooks/usePermission";
 
 export default function FinancialYearPage() {
     const {
@@ -15,7 +16,13 @@ export default function FinancialYearPage() {
         loading,
         loadFinancialYears,
     } = useFinancialYear();
-
+const {
+        canAdd,
+        canEdit,
+        canDelete,
+        canExport,
+        canPrint,
+    } = usePermission();
     const {
         openForm,
         editingRow,
@@ -47,6 +54,12 @@ export default function FinancialYearPage() {
                 columnDefs={financialYearColumns}
                 loading={loading}
                 addButtonText="Add Year"
+                // Permission control
+                canAdd={canAdd}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                canExport={canExport}
+                canPrint={canPrint}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}

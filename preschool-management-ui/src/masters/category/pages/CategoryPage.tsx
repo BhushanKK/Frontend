@@ -8,11 +8,18 @@ import { useCategoryCrud } from "../hooks/useCategoryCrud";
 import CategoryForm from "../components/CategoryForm";
 import { categoryColumns } from "../components/CategoryColumns";
 import type { Category } from "../types/category";
+import usePermission from "../../../hooks/usePermission";
 
 export default function CategoryPage() {
 
     const { category, loading, loadCategories } = useCategory(false);
-
+    const {
+        canAdd,
+        canEdit,
+        canDelete,
+        canExport,
+        canPrint,
+    } = usePermission();
     const {
         openForm,
         editingRow,
@@ -44,6 +51,12 @@ export default function CategoryPage() {
                 columnDefs={categoryColumns}
                 loading={loading}
                 addButtonText="Add Category"
+                // Permission control
+                canAdd={canAdd}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                canExport={canExport}
+                canPrint={canPrint}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}

@@ -8,10 +8,17 @@ import { useCasteCrud } from "../hooks/useCasteCrud";
 import CasteForm from "../components/CasteForm";
 import { casteColumns } from "../components/CasteColumns";
 import type { Caste } from "../types/caste";
+import usePermission from "../../../hooks/usePermission";
 
 export default function CastePage() {
     const { castes, loading, loadCastes } = useCaste();
-
+    const {
+        canAdd,
+        canEdit,
+        canDelete,
+        canExport,
+        canPrint,
+    } = usePermission();
     const {
         openForm,
         editingRow,
@@ -43,6 +50,12 @@ export default function CastePage() {
                 columnDefs={casteColumns}
                 loading={loading}
                 addButtonText="Add Caste"
+                // Permission control
+                canAdd={canAdd}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                canExport={canExport}
+                canPrint={canPrint}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}

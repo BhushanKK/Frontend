@@ -8,11 +8,18 @@ import { useAcademicYearCrud } from "../hooks/useAcademicYearCrud";
 import AcademicYearForm from "../components/AcademicYearForm";
 import { academicYearColumns } from "../components/AcademicYearColumns";
 import type { AcademicYear } from "../types/academicYear";
+import usePermission from "../../../hooks/usePermission";
 
 export default function AcademicYearPage() {
 
   const { academicYears, loading, loadAcademicYears } = useAcademicYear();
-
+  const {
+    canAdd,
+    canEdit,
+    canDelete,
+    canExport,
+    canPrint,
+  } = usePermission();
   const {
     openForm,
     editingRow,
@@ -44,6 +51,12 @@ export default function AcademicYearPage() {
         columnDefs={academicYearColumns}
         loading={loading}
         addButtonText="Add Year"
+        // Permission control
+        canAdd={canAdd}
+        canEdit={canEdit}
+        canDelete={canDelete}
+        canExport={canExport}
+        canPrint={canPrint}
         onAdd={handleAdd}
         onEdit={handleEdit}
         onDelete={handleDelete}

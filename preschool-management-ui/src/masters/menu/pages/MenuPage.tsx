@@ -5,14 +5,10 @@ import MasterGrid from "../../../components/master-grids/MasterGrid";
 import { DeleteDialog } from "../../../components/master-grids";
 import { useMenu } from "../hooks/useMenu";
 import { useMenuCrud } from "../hooks/useMenuCrud";
-
 import MenuForm from "../components/MenuForm";
-
-import type {
-    Menu,
-    MenuFormValues,
-} from "../types/menu";
+import type { Menu, MenuFormValues } from "../types/menu";
 import { menuColumns } from "../components/MenuColumns";
+import usePermission from "../../../hooks/usePermission";
 
 export default function MenuPage() {
 
@@ -23,7 +19,13 @@ export default function MenuPage() {
         loading,
         loadMenus,
     } = useMenu();
-
+ const {
+        canAdd,
+        canEdit,
+        canDelete,
+        canExport,
+        canPrint,
+    } = usePermission();
     const {
 
         openForm,
@@ -69,6 +71,12 @@ export default function MenuPage() {
                 columnDefs={menuColumns}
                 loading={loading}
                 addButtonText="Add Menu"
+                // Permission control
+                canAdd={canAdd}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                canExport={canExport}
+                canPrint={canPrint}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
