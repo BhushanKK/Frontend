@@ -1,78 +1,49 @@
+import { usePermissionStore } from "../../../store/permissionStore";
+import { useAuthStore } from "../../../store/authStore";
+import { getJwtPayload } from "../../../utils/jwtHelper";
 import { useState } from "react";
 import axios from "axios";
-
-import {
-    getRoleMenuPermission,
-    saveRoleMenuPermission,
-} from "../../../api/roleMenuPermissionApi";
-
-import type {
-    RoleMenuPermission,
-    SaveRoleMenuPermission,
-} from "../types/roleMenuPermission";
-
+import { getRoleMenuPermission, saveRoleMenuPermission } from "../../../api/roleMenuPermissionApi";
+import type { RoleMenuPermission, SaveRoleMenuPermission } from "../types/roleMenuPermission";
 import type { ApiResponse } from "../../../types/auth";
 
 type SnackbarSeverity = "success" | "warning" | "error" | "info";
 
 export function useRoleMenuPermission() {
-
     const [permissions, setPermissions] =
         useState<RoleMenuPermission[]>([]);
-
     const [loading, setLoading] = useState(false);
-
     const [saving, setSaving] = useState(false);
-
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-
     const [snackbarMessage, setSnackbarMessage] = useState("");
-
-    const [snackbarSeverity, setSnackbarSeverity] =
-        useState<SnackbarSeverity>("success");
+    const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>("success");
 
     const showSnackbar = (
         severity: SnackbarSeverity,
         message: string
     ) => {
-
         setSnackbarSeverity(severity);
         setSnackbarMessage(message);
         setSnackbarOpen(true);
-
     };
 
     const closeSnackbar = () => {
-
         setSnackbarOpen(false);
-
     };
 
     const loadPermissions = async (roleId: number) => {
-
         setLoading(true);
-
         try {
-
             const response =
                 await getRoleMenuPermission(roleId);
-
-            if (response.success) {
-
+            if (response.success)
                 setPermissions(response.data);
 
-            }
-            else {
-
+            else
                 setPermissions([]);
-
-            }
-
         }
         finally {
-
             setLoading(false);
-
         }
     };
 
@@ -81,11 +52,8 @@ export function useRoleMenuPermission() {
         field: keyof RoleMenuPermission,
         value: boolean
     ) => {
-
         setPermissions(old =>
-
             old.map(x =>
-
                 x.menuId === menuId
                     ? {
                         ...x,
@@ -104,7 +72,6 @@ export function useRoleMenuPermission() {
                 "warning",
                 "Please select role."
             );
-
             return;
         }
 
@@ -113,44 +80,50 @@ export function useRoleMenuPermission() {
         try {
 
             const request: SaveRoleMenuPermission = {
-
                 roleId,
-
                 permissions,
-
             };
 
             const response =
                 await saveRoleMenuPermission(request);
-
             switch (response.statusCode) {
 
                 case 200:
                 case 201:
-
                     showSnackbar(
                         "success",
                         response.message
                     );
 
+                    // Refresh logged-in user's permissions
+                    const accessToken =
+                        useAuthStore.getState().accessToken;
+                    if (accessToken) {
+                        const jwt = getJwtPayload(accessToken);
+                        if (jwt.roleId === roleId) {
+                            await usePermissionStore
+                                .getState()
+                                .loadPermissions(roleId);
+                            console.log(
+                                "Permissions refreshed",
+                                usePermissionStore.getState().permissions
+                            );
+                        }
+                    }
+
                     break;
 
                 case 400:
-
                     showSnackbar(
                         "error",
                         response.message
                     );
-
                     break;
-
                 default:
-
                     showSnackbar(
                         "warning",
                         response.message
                     );
-
                     break;
             }
 
@@ -167,32 +140,20 @@ export function useRoleMenuPermission() {
 
         }
         finally {
-
             setSaving(false);
-
         }
     };
 
     return {
-
         permissions,
-
         loading,
-
         saving,
-
         snackbarOpen,
-
         snackbarMessage,
-
         snackbarSeverity,
-
         loadPermissions,
-
         updatePermission,
-
         save,
-
         closeSnackbar,
     };
 }

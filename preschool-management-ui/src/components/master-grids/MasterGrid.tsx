@@ -1,13 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
-import type {
-  ColDef,
-  GridApi,
-  GridReadyEvent,
-} from "ag-grid-community";
-
+import type { ColDef, GridApi, GridReadyEvent} from "ag-grid-community";
 import { Box, Card, Divider } from "@mui/material";
-
 import LoadingOverlay from "./LoadingOverlay";
 import NoRowsOverlay from "./NoRowsOverlay";
 import ActionCellRenderer from "./ActionCellRenderer";
@@ -18,6 +12,12 @@ interface MasterGridProps<T> {
   rowData: T[];
   columnDefs: ColDef<T>[];
   loading?: boolean;
+
+  canAdd?: boolean;
+  canEdit?: boolean;
+  canDelete?: boolean;
+  canExport?: boolean;
+  canPrint?: boolean;
 
   addButtonText?: string;
 
@@ -34,22 +34,24 @@ export default function MasterGrid<T>({
   rowData,
   columnDefs,
   loading = false,
+  canAdd = false,
+  canEdit = false,
+  canDelete = false,
+  canExport = false,
   addButtonText = "Add",
   onAdd,
   onEdit,
   onDelete,
   showActions = true,
-  showToolbar = true, // ✅ Added
+  showToolbar = true,
 }: MasterGridProps<T>) {
   const gridRef = useRef<AgGridReact<T>>(null);
-
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
-
   const finalColumnDefs = useMemo<ColDef<T>[]>(() => {
-    if (!showActions) {
-      return columnDefs;
-    }
 
+    if (!showActions) 
+      return columnDefs;
+    
     return [
       ...columnDefs,
       {
@@ -57,19 +59,33 @@ export default function MasterGrid<T>({
         width: 120,
         sortable: false,
         filter: false,
+
         cellStyle: {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         },
-        cellRenderer: ActionCellRenderer,
-        cellRendererParams: {
-          onEdit,
-          onDelete,
-        },
+
+        cellRenderer: (params: any) => (
+          <ActionCellRenderer
+            {...params}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            canEdit={canEdit}
+            canDelete={canDelete}
+          />
+        ),
       },
     ];
-  }, [columnDefs, onEdit, onDelete, showActions]);
+
+  }, [
+    columnDefs,
+    onEdit,
+    onDelete,
+    canEdit,
+    canDelete,
+    showActions,
+  ]);
 
   const onGridReady = (params: GridReadyEvent) => {
     setGridApi(params.api);
@@ -101,7 +117,8 @@ export default function MasterGrid<T>({
             onSearch={handleSearch}
             onExport={handleExport}
             onAdd={onAdd}
-            showExport
+            showExport={canExport}
+            showAdd={canAdd}
           />
 
           <Divider sx={{ mb: 2 }} />

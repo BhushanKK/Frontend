@@ -1,11 +1,23 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  Box,
+  Collapse,
+  Divider,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { ExpandLess, ExpandMore} from "@mui/icons-material";
 import type { SidebarMenu } from "../../masters/menu/utils/SidebarMenu";
+import type { Menu } from "../../masters/menu/types/menu";
 import { getMenus } from "../../api/menuApi";
 import { buildMenuTree } from "../../utils/menuTree";
-import { Box, Collapse, Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
 import { getIcon } from "../../utils/iconHelper";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { usePermissionStore } from "../../store/permissionStore";
 
 export const drawerWidth = 240;
 
@@ -14,32 +26,40 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-function Sidebar({ mobileOpen, onClose }: SidebarProps) {
-  const [openMenus, setOpenMenus] = useState<Record<number, boolean>>({});
+export default function Sidebar({ mobileOpen,  onClose}: SidebarProps) {
+
   const [menus, setMenus] = useState<SidebarMenu[]>([]);
+  const [openMenus, setOpenMenus] = useState<Record<number, boolean>>({});
 
-  useEffect(() => {
-    loadMenus();
-  }, []);
+  const permissions = usePermissionStore(
+    (state) => state.permissions
+  );
 
-  const loadMenus = async () => {
+  const loadMenus = useCallback(async () => {
     try {
       const response = await getMenus(true);
-      setMenus(
-        buildMenuTree(response.data)
+
+      const menuTree = buildMenuTree(
+        permissions,
+        response.data as Menu[]
       );
+
+      setMenus(menuTree);
+    } catch (error) {
+      console.error("Failed to load menus", error);
     }
-    catch (error) {
-      console.error(
-        "Failed to load menus",
-        error
-      );
+  }, [permissions]);
+
+  useEffect(() => {
+    if (permissions.length > 0) {
+      loadMenus();
     }
-  };
+  }, [loadMenus, permissions]);
+
   const toggleMenu = (menuId: number) => {
-    setOpenMenus(previous => ({
-      ...previous,
-      [menuId]: !previous[menuId]
+    setOpenMenus((prev) => ({
+      ...prev,
+      [menuId]: !prev[menuId],
     }));
   };
 
@@ -47,188 +67,139 @@ function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     <Box>
       <Box
         sx={{
-          height: "64px",
+          height: 64,
           display: "flex",
           alignItems: "center",
           px: 2,
-          backgroundColor: "#ffffff"
+          backgroundColor: "#fff",
         }}
       >
         <Typography
           variant="h6"
-          noWrap
           sx={{
             fontWeight: 700,
-            fontSize: "20px",
-            flexGrow: 1,
-            letterSpacing: "0.2px",
-            color: "#2563EB"
+            color: "#2563EB",
           }}
         >
           School ERP
         </Typography>
       </Box>
+
       <Divider />
-      <List
-        sx={{
-          py: 1
-        }}
-      >
-        {
-          menus.map(menu => (
-            <Box
-              key={menu.menuId}
-            >
-              {
-                menu.children.length === 0 ?
-                  (
-                    <ListItemButton
-                      component={NavLink}
-                      to={
-                        menu.menuUrl ?? "#"
-                      }
-                      onClick={onClose}
-                    >
-                      <ListItemIcon>
-                        {
-                          getIcon(menu.icon)
-                        }
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={
-                          menu.menuName
-                        }
-                      />
-                    </ListItemButton>
-                  )
-                  :
-                  (
-                    <Box>
+
+      <List sx={{ py: 1 }}>
+        {menus.map((menu) => (
+          <Box key={menu.menuId}>
+            {menu.children.length === 0 ? (
+              <ListItemButton
+                component={NavLink}
+                to={menu.menuUrl ?? "#"}
+                onClick={onClose}
+              >
+                <ListItemIcon>
+                  {getIcon(menu.icon)}
+                </ListItemIcon>
+
+                <ListItemText
+                  primary={menu.menuName}
+                />
+              </ListItemButton>
+            ) : (
+              <>
+                <ListItemButton
+                  onClick={() =>
+                    toggleMenu(menu.menuId)
+                  }
+                >
+                  <ListItemIcon>
+                    {getIcon(menu.icon)}
+                  </ListItemIcon>
+
+                  <ListItemText
+                    primary={menu.menuName}
+                  />
+
+                  {openMenus[menu.menuId] ? (
+                    <ExpandLess />
+                  ) : (
+                    <ExpandMore />
+                  )}
+                </ListItemButton>
+
+                <Collapse
+                  in={openMenus[menu.menuId]}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List disablePadding>
+                    {menu.children.map((child) => (
                       <ListItemButton
-                        onClick={() =>
-                          toggleMenu(menu.menuId)
-                        }
+                        key={child.menuId}
+                        component={NavLink}
+                        to={child.menuUrl ?? "#"}
+                        sx={{ pl: 4 }}
+                        onClick={onClose}
                       >
                         <ListItemIcon>
-                          {
-                            getIcon(menu.icon)
-                          }
+                          {getIcon(child.icon)}
                         </ListItemIcon>
+
                         <ListItemText
-                          primary={
-                            menu.menuName
-                          }
+                          primary={child.menuName}
                         />
-
-                        {
-                          openMenus[menu.menuId]
-                            ?
-                            <ExpandLess />
-                            :
-                            <ExpandMore />
-                        }
                       </ListItemButton>
-
-                      <Collapse
-                        in={
-                          openMenus[menu.menuId]
-                        }
-                        timeout="auto"
-                        unmountOnExit
-                      >
-                        <List disablePadding>
-                          {
-                            menu.children.map(child => (
-                              <ListItemButton
-                                key={
-                                  child.menuId
-                                }
-                                sx={{
-                                  pl: 4
-                                }}
-                                component={NavLink}
-                                to={
-                                  child.menuUrl ?? "#"
-                                }
-                                onClick={onClose}
-                              >
-                                <ListItemIcon>
-                                  {
-                                    getIcon(child.icon)
-                                  }
-                                </ListItemIcon>
-
-                                <ListItemText
-                                  primary={
-                                    child.menuName
-                                  }
-                                />
-                              </ListItemButton>
-                            ))
-                          }
-                        </List>
-                      </Collapse>
-                    </Box>
-                  )
-              }
-            </Box>
-          ))
-        }
+                    ))}
+                  </List>
+                </Collapse>
+              </>
+            )}
+          </Box>
+        ))}
       </List>
     </Box>
   );
 
   return (
     <>
-      {/* Mobile Sidebar */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
         onClose={onClose}
         ModalProps={{
-          keepMounted: true
+          keepMounted: true,
         }}
         sx={{
           display: {
             xs: "block",
-            sm: "none"
+            sm: "none",
           },
           "& .MuiDrawer-paper": {
-            width: drawerWidth
-          }
+            width: drawerWidth,
+          },
         }}
       >
-        {
-          drawerContent
-        }
+        {drawerContent}
       </Drawer>
 
-      {/* Desktop Sidebar */}
       <Drawer
         variant="permanent"
+        open
         sx={{
           display: {
             xs: "none",
-            sm: "block"
+            sm: "block",
           },
           width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            top: 0,
-            height: "100vh"
-          }
+            height: "100vh",
+          },
         }}
-        open
-
       >
-        {
-          drawerContent
-        }
+        {drawerContent}
       </Drawer>
     </>
   );
 }
-
-export default Sidebar;

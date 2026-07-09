@@ -8,13 +8,21 @@ import { useRoles } from "../hooks/useRoleCrud";
 import RoleForm from "../components/RoleForm";
 import { RoleColumns } from "../components/RoleColumns";
 import type { Role } from "../types/role";
-
+import usePermission from "../../../hooks/usePermission";
 export default function RolePage() {
     const {
         role,
         loading,
         loadRoles,
     } = useRole();
+
+    const {
+        canAdd,
+        canEdit,
+        canDelete,
+        canExport,
+        canPrint,
+    } = usePermission();
 
     const {
         openForm,
@@ -41,15 +49,23 @@ export default function RolePage() {
 
     return (
         <PageContainer>
+
             <MasterGrid<Role>
                 title="Role Master"
                 rowData={role}
                 columnDefs={RoleColumns}
                 loading={loading}
                 addButtonText="Add Role"
+
+                // Permission control
+                canAdd={canAdd}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                canExport={canExport}
+                canPrint={canPrint}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
+                onDelete={handleDelete}       
             />
 
             <DeleteDialog

@@ -4,12 +4,27 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ActionCellRendererProps {
   data: any;
-  onEdit?: (row: any) => void;
-  onDelete?: (row: any) => void;
+  onEdit?: (
+    row: any
+  ) => void;
+
+  onDelete?: (
+    row: any
+  ) => void;
+  canEdit?: boolean;
+  canDelete?: boolean;
 }
 
-export default function ActionCellRenderer(props: ActionCellRendererProps) {
-  const { data, onEdit, onDelete } = props;
+export default function ActionCellRenderer(
+  props: ActionCellRendererProps
+) {
+  const {
+    data,
+    onEdit,
+    onDelete,
+    canEdit = false,
+    canDelete = false,
+  } = props;
 
   return (
     <Box
@@ -20,25 +35,40 @@ export default function ActionCellRenderer(props: ActionCellRendererProps) {
         height: "100%",
       }}
     >
-      <Tooltip title="Edit">
-        <IconButton
-          size="small"
-          color="primary"
-          onClick={() => onEdit?.(data)}
-        >
-          <EditIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
-
-      <Tooltip title="Delete">
-        <IconButton
-          size="small"
-          color="error"
-          onClick={() => onDelete?.(data)}
-        >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
+      {
+        canEdit && (
+          <Tooltip title="Edit">
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={() =>
+                onEdit?.(data)
+              }
+            >
+              <EditIcon
+                fontSize="small"
+              />
+            </IconButton>
+          </Tooltip>
+        )
+      }
+      {
+        canDelete && (
+          <Tooltip title="Delete">
+            <IconButton
+              size="small"
+              color="error"
+              onClick={() =>
+                onDelete?.(data)
+              }
+            >
+              <DeleteIcon
+                fontSize="small"
+              />
+            </IconButton>
+          </Tooltip>
+        )
+      }
     </Box>
   );
 }

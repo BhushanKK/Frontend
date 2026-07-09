@@ -1,10 +1,4 @@
-import {
-    Stack,
-    TextField,
-    Button,
-    Typography,
-} from "@mui/material";
-
+import { Stack, TextField, Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DownloadIcon from "@mui/icons-material/Download";
 
@@ -15,15 +9,17 @@ interface MasterToolbarProps {
     onExport?: () => void;
     addButtonText?: string;
     showExport?: boolean;
+    showAdd?: boolean;
 }
 
 export default function MasterToolbar({
     title,
-    addButtonText = "Add",
     onSearch,
-    onExport,
     onAdd,
+    onExport,
+    addButtonText = "Add",
     showExport = true,
+    showAdd = true,
 }: MasterToolbarProps) {
     return (
         <Stack
@@ -40,9 +36,7 @@ export default function MasterToolbar({
         >
             <Typography
                 variant="h5"
-                sx={{
-                    fontWeight: 700,
-                }}
+                sx={{ fontWeight: 700 }}
             >
                 {title}
             </Typography>
@@ -72,7 +66,8 @@ export default function MasterToolbar({
                 />
 
                 {showExport && (
-                    <Button size="small"
+                    <Button
+                        size="small"
                         variant="outlined"
                         startIcon={<DownloadIcon />}
                         onClick={onExport}
@@ -81,20 +76,17 @@ export default function MasterToolbar({
                     </Button>
                 )}
 
-                {onAdd && (
+                {showAdd && onAdd && (
                     <Button
+                        size="small"
                         variant="contained"
                         startIcon={<AddIcon />}
                         onClick={onAdd}
-                        size="small"
                     >
                         {addButtonText}
                     </Button>
                 )}
             </Stack>
-
         </Stack>
-
     );
-
 }
