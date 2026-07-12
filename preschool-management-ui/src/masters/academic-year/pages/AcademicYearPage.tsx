@@ -12,7 +12,7 @@ import usePermission from "../../../hooks/usePermission";
 
 export default function AcademicYearPage() {
 
-  const { academicYears, loading, loadAcademicYears } = useAcademicYear();
+  const { academicYears, loading, loadAcademicYears } = useAcademicYear(false);
   const {
     canAdd,
     canEdit,

@@ -1,15 +1,14 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
-import type {AcademicYear,AcademicYearResponse} from "../masters/academic-year/types/academicYear";
-import type { AcademicYearFormValues } from "../masters/academic-year/components/AcademicYearForm";
+import type { AcademicYear, AcademicYearFormValues, AcademicYearResponse } from "../masters/academic-year/types/academicYear";
 
 const BASE_URL = "/AcademicYearmaster";
 
 /**
  * Get All Academic Years
  */
-export const getAcademicYears = async () => {
-  const response = await api.get<AcademicYearResponse>(BASE_URL);
+export const getAcademicYears = async (filter: boolean) => {
+  const response = await api.get<AcademicYearResponse>(`${BASE_URL}/${filter}`);
   return response.data;
 };
 

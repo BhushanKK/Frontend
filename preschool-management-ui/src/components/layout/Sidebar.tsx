@@ -9,7 +9,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
 } from "@mui/material";
 import { ExpandLess, ExpandMore} from "@mui/icons-material";
 import type { SidebarMenu } from "../../masters/menu/utils/SidebarMenu";

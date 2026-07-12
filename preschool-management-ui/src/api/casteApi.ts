@@ -9,8 +9,8 @@ export const getAllCategories = async () => {
     return await getCategories(true);
 };
 
-export const getCastes = async () => {
-    const response = await api.get<CasteResponse>(BASE_URL);
+export const getCastes = async (filter:boolean) => {
+    const response = await api.get<CasteResponse>(`${BASE_URL}/${filter}`);
     return response.data;
 };
 

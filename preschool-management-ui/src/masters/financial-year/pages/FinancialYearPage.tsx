@@ -15,7 +15,7 @@ export default function FinancialYearPage() {
         financialYears,
         loading,
         loadFinancialYears,
-    } = useFinancialYear();
+    } = useFinancialYear(false);
 const {
         canAdd,
         canEdit,

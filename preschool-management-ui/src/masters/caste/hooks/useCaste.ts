@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { Caste } from "../types/caste";
 import { getCastes } from "../../../api/casteApi";
 
-export function useCaste() {
+export function useCaste(filter:boolean) {
     const [castes, setCastes] = useState<Caste[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -10,7 +10,7 @@ export function useCaste() {
         setLoading(true);
 
         try {
-            const response = await getCastes();
+            const response = await getCastes(filter);
 
             if (response.success)
                 setCastes(response.data);

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { FinancialYear } from "../types/financialYear";
 import { getFinancialYears } from "../../../api/financialYearApi";
 
-export function useFinancialYear() {
+export function useFinancialYear(filter:boolean) {
   const [financialYears, setFinancialYears] = useState<FinancialYear[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -11,7 +11,7 @@ export function useFinancialYear() {
     setLoading(true);
 
     try {
-      const response = await getFinancialYears();
+      const response = await getFinancialYears(filter);
 
       if (response.success) {
         setFinancialYears(response.data);

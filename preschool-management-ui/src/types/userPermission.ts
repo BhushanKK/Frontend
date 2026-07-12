@@ -1,4 +1,4 @@
-export interface UserPermission {
+export interface UserPermissions {
     menuId: number;
     menuName: string;
     menuUrl: string | null;

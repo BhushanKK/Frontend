@@ -1,6 +1,5 @@
 
 import { Routes, Route } from "react-router-dom";
-
 import LoginPage from "../features/auth/LoginPage";
 import DashboardPage from "../pages/Components/Dashboard/Dashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
@@ -61,6 +60,7 @@ export default function AppRoutes() {
             path="/masters/rolemenu-permission"
             element={<RoleMenuPermissionPage />}
           />
+          
         </Route>
       </Route>
     </Routes>

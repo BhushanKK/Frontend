@@ -7,8 +7,8 @@ const BASE_URL = "/FinancialYearMaster";
 /**
  * Get All Financial Years
  */
-export const getFinancialYears = async () => {
-    const response = await api.get<FinancialYearResponse>(BASE_URL);
+export const getFinancialYears = async (filter:boolean) => {
+    const response = await api.get<FinancialYearResponse>(`${BASE_URL}/${filter}`);
     return response.data;
 };
 
