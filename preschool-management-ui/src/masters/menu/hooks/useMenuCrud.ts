@@ -46,8 +46,6 @@ export function useMenuCrud({
 
     // Edit
     const handleEdit = (row: Menu) => {
-         console.log("Editing Row:", row);
-
         setEditingRow(row);
         setOpenForm(true);
     };

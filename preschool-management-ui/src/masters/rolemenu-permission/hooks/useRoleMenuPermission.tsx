@@ -104,13 +104,8 @@ export function useRoleMenuPermission() {
                             await usePermissionStore
                                 .getState()
                                 .loadPermissions(roleId);
-                            console.log(
-                                "Permissions refreshed",
-                                usePermissionStore.getState().permissions
-                            );
                         }
                     }
-
                     break;
 
                 case 400:
