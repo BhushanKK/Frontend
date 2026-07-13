@@ -12,8 +12,6 @@ dist/
 npm-debug.log*
 
 # environment
-.env
-.env.*
 
 # editor
 .vscode/
