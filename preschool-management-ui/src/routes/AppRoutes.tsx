@@ -11,6 +11,7 @@ import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";
 import RoleMenuPermissionPage from "../masters/rolemenu-permission/pages/RoleMenuPermissionPage";
+import SectionPage from "../masters/Section/pages/SectionPage";
 
 export default function AppRoutes() {
   return (
@@ -60,7 +61,10 @@ export default function AppRoutes() {
             path="/masters/rolemenu-permission"
             element={<RoleMenuPermissionPage />}
           />
-          
+           <Route
+            path="/masters/Section"
+            element={<SectionPage />}
+          />
         </Route>
       </Route>
     </Routes>
