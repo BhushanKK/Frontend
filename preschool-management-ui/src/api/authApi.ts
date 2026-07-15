@@ -1,12 +1,9 @@
 import axiosPublic from "./axiosPublic";
 import API from "./endpoints";
-
-import type {
-  LoginRequest,
-  LoginResponse,
-  RefreshTokenRequest,
-  RefreshTokenResponse,
+import type { ChangePasswordRequest, ChangePasswordResponse, 
+  LoginRequest, LoginResponse, RefreshTokenRequest, RefreshTokenResponse 
 } from "../types/auth";
+import axiosPrivate from "./axiosPrivate";
 
 /**
  * Login API
@@ -34,4 +31,18 @@ export const refreshToken = async (
   );
 
   return data;
+};
+
+/**
+ * Change Password API
+ */
+export const changePassword = async (
+    request: ChangePasswordRequest
+): Promise<ChangePasswordResponse> => {
+    const { data } = await axiosPrivate.post<ChangePasswordResponse>(
+        API.AUTH.CHANGE_PASSWORD,
+        request
+    );
+
+    return data;
 };

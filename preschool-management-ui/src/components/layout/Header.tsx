@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Avatar, Badge, IconButton, Menu, MenuItem, Toolbar, Typography, Box } from "@mui/material";
-import { Menu as MenuIcon, NotificationsNone, Logout, Person } from "@mui/icons-material";
+import { Menu as MenuIcon, NotificationsNone, Logout, Person, LockReset } from "@mui/icons-material";
 import { useAuthStore } from "../../store/authStore";
 import { drawerWidth } from "./Sidebar";
 
@@ -34,6 +34,11 @@ export default function Header({
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleChangePassword = () => {
+        handleClose();
+        navigate("/change-password");
     };
 
     const handleLogout = () => {
@@ -147,24 +152,18 @@ export default function Header({
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem
-                        onClick={handleClose}
-                    >
-                        <Person
-                            sx={{
-                                mr: 1
-                            }}
-                        />
+                    <MenuItem onClick={handleClose}>
+                        <Person sx={{ mr: 1 }} />
                         My Profile
                     </MenuItem>
-                    <MenuItem
-                        onClick={handleLogout}
-                    >
-                        <Logout
-                            sx={{
-                                mr: 1
-                            }}
-                        />
+
+                    <MenuItem onClick={handleChangePassword}>
+                        <LockReset sx={{ mr: 1 }} />
+                        Change Password
+                    </MenuItem>
+
+                    <MenuItem onClick={handleLogout}>
+                        <Logout sx={{ mr: 1 }} />
                         Logout
                     </MenuItem>
                 </Menu>

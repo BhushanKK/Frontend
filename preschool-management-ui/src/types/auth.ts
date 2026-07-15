@@ -71,3 +71,21 @@ export interface AuthState {
 
   logout: () => void;
 }
+
+/*change password*/
+
+export interface ChangePasswordRequest {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface ChangePasswordResponse {
+    success: boolean;
+    message: string;
+    statusCode: number;
+    data: {
+        success: boolean;
+        message: string;
+    };
+}
