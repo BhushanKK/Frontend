@@ -31,17 +31,12 @@ import type { ChangePasswordRequest } from "../../types/auth";
 import { useAuthStore } from "../../store/authStore";
 
 const ChangePasswordPage = () => {
-
     const navigate = useNavigate();
-
     const logout = useAuthStore((state) => state.logout);
-
     const [loading, setLoading] = useState(false);
-
     const [showCurrent, setShowCurrent] = useState(false);
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-
     const [form, setForm] = useState<ChangePasswordRequest>({
         currentPassword: "",
         newPassword: "",
@@ -86,9 +81,7 @@ const ChangePasswordPage = () => {
     // -----------------------
 
     const getPasswordStrength = (password: string) => {
-
         let score = 0;
-
         if (password.length >= 8)
             score++;
 
@@ -124,8 +117,7 @@ const ChangePasswordPage = () => {
         };
     };
 
-    const passwordStrength =
-        getPasswordStrength(form.newPassword);
+    const passwordStrength = getPasswordStrength(form.newPassword);
 
     // -----------------------
     // Validation
@@ -144,7 +136,6 @@ const ChangePasswordPage = () => {
                 severity: "warning",
                 message: "Please fill all fields.",
             });
-
             return false;
         }
 
@@ -156,7 +147,6 @@ const ChangePasswordPage = () => {
                 message:
                     "Password must contain at least 8 characters.",
             });
-
             return false;
         }
 
@@ -171,7 +161,6 @@ const ChangePasswordPage = () => {
 
             return false;
         }
-
         return true;
     };
 
@@ -180,16 +169,11 @@ const ChangePasswordPage = () => {
     // -----------------------
 
     const handleSubmit = async () => {
-
         if (!validate())
             return;
-
         try {
-
             setLoading(true);
-
             const response = await changePassword(form);
-
             setSnackbar({
                 open: true,
                 severity: response.success
@@ -241,18 +225,16 @@ const ChangePasswordPage = () => {
         <>
             <Box
                 sx={{
-                    minHeight: "100vh",
                     display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    background: "linear-gradient(135deg,#F8FAFC,#EEF2FF)",
+                    width: "100%",
                     p: 2,
+                    justifyContent: "center",
                 }}
             >
                 <Card
                     sx={{
                         width: "100%",
-                        maxWidth: 950,
+                        maxWidth: 1200,
                         borderRadius: 4,
                         boxShadow: "0 12px 32px rgba(0,0,0,.08)",
                     }}
@@ -301,7 +283,7 @@ const ChangePasswordPage = () => {
 
                         {/* Current Password */}
 
-                        <Grid container spacing={2.5} sx={{ mt: 1 }}>
+                        <Grid container spacing={2} sx={{ mt: 0.5 }}>
 
                             {/* Left Side */}
 
@@ -391,13 +373,11 @@ const ChangePasswordPage = () => {
                                         },
                                     }}
                                 />
-
                             </Grid>
 
                             {/* Right Side */}
 
                             <Grid size={{ xs: 12, md: 5 }}>
-
                                 <Paper
                                     elevation={0}
                                     sx={{
@@ -418,25 +398,14 @@ const ChangePasswordPage = () => {
                                     </Typography>
 
                                     <Stack spacing={1}>
-
                                         <Typography>✅ Minimum 8 characters</Typography>
-
                                         <Typography>✅ At least one uppercase letter</Typography>
-
                                         <Typography>✅ At least one lowercase letter</Typography>
-
                                         <Typography>✅ At least one number</Typography>
-
                                         <Typography>✅ At least one special character</Typography>
-
                                     </Stack>
-
-
-
                                 </Paper>
-
                             </Grid>
-
                         </Grid>
 
                         {/* Buttons */}

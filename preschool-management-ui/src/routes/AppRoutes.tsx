@@ -12,6 +12,8 @@ import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";
 import RoleMenuPermissionPage from "../masters/rolemenu-permission/pages/RoleMenuPermissionPage";
 import ChangePasswordPage from "../features/auth/ChangePasswordPage";
+import ForgotPasswordPage from "../features/auth/ForgotPasswordPage";
+import ResetPasswordPage from "../features/auth/ResetPasswordPage";
 
 export default function AppRoutes() {
   return (
@@ -21,7 +23,14 @@ export default function AppRoutes() {
         path="/login"
         element={<LoginPage />}
       />
-
+      <Route
+        path="/forgot-password"
+        element={<ForgotPasswordPage />}
+      />
+      <Route
+        path="/reset-password"
+        element={<ResetPasswordPage />}
+      />
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
@@ -65,6 +74,7 @@ export default function AppRoutes() {
             path="/change-password"
             element={<ChangePasswordPage />}
           />
+          
         </Route>
       </Route>
     </Routes>
