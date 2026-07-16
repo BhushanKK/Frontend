@@ -2,7 +2,6 @@ import { Box, Card, CardContent, Container, Grid } from "@mui/material";
 import schoolImage from "../../assets/images/school-3d.png";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 
-
 export default function ForgotPasswordPage() {
     return (
         <Box

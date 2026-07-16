@@ -14,6 +14,7 @@ import RoleMenuPermissionPage from "../masters/rolemenu-permission/pages/RoleMen
 import ChangePasswordPage from "../features/auth/ChangePasswordPage";
 import ForgotPasswordPage from "../features/auth/ForgotPasswordPage";
 import ResetPasswordPage from "../features/auth/ResetPasswordPage";
+import CommitteePage from "../masters/committee/pages/CommitteePage";
 
 export default function AppRoutes() {
   return (
@@ -73,6 +74,10 @@ export default function AppRoutes() {
           <Route
             path="/change-password"
             element={<ChangePasswordPage />}
+          />
+          <Route
+            path="/masters/committee"
+            element={<CommitteePage />}
           />
           
         </Route>

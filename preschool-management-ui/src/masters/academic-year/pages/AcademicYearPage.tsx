@@ -20,6 +20,7 @@ export default function AcademicYearPage() {
     canExport,
     canPrint,
   } = usePermission();
+  
   const {
     openForm,
     editingRow,

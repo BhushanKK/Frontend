@@ -157,7 +157,6 @@ export default function ResetPasswordForm() {
                 >
                     Back to Login
                 </Button>
-
             </Stack>
         </Box>
     );

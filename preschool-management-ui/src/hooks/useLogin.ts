@@ -1,15 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm, type SubmitHandler} from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { AxiosError } from "axios";
+import { jwtDecode } from "jwt-decode";
+
 import { login } from "../api/authApi";
 import { useAuthStore } from "../store/authStore";
-import type { LoginRequest, LoginResponse} from "../types/auth";
+import { usePermissionStore } from "../store/permissionStore";
+
+import type {
+    LoginRequest,
+    LoginResponse,
+} from "../types/auth";
+
+interface JwtPayload {
+    roleId: number;
+}
 
 export default function useLogin() {
-
     const navigate = useNavigate();
-    const loginStore = useAuthStore(state => state.login);
+
+    const loginStore = useAuthStore((state) => state.login);
+
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -17,9 +29,7 @@ export default function useLogin() {
     const {
         register,
         handleSubmit,
-        formState: {
-            errors
-        },
+        formState: { errors },
     } = useForm<LoginRequest>({
         defaultValues: {
             userName: "",
@@ -27,46 +37,43 @@ export default function useLogin() {
         },
     });
 
-    const onSubmit:
-        SubmitHandler<LoginRequest>
-        = async (data) => {
+    const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
         try {
             setLoading(true);
             setErrorMessage("");
-            const response:
-                LoginResponse =
-                await login(data);
+
+            const response: LoginResponse = await login(data);
+
             if (!response.success) {
-                setErrorMessage(
-                    response.message
-                );
+                setErrorMessage(response.message);
                 return;
             }
-            // Save authentication details
-            loginStore(
-                response.data
+
+            // Save authentication
+            loginStore(response.data);
+
+            // Decode JWT to get RoleId
+            const decoded = jwtDecode<JwtPayload>(
+                response.data.accessToken
             );
 
-            navigate(
-                "/dashboard",
-                {
-                    replace: true,
-                }
-            );
-        }
-        catch(error) {
-            const err =
-                error as AxiosError<{
-                    message?: string
-                }>;
+            // Load Role Permissions
+            await usePermissionStore
+                .getState()
+                .loadPermissions(decoded.roleId);
+
+            // Navigate to Dashboard
+            navigate("/dashboard", {
+                replace: true,
+            });
+        } catch (error) {
+            const err = error as AxiosError<{ message?: string }>;
 
             setErrorMessage(
-                err.response?.data?.message
-                ??
+                err.response?.data?.message ??
                 "Unable to login. Please try again."
             );
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     };
