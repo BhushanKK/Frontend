@@ -1,69 +1,64 @@
-import type {
-    ColDef,
-    ICellRendererParams,
-} from "ag-grid-community";
-import { Chip } from "@mui/material";
+import { Box } from "@mui/material";
+import type { ColDef } from "ag-grid-community";
 import type { CommitteeMaster } from "../types/committee";
 
 const FILE_BASE_URL = import.meta.env.VITE_FILE_BASE_URL;
 
-export const committeeColumns: ColDef<CommitteeMaster>[] = [
+const getLogoUrl = (path?: string | null) => {
+    if (!path) return null;
+
+    if (path.startsWith("http://") || path.startsWith("https://")) {
+        return path;
+    }
+
+    return `${FILE_BASE_URL}/${path.replace(/^\/+/, "")}`;
+};
+
+export const getCommitteeColumns = (
+    onLogoClick: (logoUrl: string) => void
+): ColDef<CommitteeMaster>[] => [
     {
         headerName: "Logo",
         field: "logoPath",
-        width: 110,
-        sortable: false,
-        filter: false,
-        cellRenderer: (
-            params: ICellRendererParams<CommitteeMaster, string>
-        ) => {
-            if (!params.value) {
-                return (
-                    <span style={{ color: "#999" }}>
-                        No Logo
-                    </span>
-                );
-            }
+        width: 100,
+        cellRenderer: (params: any) => {
+            const logoUrl = getLogoUrl(params.value);
+
+            if (!logoUrl) return "No Logo";
 
             return (
-                <img
-                    src={`${FILE_BASE_URL}/${params.value}`}
-                    alt={params.data?.committeeName}
-                    style={{
-                        width: "50px",
-                        height: "50px",
+                <Box
+                    component="img"
+                    src={logoUrl}
+                    alt={params.data?.committeeName ?? "Committee Logo"}
+                    onClick={() => onLogoClick(logoUrl)}
+                    sx={{
+                        width: 50,
+                        height: 50,
                         objectFit: "contain",
-                        borderRadius: "4px",
+                        borderRadius: 1,
                         border: "1px solid #ddd",
-                        padding: "2px",
-                        backgroundColor: "#fff",
+                        p: "2px",
+                        bgcolor: "#fff",
+                        cursor: "pointer",
                     }}
                 />
             );
         },
     },
+
+    // keep your other existing columns here
     {
         headerName: "Committee Name",
         field: "committeeName",
-        flex: 1.5,
     },
     {
         headerName: "Slogan",
         field: "slogan",
-        flex: 2,
     },
     {
         headerName: "Status",
         field: "isActive",
-        width: 120,
-        cellRenderer: (
-            params: ICellRendererParams<CommitteeMaster, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
+        cellRenderer: (params: any) => params.value ? "Active" : "Inactive",
     },
 ];

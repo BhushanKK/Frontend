@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import {
     Box,
     Button,
+    Dialog,
+    DialogContent,
     FormControlLabel,
     Grid,
+    IconButton,
     Switch,
     TextField,
     Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { Controller, useFormContext } from "react-hook-form";
 import type { CommitteeMasterFormValues } from "../types/committee";
 
@@ -37,6 +41,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
     const logo = watch("logo");
 
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [isLogoDialogOpen, setIsLogoDialogOpen] = useState(false);
 
     useEffect(() => {
         if (logo instanceof File) {
@@ -131,6 +136,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                         component="img"
                         src={previewUrl}
                         alt="Committee Logo"
+                        onClick={() => setIsLogoDialogOpen(true)}
                         sx={{
                             width: 120,
                             height: 120,
@@ -139,6 +145,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                             borderRadius: 1,
                             p: 1,
                             bgcolor: "#fff",
+                            cursor: "pointer",
                         }}
                     />
                 ) : (
@@ -179,6 +186,52 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                     )}
                 />
             </Grid>
+            <Dialog
+                open={isLogoDialogOpen}
+                onClose={() => setIsLogoDialogOpen(false)}
+                maxWidth="md"
+                fullWidth
+            >
+                <DialogContent
+                    sx={{
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        p: 3,
+                        bgcolor: "#f8f8f8",
+                    }}
+                >
+                    <IconButton
+                        onClick={() => setIsLogoDialogOpen(false)}
+                        sx={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            bgcolor: "#fff",
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+
+                    {previewUrl && (
+                        <Box
+                            component="img"
+                            src={previewUrl}
+                            alt="Committee Logo Preview"
+                            sx={{
+                                maxWidth: "100%",
+                                maxHeight: "75vh",
+                                objectFit: "contain",
+                                bgcolor: "#fff",
+                                border: "1px solid #ddd",
+                                borderRadius: 1,
+                                p: 1,
+                            }}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
         </Grid>
     );
 }

@@ -1,16 +1,27 @@
+import { useMemo, useState } from "react";
+import {
+    Box,
+    Dialog,
+    DialogContent,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
 import { DeleteDialog } from "../../../components/master-grids";
 import CommitteeForm from "../components/CommitteeForm";
-import { committeeColumns } from "../components/CommitteeColumns";
+import { getCommitteeColumns } from "../components/CommitteeColumns";
 import { useCommittee } from "../hooks/useCommittee";
 import { useCommitteeCrud } from "../hooks/useCommitteeCrud";
 import type { CommitteeMaster } from "../types/committee";
 import usePermission from "../../../hooks/usePermission";
 
 export default function CommitteePage() {
+    const [selectedLogoUrl, setSelectedLogoUrl] = useState<string | null>(null);
+
     const {
         committees,
         loading,
@@ -24,13 +35,7 @@ export default function CommitteePage() {
         canExport,
         canPrint,
     } = usePermission();
-console.log({
-    canAdd,
-    canEdit,
-    canDelete,
-    canExport,
-    canPrint
-});
+
     const {
         openForm,
         editingRow,
@@ -56,6 +61,11 @@ console.log({
         loadCommittees,
     });
 
+    const committeeColumns = useMemo(
+        () => getCommitteeColumns(setSelectedLogoUrl),
+        []
+    );
+
     return (
         <PageContainer>
             <MasterGrid<CommitteeMaster>
@@ -74,6 +84,52 @@ console.log({
                 onDelete={handleDelete}
             />
 
+            <Dialog
+                open={!!selectedLogoUrl}
+                onClose={() => setSelectedLogoUrl(null)}
+                maxWidth="md"
+                fullWidth
+            >
+                <DialogContent
+                    sx={{
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        p: 3,
+                        bgcolor: "#f8f8f8",
+                    }}
+                >
+                    <IconButton
+                        onClick={() => setSelectedLogoUrl(null)}
+                        sx={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            bgcolor: "#fff",
+                            zIndex: 1,
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+
+                    <Box
+                        component="img"
+                        src={selectedLogoUrl ?? ""}
+                        alt="Committee Logo Preview"
+                        sx={{
+                            maxWidth: "100%",
+                            maxHeight: "75vh",
+                            objectFit: "contain",
+                            bgcolor: "#fff",
+                            border: "1px solid #ddd",
+                            borderRadius: 1,
+                            p: 1,
+                        }}
+                    />
+                </DialogContent>
+            </Dialog>
+
             <DeleteDialog
                 open={deleteOpen}
                 title="Delete Committee"
@@ -88,11 +144,7 @@ console.log({
 
             <MasterDialog
                 open={openForm}
-                title={
-                    editingRow
-                        ? "Edit Committee"
-                        : "Add Committee"
-                }
+                title={editingRow ? "Edit Committee" : "Add Committee"}
                 defaultValues={{
                     committeeName: editingRow?.committeeName ?? "",
                     slogan: editingRow?.slogan ?? "",
@@ -104,9 +156,7 @@ console.log({
                 onClose={handleCloseForm}
                 onSave={handleSave}
             >
-                <CommitteeForm
-                    existingLogo={editingRow?.logoPath}
-                />
+                <CommitteeForm existingLogo={editingRow?.logoPath} />
             </MasterDialog>
 
             <AppSnackbar
