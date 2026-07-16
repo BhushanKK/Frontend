@@ -2,33 +2,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { resetPassword } from "../services/tokenService";
-
-
-interface ResetPasswordFormData {
-    newPassword: string;
-    confirmPassword: string;
-}
+import type { ResetPasswordFormData } from "../types/auth";
 
 export const useResetPassword = () => {
 
     const navigate = useNavigate();
-
     const [searchParams] = useSearchParams();
-
     const token = searchParams.get("token") ?? "";
-    const email = searchParams.get("email") ?? "";
-
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<ResetPasswordFormData>();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<ResetPasswordFormData>();
 
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -43,49 +28,40 @@ export const useResetPassword = () => {
 
             setLoading(true);
             setErrorMessage("");
-
             const response = await resetPassword({
                 token,
                 password: data.newPassword,
                 confirmPassword: data.confirmPassword,
             });
-
+            
             setSuccessMessage(response.data.message);
-
+            
             setTimeout(() => {
                 navigate("/login");
             }, 2000);
 
         } catch (error: any) {
-
             setErrorMessage(
                 error?.response?.data?.message ??
                 "Unable to reset password."
             );
-
         } finally {
             setLoading(false);
         }
     };
 
     return {
-
         register,
         handleSubmit,
         watch,
         errors,
-
         loading,
-
         successMessage,
         errorMessage,
-
         showPassword,
         setShowPassword,
-
         showConfirmPassword,
         setShowConfirmPassword,
-
         onSubmit,
     };
 };

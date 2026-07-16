@@ -89,3 +89,12 @@ export interface ChangePasswordResponse {
         message: string;
     };
 }
+
+export interface ResetPasswordFormData {
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface ForgotPasswordFormData {
+    email: string;
+}

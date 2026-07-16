@@ -7,20 +7,12 @@ import { useAuthStore } from "../store/authStore";
 import type { LoginRequest, LoginResponse} from "../types/auth";
 
 export default function useLogin() {
+
     const navigate = useNavigate();
-    const loginStore =
-        useAuthStore(
-            state => state.login
-        );
-
-    const [loading, setLoading] =
-        useState(false);
-
-    const [errorMessage, setErrorMessage] =
-        useState("");
-
-    const [showPassword, setShowPassword] =
-        useState(false);
+    const loginStore = useAuthStore(state => state.login);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
@@ -34,7 +26,6 @@ export default function useLogin() {
             password: "",
         },
     });
-
 
     const onSubmit:
         SubmitHandler<LoginRequest>

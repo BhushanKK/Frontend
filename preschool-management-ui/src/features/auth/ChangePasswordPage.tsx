@@ -203,7 +203,6 @@ const ChangePasswordPage = () => {
 
         }
         catch (error: any) {
-
             setSnackbar({
                 open: true,
                 severity: "error",
@@ -211,7 +210,6 @@ const ChangePasswordPage = () => {
                     error?.response?.data?.message ??
                     "Unable to change password.",
             });
-
         }
         finally {
 

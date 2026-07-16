@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { forgotPassword } from "../services/tokenService";
-
-interface ForgotPasswordFormData {
-    email: string;
-}
+import type {ForgotPasswordFormData} from "../types/auth";
 
 export const useForgotPassword = () => {
     const {
