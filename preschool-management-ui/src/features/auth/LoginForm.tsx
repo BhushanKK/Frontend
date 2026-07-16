@@ -134,8 +134,12 @@ export default function LoginForm() {
                     }}
                 >
                     <FormControlLabel
-                        control={<Checkbox size="small" />}
-                        label="Remember Me"
+                        control={
+                            <Checkbox
+                            size="small"
+                            {...register("rememberMe")}
+                            />
+                        } label="Remember Me"
                     />
 
                     <Typography

@@ -6,6 +6,10 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface LoginFormData extends LoginRequest {
+  rememberMe: boolean;
+}
+
 /**
  * JWT Token Data
  */
