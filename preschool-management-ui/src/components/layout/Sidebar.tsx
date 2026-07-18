@@ -37,12 +37,10 @@ export default function Sidebar({ mobileOpen,  onClose}: SidebarProps) {
   const loadMenus = useCallback(async () => {
     try {
       const response = await getMenus(true);
-
       const menuTree = buildMenuTree(
         permissions,
         response.data as Menu[]
       );
-
       setMenus(menuTree);
     } catch (error) {
       console.error("Failed to load menus", error);

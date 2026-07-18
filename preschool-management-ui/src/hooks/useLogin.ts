@@ -57,31 +57,6 @@ export default function useLogin() {
             loginStore(
                 response.data
             );
-            // Decode JWT
-            const jwt =
-                getJwtPayload(
-                    response.data.accessToken
-                );
-            console.log(
-                "Role Id:",
-                jwt.roleId
-            );
-            // Load role permissions
-           const permissions =
-    await usePermissionStore
-        .getState()
-        .loadPermissions(jwt.roleId);
-
-console.log(
-    "Role Id:",
-    jwt.roleId
-);
-
-
-console.log(
-    "Permissions:",
-    permissions
-);
 
             navigate(
                 "/dashboard",
