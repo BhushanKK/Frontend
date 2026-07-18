@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { getPermissionsByRole } from "../api/permissionApi";
-import type { UserPermission } from "../types/UserPermission";
+import type { UserPermissions } from "../types/userPermission";
 
 interface PermissionState {
-    permissions: UserPermission[];
+    permissions: UserPermissions[];
     loadPermissions: (
         roleId: number
-    ) => Promise<UserPermission[]>;
+    ) => Promise<UserPermissions[]>;
     clearPermissions: () => void;
 }
 

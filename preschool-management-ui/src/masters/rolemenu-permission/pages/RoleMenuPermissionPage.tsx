@@ -47,7 +47,7 @@ export default function RoleMenuPermissionPage() {
             >
                 <Typography
                     variant="h5"
-                    sx={{ fontWeight: 700, mb: 3 }}
+                    sx={{ fontWeight: 600, mb: 2 }}
                 >
                     Role Menu Permission
                 </Typography>

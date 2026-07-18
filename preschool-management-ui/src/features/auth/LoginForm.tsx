@@ -1,3 +1,4 @@
+import { Link as RouterLink } from "react-router-dom";
 import {
     Alert,
     Box,
@@ -84,7 +85,7 @@ export default function LoginForm() {
                 <TextField
                     label="Username"
                     size="small"
-                    fullWidth
+                    fullWidth   
                     {...register("userName", {
                         required: "Username is required",
                     })}
@@ -133,14 +134,21 @@ export default function LoginForm() {
                     }}
                 >
                     <FormControlLabel
-                        control={<Checkbox size="small" />}
-                        label="Remember Me"
+                        control={
+                            <Checkbox
+                            size="small"
+                            {...register("rememberMe")}
+                            />
+                        } label="Remember Me"
                     />
 
                     <Typography
+                        component={RouterLink}
+                        to="/forgot-password"
                         variant="body2"
                         color="primary"
                         sx={{
+                            textDecoration: "none",
                             cursor: "pointer",
                             fontWeight: 600,
                             "&:hover": {

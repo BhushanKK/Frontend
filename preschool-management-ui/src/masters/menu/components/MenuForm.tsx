@@ -73,7 +73,7 @@ export default function MenuForm({
             </Grid>
             {/* Allowed Roles */}
 
-            {/* <Grid size={12}>
+            { <Grid size={12}>
                 <Controller
                     name="roles"
                     control={control}
@@ -103,7 +103,7 @@ export default function MenuForm({
                         />
                     )}
                 />
-            </Grid> */}
+            </Grid> }
 
             {/* Menu Url */}
 

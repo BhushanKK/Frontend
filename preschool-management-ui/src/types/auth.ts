@@ -6,6 +6,10 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface LoginFormData extends LoginRequest {
+  rememberMe: boolean;
+}
+
 /**
  * JWT Token Data
  */
@@ -70,4 +74,31 @@ export interface AuthState {
   ) => void;
 
   logout: () => void;
+}
+
+/*change password*/
+
+export interface ChangePasswordRequest {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface ChangePasswordResponse {
+    success: boolean;
+    message: string;
+    statusCode: number;
+    data: {
+        success: boolean;
+        message: string;
+    };
+}
+
+export interface ResetPasswordFormData {
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface ForgotPasswordFormData {
+    email: string;
 }
