@@ -5,7 +5,7 @@ import type { holiday, holidayFormValues, holidayResponse } from "../masters/hol
 
 const BASE_URL="/HolidayMaster";
 
-export const getCategories = async(filter:boolean) =>{
+export const getHolidays = async(filter:boolean) =>{
     const response = await api.get<holidayResponse>(`${BASE_URL}/${filter}`);
     return response.data;
 }

@@ -1,6 +1,6 @@
 import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import { Chip } from "@mui/material";
-import type { Section } from "../types/section";
+import type { Section } from "../types/Section";
 
 export const SectionColumns: ColDef<Section>[] = [
     {
