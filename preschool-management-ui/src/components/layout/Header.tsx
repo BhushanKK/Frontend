@@ -1,8 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Avatar, Badge, IconButton, Menu, MenuItem, Toolbar, Typography, Box } from "@mui/material";
-import { Menu as MenuIcon, NotificationsNone, Logout, Person, LockReset } from "@mui/icons-material";
+import {
+    AppBar,
+    Avatar,
+    Badge,
+    Box,
+    FormControl,
+    IconButton,
+    Menu,
+    MenuItem,
+    Select,
+    Toolbar,
+    Typography,
+} from "@mui/material";
+import {
+    Menu as MenuIcon,
+    NotificationsNone,
+    Logout,
+    Person,
+    LockReset,
+    Translate,
+} from "@mui/icons-material";
+
 import { useAuthStore } from "../../store/authStore";
+import { useLanguageStore } from "../../store/languageStore";
 import { drawerWidth } from "./Sidebar";
 
 interface HeaderProps {
@@ -10,14 +31,14 @@ interface HeaderProps {
 }
 
 export default function Header({
-    onMenuClick
+    onMenuClick,
 }: HeaderProps) {
-
     const navigate = useNavigate();
 
-    const logout = useAuthStore(
-        (state) => state.logout
-    );
+    const logout = useAuthStore((state) => state.logout);
+
+    const language = useLanguageStore((state) => state.language);
+    const setLanguage = useLanguageStore((state) => state.setLanguage);
 
     const [anchorEl, setAnchorEl] =
         useState<null | HTMLElement>(null);
@@ -27,9 +48,7 @@ export default function Header({
     const handleProfileClick = (
         event: React.MouseEvent<HTMLElement>
     ) => {
-        setAnchorEl(
-            event.currentTarget
-        );
+        setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
@@ -44,12 +63,9 @@ export default function Header({
     const handleLogout = () => {
         handleClose();
         logout();
-        navigate(
-            "/login",
-            {
-                replace: true
-            }
-        );
+        navigate("/login", {
+            replace: true,
+        });
     };
 
     return (
@@ -57,17 +73,17 @@ export default function Header({
             position="fixed"
             sx={{
                 width: {
-                    sm: `calc(100% - ${drawerWidth}px)`
+                    sm: `calc(100% - ${drawerWidth}px)`,
                 },
                 ml: {
-                    sm: `${drawerWidth}px`
+                    sm: `${drawerWidth}px`,
                 },
-                backgroundColor: "#ffffff",
+                backgroundColor: "#fff",
                 color: "#111827",
                 borderBottom: "1px solid #E5E7EB",
-                boxShadow: "none",   // Remove top bar shadow
+                boxShadow: "none",
                 zIndex: (theme) =>
-                    theme.zIndex.drawer + 1
+                    theme.zIndex.drawer + 1,
             }}
         >
             <Toolbar
@@ -86,8 +102,8 @@ export default function Header({
                         mr: 2,
                         display: {
                             xs: "flex",
-                            sm: "none"
-                        }
+                            sm: "none",
+                        },
                     }}
                 >
                     <MenuIcon />
@@ -104,14 +120,62 @@ export default function Header({
                 >
                     School Management System
                 </Typography>
+
                 {/* Right Section */}
                 <Box
                     sx={{
                         display: "flex",
                         alignItems: "center",
-                        gap: 1
+                        gap: 2,
                     }}
                 >
+                    {/* Language */}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                        }}
+                    >
+                        <Translate
+                            fontSize="small"
+                            sx={{
+                                color: "#6B7280",
+                            }}
+                        />
+
+                        <FormControl
+                            size="small"
+                            sx={{
+                                minWidth: 120,
+                            }}
+                        >
+                            <Select
+                                value={language}
+                                onChange={(e) =>
+                                    setLanguage(
+                                        e.target.value as
+                                            | "en"
+                                            | "mr"
+                                            | "hi"
+                                    )
+                                }
+                            >
+                                <MenuItem value="en">
+                                    English
+                                </MenuItem>
+
+                                <MenuItem value="mr">
+                                    मराठी
+                                </MenuItem>
+
+                                <MenuItem value="hi">
+                                    हिन्दी
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+
                     {/* Notification */}
                     <IconButton>
                         <Badge
@@ -119,8 +183,8 @@ export default function Header({
                             color="error"
                             sx={{
                                 "& .MuiBadge-badge": {
-                                    fontSize: "10px"
-                                }
+                                    fontSize: "10px",
+                                },
                             }}
                         >
                             <NotificationsNone />
@@ -129,16 +193,14 @@ export default function Header({
 
                     {/* Profile */}
                     <IconButton
-                        onClick={
-                            handleProfileClick
-                        }
+                        onClick={handleProfileClick}
                     >
                         <Avatar
                             sx={{
                                 width: 38,
                                 height: 38,
                                 bgcolor: "#2563EB",
-                                fontSize: "16px"
+                                fontSize: "16px",
                             }}
                         >
                             A
@@ -157,7 +219,9 @@ export default function Header({
                         My Profile
                     </MenuItem>
 
-                    <MenuItem onClick={handleChangePassword}>
+                    <MenuItem
+                        onClick={handleChangePassword}
+                    >
                         <LockReset sx={{ mr: 1 }} />
                         Change Password
                     </MenuItem>

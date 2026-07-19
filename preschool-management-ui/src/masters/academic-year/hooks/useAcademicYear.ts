@@ -1,36 +1,40 @@
 import { useCallback, useEffect, useState } from "react";
 import { getAcademicYears } from "../../../api/academicYearApi";
 import type { AcademicYear } from "../types/academicYear";
+import { useLanguageStore } from "../../../store/languageStore";
 
-export function useAcademicYear(filter:boolean) {
-  const [academicYears, setAcademicYears] = useState<AcademicYear[]>([]);
-  const [loading, setLoading] = useState(false);
+export function useAcademicYear(filter: boolean) {
+    const [academicYears, setAcademicYears] = useState<AcademicYear[]>([]);
+    const [loading, setLoading] = useState(false);
 
-  const loadAcademicYears = useCallback(async () => {
-    setLoading(true);
+    // Subscribe to selected language
+    const language = useLanguageStore((state) => state.language);
 
-    try {
-      const response = await getAcademicYears(filter);
+    const loadAcademicYears = useCallback(async () => {
+        setLoading(true);
 
-      if (response.success) {
-        setAcademicYears(response.data);
-      } else {
-        setAcademicYears([]);
-      }
-    } catch (error) {
-      setAcademicYears([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        try {
+            const response = await getAcademicYears(filter);
 
-  useEffect(() => {
-    loadAcademicYears();
-  }, [loadAcademicYears]);
+            if (response.success) {
+                setAcademicYears(response.data);
+            } else {
+                setAcademicYears([]);
+            }
+        } catch {
+            setAcademicYears([]);
+        } finally {
+            setLoading(false);
+        }
+    }, [filter]);
 
-  return {
-    academicYears,
-    loading,
-    loadAcademicYears,
-  };
+    useEffect(() => {
+        loadAcademicYears();
+    }, [loadAcademicYears, language]);
+
+    return {
+        academicYears,
+        loading,
+        loadAcademicYears,
+    };
 }

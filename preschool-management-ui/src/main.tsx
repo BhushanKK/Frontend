@@ -7,7 +7,7 @@ import App from "./app";
 import theme from "./theme/theme";
 import { ModuleRegistry, ClientSideRowModelModule, ValidationModule, PaginationModule } from "ag-grid-community";
 import "./config/agGrid";
-
+import "./i18n"; // Initialize i18next
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
   PaginationModule,

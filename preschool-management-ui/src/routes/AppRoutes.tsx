@@ -6,7 +6,6 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AcademicYearPage from "../../src/masters/academic-year/pages/AcademicYearPage";
 import FinancialYearPage from "../masters/financial-year/pages/FinancialYearPage";
-import RolePage from "../masters/role/pages/RolePage";
 import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";

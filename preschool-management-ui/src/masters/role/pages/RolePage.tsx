@@ -1,15 +1,19 @@
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
-import { DeleteDialog } from "../../../components/master-grids";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
+import { DeleteDialog } from "../../../components/master-grids";
 import { useRole } from "../hooks/useRole";
 import { useRoles } from "../hooks/useRoleCrud";
 import RoleForm from "../components/RoleForm";
 import { RoleColumns } from "../components/RoleColumns";
-import type { Role } from "../types/role";
+
+import type { Role, RoleFormValues } from "../types/role";
+
 import usePermission from "../../../hooks/usePermission";
+
 export default function RolePage() {
+    
     const {
         role,
         loading,
@@ -27,15 +31,17 @@ export default function RolePage() {
     const {
         openForm,
         editingRow,
+
         deleteOpen,
-        selectRow,
+        selectedRow,
+
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
 
         handleAdd,
         handleEdit,
-        handelSave,
+        handleSave,
         handleCloseForm,
 
         handleDelete,
@@ -47,17 +53,33 @@ export default function RolePage() {
         loadRoles,
     });
 
+    const defaultValues: RoleFormValues = {
+        
+        roleName: editingRow?.roleName ?? "",
+        isActive: editingRow?.isActive ?? true,
+
+        translations:
+            editingRow?.translations?.length
+                ? editingRow.translations.map((x) => ({
+                      languageCode: x.languageCode,
+                      roleName: x.roleName,
+                  }))
+                : [
+                      {
+                          languageCode: "mr",
+                          roleName: "",
+                      },
+                  ],
+    };
+
     return (
         <PageContainer>
-
             <MasterGrid<Role>
                 title="Role Master"
                 rowData={role}
                 columnDefs={RoleColumns}
                 loading={loading}
                 addButtonText="Add Role"
-
-                // Permission control
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
@@ -65,34 +87,31 @@ export default function RolePage() {
                 canPrint={canPrint}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
-                onDelete={handleDelete}       
+                onDelete={handleDelete}
             />
 
             <DeleteDialog
                 open={deleteOpen}
                 title="Delete Role"
                 description={
-                    selectRow
-                        ? `Are you sure you want to delete "${selectRow.roleName}"?`
+                    selectedRow
+                        ? `Are you sure you want to delete "${selectedRow.roleName}"?`
                         : ""
                 }
                 onClose={handleCloseDelete}
                 onConfirm={handleConfirmDelete}
             />
 
-            <MasterDialog
+            <MasterDialog<RoleFormValues>
                 open={openForm}
                 title={
                     editingRow
                         ? "Edit Role"
                         : "Add Role"
                 }
-                defaultValues={{
-                    roleName: editingRow?.roleName ?? "",
-                    isActive: editingRow?.isActive ?? true,
-                }}
+                defaultValues={defaultValues}
                 onClose={handleCloseForm}
-                onSave={handelSave}
+                onSave={handleSave}
             >
                 <RoleForm />
             </MasterDialog>

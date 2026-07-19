@@ -1,18 +1,34 @@
-import MasterGrid from "../../../components/master-grids/MasterGrid";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+
 import PageContainer from "../../../components/common/PageContainer";
-import { DeleteDialog } from "../../../components/master-grids";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
+import MasterGrid from "../../../components/master-grids/MasterGrid";
+import { DeleteDialog } from "../../../components/master-grids";
+
 import { useCategory } from "../hooks/useCategory";
 import { useCategoryCrud } from "../hooks/useCategoryCrud";
+
 import CategoryForm from "../components/CategoryForm";
-import { categoryColumns } from "../components/CategoryColumns";
-import type { Category } from "../types/category";
+import { getCategoryColumns } from "../components/CategoryColumns";
+
+import type {
+    Category,
+    CategoryFormValues,
+} from "../types/category";
+
 import usePermission from "../../../hooks/usePermission";
 
 export default function CategoryPage() {
+    const { t, i18n } = useTranslation();
 
-    const { category, loading, loadCategories } = useCategory(false);
+    const {
+        categories,
+        loading,
+        loadCategories,
+    } = useCategory(false);
+
     const {
         canAdd,
         canEdit,
@@ -20,6 +36,7 @@ export default function CategoryPage() {
         canExport,
         canPrint,
     } = usePermission();
+
     const {
         openForm,
         editingRow,
@@ -28,35 +45,57 @@ export default function CategoryPage() {
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
-
         handleAdd,
         handleEdit,
         handleSave,
         handleCloseForm,
-
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,
-
         closeSnackbar,
     } = useCategoryCrud({
         loadCategories,
     });
+    console.log("CategoryPage Render:", i18n.language);
+    const categoryColumns = useMemo(() => {
+        console.log("Creating columns:", i18n.language);
+        return getCategoryColumns(t);
+    }, [t, i18n.language]);
+
+    const defaultValues: CategoryFormValues = {
+        categoryName: editingRow?.categoryName ?? "",
+        isActive: editingRow?.isActive ?? true,
+        translations:
+            editingRow?.translations?.length
+                ? editingRow.translations.map((x) => ({
+                    languageCode: x.languageCode,
+                    categoryName: x.categoryName,
+                }))
+                : [
+                    {
+                        languageCode: "mr",
+                        categoryName: "",
+                    },
+                ],
+    };
 
     return (
         <PageContainer>
             <MasterGrid<Category>
-                title="Category Master"
-                rowData={category}
+                title={t("categoryMaster")}
+                rowData={categories}
                 columnDefs={categoryColumns}
                 loading={loading}
-                addButtonText="Add Category"
-                // Permission control
+                addButtonText={t("addCategory")}
+
+                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
+
+                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -64,10 +103,10 @@ export default function CategoryPage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Category"
+                title={t("confirmDelete")}
                 description={
                     selectedRow
-                        ? `Are you sure you want to delete "${selectedRow.categoryName}"?`
+                        ? t("deleteConfirmation", { name: selectedRow.categoryName })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -76,11 +115,12 @@ export default function CategoryPage() {
 
             <MasterDialog
                 open={openForm}
-                title={editingRow ? "Edit Category" : "Add Category"}
-                defaultValues={{
-                    categoryName: editingRow?.categoryName ?? "",
-                    isActive: editingRow?.isActive ?? true,
-                }}
+                title={
+                    editingRow
+                        ? t("editCategory")
+                        : t("addCategory")
+                }
+                defaultValues={defaultValues}
                 onClose={handleCloseForm}
                 onSave={handleSave}
             >

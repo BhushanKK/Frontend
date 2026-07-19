@@ -1,11 +1,15 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
-import type { ColDef, GridApi, GridReadyEvent} from "ag-grid-community";
+import type { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
 import { Box, Card, Divider } from "@mui/material";
 import LoadingOverlay from "./LoadingOverlay";
 import NoRowsOverlay from "./NoRowsOverlay";
 import ActionCellRenderer from "./ActionCellRenderer";
 import MasterToolbar from "./MasterToolbar";
+import { useTranslation } from "react-i18next";
+import agGridEn from "../../i18n/locales/en/agGrid.en";
+import agGridMr from "../../i18n/locales/mr/agGrid.mr";
+
 
 interface MasterGridProps<T> {
   title: string;
@@ -46,16 +50,27 @@ export default function MasterGrid<T>({
   showToolbar = true,
 }: MasterGridProps<T>) {
   const gridRef = useRef<AgGridReact<T>>(null);
+  const { t, i18n } = useTranslation();
+
+  const localeText = useMemo(() => {
+    switch (i18n.language) {
+      case "mr":
+        return agGridMr;
+      default:
+        return agGridEn;
+    }
+  }, [i18n.language]);
+
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const finalColumnDefs = useMemo<ColDef<T>[]>(() => {
 
-    if (!showActions) 
+    if (!showActions)
       return columnDefs;
-    
+
     return [
       ...columnDefs,
       {
-        headerName: "Actions",
+        headerName: t("action"),
         width: 120,
         sortable: false,
         filter: false,
@@ -85,6 +100,7 @@ export default function MasterGrid<T>({
     canEdit,
     canDelete,
     showActions,
+    t
   ]);
 
   const onGridReady = (params: GridReadyEvent) => {
@@ -137,6 +153,7 @@ export default function MasterGrid<T>({
         }}
       >
         <AgGridReact<T>
+          key={i18n.language}
           ref={gridRef}
           rowData={rowData}
           columnDefs={finalColumnDefs}
@@ -148,6 +165,7 @@ export default function MasterGrid<T>({
           paginationPageSizeSelector={[10, 20, 50, 100]}
           rowHeight={36}
           headerHeight={38}
+          localeText={localeText}
           loadingOverlayComponent={LoadingOverlay}
           noRowsOverlayComponent={NoRowsOverlay}
           defaultColDef={{

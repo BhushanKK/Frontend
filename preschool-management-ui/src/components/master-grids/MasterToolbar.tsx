@@ -1,6 +1,7 @@
 import { Stack, TextField, Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DownloadIcon from "@mui/icons-material/Download";
+import { t } from "i18next";
 
 interface MasterToolbarProps {
     title: string;
@@ -47,7 +48,7 @@ export default function MasterToolbar({
             >
                 <TextField
                     size="small"
-                    placeholder="Search..."
+                    placeholder={t("search")}
                     onChange={(e) => onSearch(e.target.value)}
                     sx={{
                         width: {
@@ -72,7 +73,7 @@ export default function MasterToolbar({
                         startIcon={<DownloadIcon />}
                         onClick={onExport}
                     >
-                        Export
+                        {t("export")}
                     </Button>
                 )}
 

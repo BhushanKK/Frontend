@@ -7,20 +7,27 @@ const BASE_URL = "/AcademicYearmaster";
 /**
  * Get All Academic Years
  */
-export const getAcademicYears = async (filter: boolean) => {
-  const response = await api.get<AcademicYearResponse>(`${BASE_URL}/${filter}`);
-  return response.data;
+export const getAcademicYears = async (
+    filter: boolean
+): Promise<ApiResponse<AcademicYear[]>> => {
+    const response = await api.get<ApiResponse<AcademicYear[]>>(
+        `${BASE_URL}/${filter}`
+    );
+
+    return response.data;
 };
 
 /**
  * Get Academic Year By Id
  */
-export const getAcademicYearById = async (id: number) => {
-  const response = await api.get<ApiResponse<AcademicYear>>(
-    `${BASE_URL}/${id}`
-  );
+export const getAcademicYearById = async (
+    id: number
+): Promise<ApiResponse<AcademicYear>> => {
+    const response = await api.get<ApiResponse<AcademicYear>>(
+        `${BASE_URL}/${id}`
+    );
 
-  return response.data;
+    return response.data;
 };
 
 /**
