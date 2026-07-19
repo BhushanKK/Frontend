@@ -11,6 +11,11 @@ import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";
 import RoleMenuPermissionPage from "../masters/rolemenu-permission/pages/RoleMenuPermissionPage";
+import SectionPage from "../masters/Section/pages/SectionPage";
+import HolidayPage from "../masters/holiday/pages/HolidayPage";
+import ReligionPage from "../masters/religion/pages/ReligionPage";
+import DivisionPage from "../masters/division/pages/DivisionPage";
+import DistrictPage from "../masters/district/pages/DistrictPage";
 
 export default function AppRoutes() {
   return (
@@ -67,7 +72,26 @@ export default function AppRoutes() {
             path="/masters/rolemenu-permission"
             element={<RoleMenuPermissionPage />}
           />
-          
+          <Route
+            path="/masters/section"
+            element={<SectionPage />}
+          />
+           <Route
+            path="/masters/holiday"
+            element={<HolidayPage />}
+          />
+           <Route
+            path="/masters/religion"
+            element={<ReligionPage />}
+          />
+           <Route
+            path="/masters/division"
+            element={<DivisionPage />}
+          />
+           <Route
+            path="/masters/district"
+            element={<DistrictPage />}
+          />
         </Route>
       </Route>
     </Routes>
