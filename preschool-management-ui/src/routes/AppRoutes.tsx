@@ -15,6 +15,7 @@ import HolidayPage from "../masters/holiday/pages/HolidayPage";
 import ReligionPage from "../masters/religion/pages/ReligionPage";
 import DivisionPage from "../masters/division/pages/DivisionPage";
 import DistrictPage from "../masters/district/pages/DistrictPage";
+import RolePage from "../masters/role/pages/RolePage";
 
 export default function AppRoutes() {
   return (
