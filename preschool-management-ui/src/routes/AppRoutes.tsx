@@ -6,15 +6,10 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AcademicYearPage from "../../src/masters/academic-year/pages/AcademicYearPage";
 import FinancialYearPage from "../masters/financial-year/pages/FinancialYearPage";
-
 import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";
 import RoleMenuPermissionPage from "../masters/rolemenu-permission/pages/RoleMenuPermissionPage";
-import ChangePasswordPage from "../features/auth/ChangePasswordPage";
-import ForgotPasswordPage from "../features/auth/ForgotPasswordPage";
-import ResetPasswordPage from "../features/auth/ResetPasswordPage";
-import CommitteePage from "../masters/committee/pages/CommitteePage";
 import RolePage from "../masters/role/pages/RolePage";
 
 export default function AppRoutes() {
@@ -25,14 +20,14 @@ export default function AppRoutes() {
         path="/login"
         element={<LoginPage />}
       />
-      <Route
+      {/* <Route
         path="/forgot-password"
         element={<ForgotPasswordPage />}
       />
       <Route
         path="/reset-password"
         element={<ResetPasswordPage />}
-      />
+      /> */}
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
@@ -71,14 +66,6 @@ export default function AppRoutes() {
           <Route
             path="/masters/rolemenu-permission"
             element={<RoleMenuPermissionPage />}
-          />
-          <Route
-            path="/change-password"
-            element={<ChangePasswordPage />}
-          />
-          <Route
-            path="/masters/committee"
-            element={<CommitteePage />}
           />
           
         </Route>
