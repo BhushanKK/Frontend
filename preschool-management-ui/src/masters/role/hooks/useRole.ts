@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Role } from "../types/role";
 import { getRoles } from "../../../api/roleApi";
+import type { Role } from "../types/role";
+import { useLanguageStore } from "../../../store/languageStore";
 
 export function useRole() {
+    const language = useLanguageStore(
+        state => state.language
+    );
+
     const [role, setRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState(false);
-
     const loadRoles = useCallback(async () => {
         setLoading(true);
         try {
@@ -14,20 +18,19 @@ export function useRole() {
                 setRoles(response.data);
             else
                 setRoles([]);
-        } catch (error) {
-            setRoles([]);
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
+
     }, []);
+
     useEffect(() => {
         loadRoles();
-    }, [loadRoles]
-    );
+    }, [loadRoles, language]);   // <-- important
+
     return {
         role,
         loading,
         loadRoles
-    }
-};
+    };
+}

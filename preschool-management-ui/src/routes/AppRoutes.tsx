@@ -6,7 +6,7 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AcademicYearPage from "../../src/masters/academic-year/pages/AcademicYearPage";
 import FinancialYearPage from "../masters/financial-year/pages/FinancialYearPage";
-import RolePage from "../masters/role/pages/RolePage";
+
 import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";
@@ -15,6 +15,7 @@ import ChangePasswordPage from "../features/auth/ChangePasswordPage";
 import ForgotPasswordPage from "../features/auth/ForgotPasswordPage";
 import ResetPasswordPage from "../features/auth/ResetPasswordPage";
 import CommitteePage from "../masters/committee/pages/CommitteePage";
+import RolePage from "../masters/role/pages/RolePage";
 
 export default function AppRoutes() {
   return (

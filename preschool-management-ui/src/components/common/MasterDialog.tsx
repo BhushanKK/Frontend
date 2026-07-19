@@ -15,6 +15,7 @@ import {
   type FieldValues,
   type DefaultValues,
 } from "react-hook-form";
+import { t } from "i18next";
 
 interface MasterDialogProps<T extends FieldValues> {
   open: boolean;
@@ -69,7 +70,7 @@ export default function MasterDialog<T extends FieldValues>({
               onClick={onClose}
               disabled={loading}
             >
-              Cancel
+              {t("cancel")}
             </Button>
 
             <Button
@@ -78,7 +79,7 @@ export default function MasterDialog<T extends FieldValues>({
               variant="contained"
               disabled={loading}
             >
-              {loading ? "Saving..." : "Save"}
+              {loading ? "Saving..." : t("save")}
             </Button>
           </DialogActions>
         </form>

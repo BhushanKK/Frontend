@@ -7,12 +7,17 @@ import { useAcademicYear } from "../hooks/useAcademicYear";
 import { useAcademicYearCrud } from "../hooks/useAcademicYearCrud";
 import AcademicYearForm from "../components/AcademicYearForm";
 import { academicYearColumns } from "../components/AcademicYearColumns";
-import type { AcademicYear } from "../types/academicYear";
+import type { AcademicYear, AcademicYearFormValues } from "../types/academicYear";
 import usePermission from "../../../hooks/usePermission";
 
 export default function AcademicYearPage() {
 
-  const { academicYears, loading, loadAcademicYears } = useAcademicYear(false);
+  const {
+    academicYears,
+    loading,
+    loadAcademicYears
+  } = useAcademicYear(false);
+
   const {
     canAdd,
     canEdit,
@@ -20,12 +25,14 @@ export default function AcademicYearPage() {
     canExport,
     canPrint,
   } = usePermission();
-  
+
   const {
     openForm,
     editingRow,
+
     deleteOpen,
     selectedRow,
+
     snackbarOpen,
     snackbarMessage,
     snackbarSeverity,
@@ -33,17 +40,39 @@ export default function AcademicYearPage() {
     handleAdd,
     handleEdit,
     handleSave,
+
     handleCloseForm,
 
     handleDelete,
     handleConfirmDelete,
     handleCloseDelete,
-
+    
     closeSnackbar,
   } = useAcademicYearCrud({
     loadAcademicYears,
   });
+  const defaultValues: AcademicYearFormValues = {
+    academicYearName: editingRow?.academicYearName ?? "",
+    fromDate:
+      editingRow?.fromDate?.split("T")[0] ?? "",
+    toDate:
+      editingRow?.toDate?.split("T")[0] ?? "",
+    isActive:
+      editingRow?.isActive ?? true,
 
+    translations:
+      editingRow?.translations?.length
+        ? editingRow.translations.map((x) => ({
+          languageCode: x.languageCode,
+          academicYearName: x.academicYearName,
+        }))
+        : [
+          {
+            languageCode: "mr",
+            academicYearName: "",
+          },
+        ],
+  };
   return (
     <PageContainer>
       <MasterGrid<AcademicYear>
@@ -52,7 +81,8 @@ export default function AcademicYearPage() {
         columnDefs={academicYearColumns}
         loading={loading}
         addButtonText="Add Year"
-        // Permission control
+
+        // Permissions
         canAdd={canAdd}
         canEdit={canEdit}
         canDelete={canDelete}
@@ -63,6 +93,7 @@ export default function AcademicYearPage() {
         onDelete={handleDelete}
       />
 
+      {/* Delete Confirmation */}
       <DeleteDialog
         open={deleteOpen}
         title="Delete Academic Year"
@@ -75,6 +106,8 @@ export default function AcademicYearPage() {
         onConfirm={handleConfirmDelete}
       />
 
+      {/* Add / Edit Dialog */}
+
       <MasterDialog
         open={openForm}
         title={
@@ -82,17 +115,14 @@ export default function AcademicYearPage() {
             ? "Edit Academic Year"
             : "Add Academic Year"
         }
-        defaultValues={{
-          academicYearName: editingRow?.academicYearName ?? "",
-          fromDate: editingRow?.fromDate?.split("T")[0] ?? "",
-          toDate: editingRow?.toDate?.split("T")[0] ?? "",
-          isActive: editingRow?.isActive ?? true,
-        }}
+        defaultValues={defaultValues}
         onClose={handleCloseForm}
         onSave={handleSave}
       >
         <AcademicYearForm />
       </MasterDialog>
+
+      {/* Snackbar */}
 
       <AppSnackbar
         open={snackbarOpen}

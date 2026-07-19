@@ -4,7 +4,7 @@ import { createAcademicYear, updateAcademicYear, deleteAcademicYear } from "../.
 import type { AcademicYear, AcademicYearFormValues } from "../types/academicYear";
 import type { ApiResponse } from "../../../types/auth";
 
-type SnackbarSeverity = "success" | "error" | "warning" | "info";
+type SnackbarSeverity = "success" | "warning" | "error" | "info";
 
 interface UseAcademicYearCrudProps {
     loadAcademicYears: () => Promise<void>;
@@ -13,13 +13,25 @@ interface UseAcademicYearCrudProps {
 export function useAcademicYearCrud({
     loadAcademicYears,
 }: UseAcademicYearCrudProps) {
+
+    // Dialog State
     const [openForm, setOpenForm] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [editingRow, setEditingRow] = useState<AcademicYear | null>(null);
-    const [selectedRow, setSelectedRow] = useState<AcademicYear | null>(null);
+
+    // Selected Rows
+    const [editingRow, setEditingRow] =
+        useState<AcademicYear | null>(null);
+
+    const [selectedRow, setSelectedRow] =
+        useState<AcademicYear | null>(null);
+
+    // Snackbar
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>("success");
+    const [snackbarSeverity, setSnackbarSeverity] =
+        useState<SnackbarSeverity>("success");
+
+    //#region Snackbar
 
     const showSnackbar = (
         severity: SnackbarSeverity,
@@ -33,6 +45,10 @@ export function useAcademicYearCrud({
     const closeSnackbar = () => {
         setSnackbarOpen(false);
     };
+
+    //#endregion
+
+    //#region Form
 
     const handleAdd = () => {
         setEditingRow(null);
@@ -49,41 +65,70 @@ export function useAcademicYearCrud({
         setEditingRow(null);
     };
 
-    const handleSave = async (data: AcademicYearFormValues) => {
+    const handleSave = async (
+        data: AcademicYearFormValues
+    ) => {
         try {
             const response = editingRow
-                ? await updateAcademicYear(editingRow.academicYearId, data)
+                ? await updateAcademicYear(
+                    editingRow.academicYearId,
+                    data
+                )
                 : await createAcademicYear(data);
 
             switch (response.statusCode) {
-                case 409:
-                    showSnackbar("warning", response.message);
+                case 200:
+                case 201:
+                    await loadAcademicYears();
+
+                    handleCloseForm();
+
+                    showSnackbar(
+                        "success",
+                        response.message
+                    );
                     break;
 
                 case 400:
-                    showSnackbar("error", response.message);
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
                     break;
 
-                case 200:
-                case 201:
-                    handleCloseForm();
-                    await loadAcademicYears();
-                    showSnackbar("success", response.message);
+                case 409:
+                    showSnackbar(
+                        "warning",
+                        response.message
+                    );
                     break;
 
                 default:
-                    showSnackbar("error", response.message);
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
                     break;
             }
         } catch (error) {
-            showSnackbar(
-                "error",
-                axios.isAxiosError<ApiResponse<number>>(error)
-                    ? error.response?.data.message ?? "Something went wrong."
-                    : "Unexpected error."
-            );
+            if (axios.isAxiosError<ApiResponse<number>>(error)) {
+                showSnackbar(
+                    "error",
+                    error.response?.data.message ??
+                    "Something went wrong."
+                );
+            } else {
+                showSnackbar(
+                    "error",
+                    "Unexpected error occurred."
+                );
+            }
         }
     };
+
+    //#endregion
+
+    //#region Delete
 
     const handleDelete = (row: AcademicYear) => {
         setSelectedRow(row);
@@ -105,13 +150,28 @@ export function useAcademicYearCrud({
 
             if (response.success) {
                 await loadAcademicYears();
+
                 handleCloseDelete();
-                showSnackbar("info", response.message);
+
+                showSnackbar(
+                    "info",
+                    response.message
+                );
+            } else {
+                showSnackbar(
+                    "error",
+                    response.message
+                );
             }
         } catch {
-            showSnackbar("error", "Failed to delete Academic Year.");
+            showSnackbar(
+                "error",
+                "Failed to delete Academic Year."
+            );
         }
     };
+
+    //#endregion
 
     return {
         // Form
@@ -133,6 +193,6 @@ export function useAcademicYearCrud({
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
-        closeSnackbar
+        closeSnackbar,
     };
 }

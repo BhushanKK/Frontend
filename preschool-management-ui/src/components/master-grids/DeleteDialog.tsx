@@ -7,6 +7,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
+import { t } from "i18next";
 
 interface DeleteDialogProps {
   open: boolean;
@@ -55,7 +56,7 @@ export default function DeleteDialog({
           disabled={loading}
           variant="outlined"
         >
-          Cancel
+          {t("cancel")}
         </Button>
 
         <Button
@@ -64,7 +65,7 @@ export default function DeleteDialog({
           variant="contained"
           disabled={loading}
         >
-          {loading ? "Deleting..." : "Delete"}
+          {loading ? t("deleting") : t("delete")}
         </Button>
       </DialogActions>
     </Dialog>

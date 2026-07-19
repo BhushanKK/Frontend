@@ -1,30 +1,25 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
+import type { ColDef } from "ag-grid-community";
 import type { Category } from "../types/category";
-import { Chip } from "@mui/material";
+import type { TFunction } from "i18next";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const categoryColumns: ColDef<Category>[] = [
+export const getCategoryColumns = (
+    t: TFunction
+): ColDef<Category>[] => [
     {
-        headerName: "ID",
+        headerName: t("ID"),
         field: "categoryId",
         width: 100,
     },
     {
-        headerName: "Category",
+        headerName: t("category"),
         field: "categoryName",
-        flex: 1
+        flex: 1,
     },
     {
-        headerName: "Status",
+        headerName: t("status"),
         field: "isActive",
         flex: 1,
-        cellRenderer: (
-            param: ICellRendererParams<Category, boolean>
-        ) => (
-            <Chip
-                label={param.value ? "Active" : "Inactive"}
-                color={param.value ? "success" : "error"}
-                size="small"
-            />
-        ),
+        cellRenderer: StatusCellRenderer,
     }
-]
+];
