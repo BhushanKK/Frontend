@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { createCategory, updateCategory, deleteCategory } from "../../../api/categoryApi";
+import { createCategory, updateCategory, deleteCategory, getCategoryById } from "../../../api/categoryApi";
 import type { Category, CategoryFormValues } from "../types/category";
 import type { ApiResponse } from "../../../types/auth";
 
@@ -19,17 +19,12 @@ export function useCategoryCrud({
     const [deleteOpen, setDeleteOpen] = useState(false);
 
     // Selected Rows
-    const [editingRow, setEditingRow] =
-        useState<Category | null>(null);
-    const [selectedRow, setSelectedRow] =
-        useState<Category | null>(null);
+    const [editingRow, setEditingRow] = useState<Category | null>(null);
+    const [selectedRow, setSelectedRow] = useState<Category | null>(null);
     // Snackbar
-    const [snackbarOpen, setSnackbarOpen] =
-        useState(false);
-    const [snackbarMessage, setSnackbarMessage] =
-        useState("");
-    const [snackbarSeverity, setSnackbarSeverity] =
-        useState<SnackbarSeverity>("success");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>("success");
 
     //#region Snackbar
 
@@ -55,9 +50,30 @@ export function useCategoryCrud({
         setOpenForm(true);
     };
 
-    const handleEdit = (row: Category) => {
-        setEditingRow(row);
-        setOpenForm(true);
+    const handleEdit = async (row: Category) => {
+        try {
+            const response = await getCategoryById(row.categoryId);
+
+            if (!response.success) {
+                showSnackbar("error", response.message);
+                return;
+            }
+
+            setEditingRow(response.data);
+            setOpenForm(true);
+        } catch (error) {
+            console.error("Get Category By Id Error:", error);
+
+            if (axios.isAxiosError(error)) {
+                console.log(error.response?.status);
+                console.log(error.response?.data);
+            }
+
+            showSnackbar(
+                "error",
+                "Failed to load category details."
+            );
+        }
     };
 
     const handleCloseForm = () => {

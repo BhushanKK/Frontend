@@ -56,11 +56,11 @@ export default function CategoryPage() {
     } = useCategoryCrud({
         loadCategories,
     });
-console.log("CategoryPage Render:", i18n.language);
+    console.log("CategoryPage Render:", i18n.language);
     const categoryColumns = useMemo(() => {
-    console.log("Creating columns:", i18n.language);
-    return getCategoryColumns(t);
-}, [t, i18n.language]);
+        console.log("Creating columns:", i18n.language);
+        return getCategoryColumns(t);
+    }, [t, i18n.language]);
 
     const defaultValues: CategoryFormValues = {
         categoryName: editingRow?.categoryName ?? "",
@@ -68,15 +68,15 @@ console.log("CategoryPage Render:", i18n.language);
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
-                      languageCode: x.languageCode,
-                      categoryName: x.categoryName,
-                  }))
+                    languageCode: x.languageCode,
+                    categoryName: x.categoryName,
+                }))
                 : [
-                      {
-                          languageCode: "mr",
-                          categoryName: "",
-                      },
-                  ],
+                    {
+                        languageCode: "mr",
+                        categoryName: "",
+                    },
+                ],
     };
 
     return (
@@ -104,10 +104,10 @@ console.log("CategoryPage Render:", i18n.language);
             <DeleteDialog
                 open={deleteOpen}
                 title={t("confirmDelete")}
-                description = {
-                selectedRow 
-                    ? t("deleteConfirmation", { name : selectedRow.categoryName})
-                    : ""
+                description={
+                    selectedRow
+                        ? t("deleteConfirmation", { name: selectedRow.categoryName })
+                        : ""
                 }
                 onClose={handleCloseDelete}
                 onConfirm={handleConfirmDelete}

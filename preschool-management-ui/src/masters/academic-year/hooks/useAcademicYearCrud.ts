@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { createAcademicYear, updateAcademicYear, deleteAcademicYear } from "../../../api/academicYearApi";
+import { createAcademicYear, updateAcademicYear, deleteAcademicYear, getAcademicYearById } from "../../../api/academicYearApi";
 import type { AcademicYear, AcademicYearFormValues } from "../types/academicYear";
 import type { ApiResponse } from "../../../types/auth";
 
@@ -55,10 +55,25 @@ export function useAcademicYearCrud({
         setOpenForm(true);
     };
 
-    const handleEdit = (row: AcademicYear) => {
-        setEditingRow(row);
-        setOpenForm(true);
-    };
+    const handleEdit = async (row: AcademicYear) => {
+    try {
+        const response = await getAcademicYearById(row.academicYearId);
+
+        if (response.success) {
+            setEditingRow(response.data);
+            setOpenForm(true);
+        } else {
+            showSnackbar("error", response.message);
+        }
+    } catch (error) {
+        console.error("Failed to load Academic Year:", error);
+
+        showSnackbar(
+            "error",
+            "Failed to load Academic Year details."
+        );
+    }
+};
 
     const handleCloseForm = () => {
         setOpenForm(false);
