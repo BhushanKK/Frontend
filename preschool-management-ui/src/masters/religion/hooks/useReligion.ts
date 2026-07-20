@@ -1,35 +1,39 @@
 import { useCallback, useEffect, useState } from "react";
 import { getReligions } from "../../../api/religionApi";
-import type { religion } from "../types/religion";
+import type { Religion } from "../types/religion";
+import { useLanguageStore } from "../../../store/languageStore";
 
-export function useReligion(filter:boolean) {
-    const [Religion, setReligion] = useState<religion[]>([]);
+export function useReligion(filter: boolean) {
+    const [religions, setReligions] = useState<Religion[]>([]);
     const [loading, setLoading] = useState(false);
 
+    // Refresh data when language changes
+    const language = useLanguageStore(
+        (state) => state.language
+    );
     const loadReligions = useCallback(async () => {
-        setLoading(false);
-
+        setLoading(true);
         try {
             const response = await getReligions(filter);
-            if (response.success)
-                setReligion(response.data);
-            else
-                setReligion([]);
-        } catch (error) {
-            setReligion([]);
-        }
-        finally {
+            if (response.success) {
+                setReligions(response.data);
+            } else {
+                setReligions([]);
+            }
+        } catch {
+            setReligions([]);
+        } finally {
             setLoading(false);
         }
-    }, []);
+    }, [filter]);
 
     useEffect(() => {
         loadReligions();
-    }, [loadReligions])
+    }, [loadReligions, language]);
 
     return {
-        Religion,
+        religions,
         loading,
-        loadReligions
+        loadReligions,
     };
 }

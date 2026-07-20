@@ -1,0 +1,70 @@
+{
+  "addCategory": "प्रवर्ग नोंद करा",
+  "editCategory": "प्रवर्ग संपादित करा",
+  "categoryMaster": "प्रवर्ग मास्टर",
+  "category": "प्रवर्ग",
+  "Category": "प्रवर्ग",
+
+  "addRole": "रोल नोंद करा",
+  "editRole": "रोल संपादित करा",
+  "roleMaster": "रोल मास्टर",
+  "role": "रोल",
+  "Role": "रोल",
+
+  "addFinancialYear": "आर्थिक वर्ष नोंद",
+  "editFinancialYear": "आर्थिक वर्ष संपादित करा",
+  "financialYearMaster": "आर्थिक वर्ष मास्टर",
+  "financialYear": "आर्थिक वर्ष",
+  "FinancialYear": "आर्थिक वर्ष",
+  
+  "addAcademicYear": "शैक्षणिक वर्ष नोंद",
+  "editAcademicYear": "शैक्षणिक वर्ष संपादित करा",
+  "academicYearMaster": "शैक्षणिक वर्ष मास्टर",
+  "academicYear": "शैक्षणिक वर्ष",
+  "AcademicYear": "शैक्षणिक वर्ष",
+
+  "fromDate":"पासून दि.",
+  "toDate":"पर्यंत दि.",
+
+  "addReligion": "धर्म नोंद करा",
+  "editReligion": "धर्म संपादित करा",
+  "religionMaster": "धर्म मास्टर",
+  "religion": "धर्म",
+  "Religion": "धर्म",
+
+  "addCaste": "जात नोंद करा",
+  "editCaste": "जात संपादित करा",
+  "casteMaster": "जात मास्टर",
+  "caste": "जात",
+  "Caste": "जात",
+
+  "addSection": "तुकडी नोंद करा",
+  "editSection": "तुकडी संपादित करा",
+  "sectionMaster": "तुकडी मास्टर",
+  "section": "तुकडी",
+  "Section": "तुकडी",
+
+  "addState": "राज्य नोंद करा",
+  "editState": "राज्य संपादित करा",
+  "stateMaster": "राज्य मास्टर",
+  "state": "राज्य",
+  "State": "राज्य",
+
+  "addDistrict": "जिल्हा नोंद करा",
+  "editDistrict": "जिल्हा संपादित करा",
+  "districtMaster": "जिल्हा मास्टर",
+  "district": "जिल्हा",
+  "District": "जिल्हा",
+
+  "addBoard": "शिक्षण मंडळ नोंद करा",
+  "editBoard": "शिक्षण मंडळ संपादित करा",
+  "boardMaster": "शिक्षण मंडळ मास्टर",
+  "board": "शिक्षण मंडळ",
+  "Board": "शिक्षण मंडळ",
+
+  "addCommittee": "समिती नोंद करा",
+  "editCommittee": "समिती संपादित करा",
+  "committeeMaster": "समिती मास्टर",
+  "committee": "समिती",
+  "Committee": "समिती"
+}

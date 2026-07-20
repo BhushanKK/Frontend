@@ -1,40 +1,24 @@
-import { useCallback, useEffect, useState } from "react";
-import { getRoles } from "../../../api/roleApi";
-import type { Role } from "../types/role";
-import { useLanguageStore } from "../../../store/languageStore";
+export interface RoleTranslation {
+    languageCode: string;
+    roleName: string;
+}
 
-export function useRole() {
-    const [role, setRoles] = useState<Role[]>([]);
-    const [loading, setLoading] = useState(false);
+export interface Role {
+    roleId: number;
+    roleName: string;
+    isActive: boolean;
+    translations: RoleTranslation[];
+}
 
-    const language = useLanguageStore((state) => state.language);
+export interface RoleResponse {
+    success: boolean;
+    message: string;
+    statusCode: number;
+    data: Role[];
+}
 
-    const loadRoles = useCallback(async () => {
-        setLoading(true);
-
-        try {
-            const response = await getRoles();
-
-            if (response.success)
-                setRoles(response.data);
-            else
-                setRoles([]);
-        }
-        catch {
-            setRoles([]);
-        }
-        finally {
-            setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        loadRoles();
-    }, [loadRoles, language]);
-
-    return {
-        role,
-        loading,
-        loadRoles,
-    };
+export interface RoleFormValues {
+    roleName: string;
+    isActive: boolean;
+    translations: RoleTranslation[];
 }

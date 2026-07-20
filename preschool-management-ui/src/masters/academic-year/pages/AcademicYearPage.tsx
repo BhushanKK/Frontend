@@ -6,12 +6,15 @@ import AppSnackbar from "../../../components/common/AppSnackbar";
 import { useAcademicYear } from "../hooks/useAcademicYear";
 import { useAcademicYearCrud } from "../hooks/useAcademicYearCrud";
 import AcademicYearForm from "../components/AcademicYearForm";
-import { academicYearColumns } from "../components/AcademicYearColumns";
+import { getAcademicYearColumns } from "../components/AcademicYearColumns";
 import type { AcademicYear, AcademicYearFormValues } from "../types/academicYear";
 import usePermission from "../../../hooks/usePermission";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
+import i18n from "../../../i18n";
 
 export default function AcademicYearPage() {
-
+const { t } = useTranslation(["common", "masters"]);
   const {
     academicYears,
     loading,
@@ -51,6 +54,9 @@ export default function AcademicYearPage() {
   } = useAcademicYearCrud({
     loadAcademicYears,
   });
+  const academicYearColumns = useMemo(() => {
+        return getAcademicYearColumns(t);
+  }, [t, i18n.language]);
   const defaultValues: AcademicYearFormValues = {
     academicYearName: editingRow?.academicYearName ?? "",
     fromDate:
@@ -76,12 +82,11 @@ export default function AcademicYearPage() {
   return (
     <PageContainer>
       <MasterGrid<AcademicYear>
-        title="Academic Year Master"
+        title={t("masters:academicYearMaster")}
         rowData={academicYears}
         columnDefs={academicYearColumns}
         loading={loading}
-        addButtonText="Add Year"
-
+        addButtonText = {t("masters:addAcademicYear")}
         // Permissions
         canAdd={canAdd}
         canEdit={canEdit}
@@ -96,11 +101,11 @@ export default function AcademicYearPage() {
       {/* Delete Confirmation */}
       <DeleteDialog
         open={deleteOpen}
-        title="Delete Academic Year"
+        title={t("common:confirmDelete")}
         description={
           selectedRow
-            ? `Are you sure you want to delete "${selectedRow.academicYearName}"?`
-            : ""
+              ? t("common:deleteConfirmation", { name: selectedRow.academicYearName })
+              : ""                
         }
         onClose={handleCloseDelete}
         onConfirm={handleConfirmDelete}
@@ -112,8 +117,8 @@ export default function AcademicYearPage() {
         open={openForm}
         title={
           editingRow
-            ? "Edit Academic Year"
-            : "Add Academic Year"
+            ? t("masters:editAcademicYear")
+            : t("masters:addAcademicYear")
         }
         defaultValues={defaultValues}
         onClose={handleCloseForm}

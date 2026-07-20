@@ -1,21 +1,28 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
-import type { FinancialYear,FinancialYearResponse,FinancialYearFormValues } from "../masters/financial-year/types/financialYear";
+import type { FinancialYear, FinancialYearFormValues } from "../masters/financial-year/types/financialYear";
 
 const BASE_URL = "/FinancialYearMaster";
 
 /**
  * Get All Financial Years
  */
-export const getFinancialYears = async (filter:boolean) => {
-    const response = await api.get<FinancialYearResponse>(`${BASE_URL}/${filter}`);
+export const getFinancialYears = async (
+    filter: boolean
+): Promise<ApiResponse<FinancialYear[]>> => {
+    const response = await api.get<ApiResponse<FinancialYear[]>>(
+        `${BASE_URL}/${filter}`
+    );
+
     return response.data;
 };
 
 /**
  * Get Financial Year By Id
  */
-export const getFinancialYearById = async (id: number) => {
+export const getFinancialYearById = async (
+    id: number
+): Promise<ApiResponse<FinancialYear>> => {
     const response = await api.get<ApiResponse<FinancialYear>>(
         `${BASE_URL}/${id}`
     );
@@ -28,7 +35,7 @@ export const getFinancialYearById = async (id: number) => {
  */
 export const createFinancialYear = async (
     data: FinancialYearFormValues
-) => {
+): Promise<ApiResponse<FinancialYear>> => {
     const response = await api.post<ApiResponse<FinancialYear>>(
         BASE_URL,
         data
@@ -43,7 +50,7 @@ export const createFinancialYear = async (
 export const updateFinancialYear = async (
     id: number,
     data: FinancialYearFormValues
-) => {
+): Promise<ApiResponse<FinancialYear>> => {
     const response = await api.put<ApiResponse<FinancialYear>>(
         `${BASE_URL}/${id}`,
         data
@@ -55,7 +62,9 @@ export const updateFinancialYear = async (
 /**
  * Delete Financial Year
  */
-export const deleteFinancialYear = async (id: number) => {
+export const deleteFinancialYear = async (
+    id: number
+): Promise<ApiResponse<null>> => {
     const response = await api.delete<ApiResponse<null>>(
         `${BASE_URL}/${id}`
     );

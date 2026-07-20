@@ -1,17 +1,28 @@
-export interface religion{
-    religionId:number;
-    religionName:string;
-
+export interface ReligionTranslation {
+    religionTranslationId?: number;
+    religionId?: number;
+    languageCode: string;
+    religionName: string;
 }
 
-export interface religionResponse{
-    success:boolean;
-    message:string;
-    statusCode:number;
-    data: religion[];
+export interface Religion {
+    religionId: number;
+    religionName: string;
+    isMinority: boolean;
+    isActive: boolean;
+    translations: ReligionTranslation[];
 }
 
-export interface religionFormValues{
-    religionName:string;
-  
+export interface ReligionFormValues {
+    religionName: string;
+    isMinority: boolean;
+    isActive: boolean;
+    translations: ReligionTranslation[];
+}
+
+export interface ReligionResponse {
+    success: boolean;
+    message: string;
+    statusCode: number;
+    data: Religion[];
 }

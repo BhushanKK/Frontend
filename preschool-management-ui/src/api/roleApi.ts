@@ -1,30 +1,72 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
-import type { Role, RoleResponse,RoleFormValues } from "../../src/masters/role/types/role";
+import type {
+    Role,
+    RoleFormValues,
+} from "../masters/role/types/role";
 
-const BASE_URL="/RoleMaster";
+const BASE_URL = "/RoleMaster";
 
-export const getRoles = async() => {
-    const response =await api.get<RoleResponse>(BASE_URL);
+/**
+ * Get All Roles
+ */
+export const getRoles = async (
+): Promise<ApiResponse<Role[]>> => {
+    const response = await api.get<ApiResponse<Role[]>>(BASE_URL);
     return response.data;
 };
 
-export const getRoleById =async(id:number) =>{
-    const response = await api.get<RoleResponse>(`${BASE_URL}/${id}`);
-    return response.data;
-}
+/**
+ * Get Role By Id
+ */
+export const getRoleById = async (
+    id: number
+): Promise<ApiResponse<Role>> => {
+    const response = await api.get<ApiResponse<Role>>(
+        `${BASE_URL}/${id}`
+    );
 
-export const createRole = async (data: RoleFormValues) => {
-    const response = await api.post<ApiResponse<Role>>(BASE_URL,data);
     return response.data;
-}        
+};
 
-export const updateRole = async (id: number,data: RoleFormValues) => {
-    const response = await api.put<ApiResponse<Role>>(`${BASE_URL}/${id}`,data);
-    return response.data;
-}
+/**
+ * Create Role
+ */
+export const createRole = async (
+    data: RoleFormValues
+): Promise<ApiResponse<Role>> => {
+    const response = await api.post<ApiResponse<Role>>(
+        BASE_URL,
+        data
+    );
 
-export const deleteRole = async (id: number) => {
-    const response = await api.delete<ApiResponse<Role>>(`${BASE_URL}/${id}`);
     return response.data;
-}
+};
+
+/**
+ * Update Role
+ */
+export const updateRole = async (
+    id: number,
+    data: RoleFormValues
+): Promise<ApiResponse<Role>> => {
+    const response = await api.put<ApiResponse<Role>>(
+        `${BASE_URL}/${id}`,
+        data
+    );
+
+    return response.data;
+};
+
+/**
+ * Delete Role
+ */
+export const deleteRole = async (
+    id: number
+): Promise<ApiResponse<null>> => {
+    const response = await api.delete<ApiResponse<null>>(
+        `${BASE_URL}/${id}`
+    );
+
+    return response.data;
+};

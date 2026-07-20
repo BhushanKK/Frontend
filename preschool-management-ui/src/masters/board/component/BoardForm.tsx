@@ -16,8 +16,7 @@ import {
     useFieldArray,
     useFormContext,
 } from "react-hook-form";
-
-import type { SectionFormValues } from "../types/section";
+import type { BoardFormValues } from "../types/boardApi";
 
 const languages = [
     { code: "en", name: "English" },
@@ -25,9 +24,8 @@ const languages = [
     { code: "hi", name: "हिंदी" },
 ];
 
-export default function SectionForm() {
-    const { control } =
-        useFormContext<SectionFormValues>();
+export default function BoardForm() {
+    const { control } = useFormContext<BoardFormValues>();
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -36,15 +34,15 @@ export default function SectionForm() {
 
     return (
         <Grid container spacing={2} sx={{ mt: 1 }}>
-            {/* Section Name */}
+            {/* Board Name */}
             <Grid size={12}>
                 <Controller
-                    name="sectionName"
+                    name="boardName"
                     control={control}
                     render={({ field, fieldState }) => (
                         <TextField
                             {...field}
-                            label="Section Name"
+                            label="Board Name"
                             fullWidth
                             size="small"
                             error={!!fieldState.error}
@@ -77,7 +75,7 @@ export default function SectionForm() {
                     >
                         <Grid
                             container
-                            sx={{spacing:2,alignItems:"center"}}
+                            sx={{ spacing: 2, alignItems: "center" }}
                         >
                             {/* Language */}
                             <Grid size={{ xs: 4 }}>
@@ -108,12 +106,12 @@ export default function SectionForm() {
                             {/* Translation */}
                             <Grid size={{ xs: 7 }}>
                                 <Controller
-                                    name={`translations.${index}.sectionName`}
+                                    name={`translations.${index}.boardName`}
                                     control={control}
                                     render={({ field }) => (
                                         <TextField
                                             {...field}
-                                            label="Translated Section Name"
+                                            label="Translated Board Name"
                                             fullWidth
                                             size="small"
                                         />
@@ -141,7 +139,7 @@ export default function SectionForm() {
                     onClick={() =>
                         append({
                             languageCode: "",
-                            sectionName: "",
+                            boardName: "",
                         })
                     }
                 >
@@ -149,18 +147,14 @@ export default function SectionForm() {
                 </Button>
             </Grid>
 
-            {/* Status */}
+            {/* Active */}
             <Grid size={12}>
                 <Controller
                     name="isActive"
                     control={control}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={
-                                field.value
-                                    ? "Active"
-                                    : "Inactive"
-                            }
+                            label={field.value ? "Active" : "Inactive"}
                             control={
                                 <Switch
                                     sx={{
@@ -168,10 +162,10 @@ export default function SectionForm() {
                                             color: "success.main",
                                         },
                                         "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
-                                            {
-                                                backgroundColor:
-                                                    "success.main",
-                                            },
+                                        {
+                                            backgroundColor:
+                                                "success.main",
+                                        },
                                         "& .MuiSwitch-track": {
                                             backgroundColor: field.value
                                                 ? "success.main"
@@ -181,9 +175,7 @@ export default function SectionForm() {
                                     }}
                                     checked={field.value}
                                     onChange={(e) =>
-                                        field.onChange(
-                                            e.target.checked
-                                        )
+                                        field.onChange(e.target.checked)
                                     }
                                 />
                             }

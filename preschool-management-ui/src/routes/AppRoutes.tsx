@@ -19,6 +19,8 @@ import SectionPage from "../masters/Section/pages/SectionPage";
 import ReligionPage from "../masters/religion/pages/ReligionPage";
 import DistrictPage from "../masters/district/pages/DistrictPage";
 import DivisionPage from "../masters/division/pages/DivisionPage";
+import BoardPage from "../masters/board/pages/BoardPage";
+import CommitteePage from "../masters/committee/pages/CommitteePage";
 
 export default function AppRoutes() {
   return (
@@ -95,9 +97,17 @@ export default function AppRoutes() {
             path="/masters/division"
             element={<DivisionPage />}
           />
-           <Route
+          <Route
             path="/masters/district"
             element={<DistrictPage />}
+          />
+          <Route
+            path="/masters/board"
+            element={<BoardPage />}
+          />
+          <Route
+            path="/masters/committee"
+            element={<CommitteePage />}
           />
         </Route>
       </Route>

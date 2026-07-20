@@ -1,27 +1,19 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-
 import PageContainer from "../../../components/common/PageContainer";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import { DeleteDialog } from "../../../components/master-grids";
-
 import { useCategory } from "../hooks/useCategory";
 import { useCategoryCrud } from "../hooks/useCategoryCrud";
-
 import CategoryForm from "../components/CategoryForm";
 import { getCategoryColumns } from "../components/CategoryColumns";
-
-import type {
-    Category,
-    CategoryFormValues,
-} from "../types/category";
-
+import type { Category, CategoryFormValues } from "../types/category";
 import usePermission from "../../../hooks/usePermission";
 
 export default function CategoryPage() {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation("masters");
 
     const {
         categories,
@@ -56,9 +48,8 @@ export default function CategoryPage() {
     } = useCategoryCrud({
         loadCategories,
     });
-    console.log("CategoryPage Render:", i18n.language);
+    
     const categoryColumns = useMemo(() => {
-        console.log("Creating columns:", i18n.language);
         return getCategoryColumns(t);
     }, [t, i18n.language]);
 

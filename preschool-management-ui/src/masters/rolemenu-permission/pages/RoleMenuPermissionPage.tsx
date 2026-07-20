@@ -11,7 +11,7 @@ import type { RoleMenuPermission } from "../types/roleMenuPermission";
 export default function RoleMenuPermissionPage() {
     const [roleId, setRoleId] = useState(0);
     const {
-        role,
+        roles,
     } = useRole();
 
     const {
@@ -82,7 +82,7 @@ export default function RoleMenuPermissionPage() {
                                 Select Role
                             </MenuItem>
 
-                            {role.map(r => (
+                            {roles.map(r => (
                                 <MenuItem
                                     key={r.roleId}
                                     value={r.roleId}

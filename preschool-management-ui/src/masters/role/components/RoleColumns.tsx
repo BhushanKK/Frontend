@@ -1,30 +1,26 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
+import type {
+    ColDef,
+} from "ag-grid-community";
 import type { Role } from "../types/role";
-import { Chip } from "@mui/material";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
+import { t, type TFunction } from "i18next";
+import i18n from "../../../i18n";
 
-export const RoleColumns : ColDef<Role>[] = [
+export const getRoleColumns = (t: TFunction): ColDef<Role>[] => [
     {
-        headerName: "Id",
+        headerName: t("ID"),
         field: "roleId",
-        width: 100
+        width: 100,
     },
     {
-        headerName:"Role",
-        field:"roleName",
-        width:100
+        headerName: i18n.t("masters:role"),
+        field: "roleName",
+        flex: 1,
     },
     {
-        headerName: "Status",
+        headerName: t("status"),
         field: "isActive",
         flex: 1,
-        cellRenderer: (
-            params: ICellRendererParams<Role, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
+        cellRenderer: StatusCellRenderer,
     }
 ];

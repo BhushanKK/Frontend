@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Section } from "../types/Section";
 import { getSections } from "../../../api/sectionApi";
+import type { Section } from "../types/section";
+import { useLanguageStore } from "../../../store/languageStore";
 
-export function useSection(filter:boolean) {
-    const [Sections, setSections] = useState<Section[]>([]);
+export function useSection(filter: boolean) {
+    const [sections, setSections] = useState<Section[]>([]);
     const [loading, setLoading] = useState(false);
+
+    // Reload data whenever language changes
+    const language = useLanguageStore((state) => state.language);
 
     const loadSections = useCallback(async () => {
         setLoading(true);
@@ -12,23 +16,24 @@ export function useSection(filter:boolean) {
         try {
             const response = await getSections(filter);
 
-            if (response.success)
+            if (response.success) {
                 setSections(response.data);
-            else
+            } else {
                 setSections([]);
-        } catch (error) {
+            }
+        } catch {
             setSections([]);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [filter]);
 
     useEffect(() => {
         loadSections();
-    }, [loadSections]);
+    }, [loadSections, language]);
 
     return {
-        Sections,
+        sections,
         loading,
         loadSections,
     };

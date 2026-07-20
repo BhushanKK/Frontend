@@ -1,43 +1,36 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
+import type { ColDef } from "ag-grid-community";
 import type { FinancialYear } from "../types/financialYear";
 import { formatDate } from "../../../utils/dateFormatter";
-import { Chip } from "@mui/material";
+import type { TFunction } from "i18next";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const financialYearColumns: ColDef<FinancialYear>[] = [
+export const getFinancialYearColumns = (t: TFunction): ColDef<FinancialYear>[] => [
     {
-        headerName: "ID",
+        headerName: t("ID"),
         field: "financialYearId",
         width: 100,
     },
     {
-        headerName: "Financial Year",
+        headerName: t("masters:financialYear"),
         field: "financialYearName",
         flex: 1,
     },
     {
-        headerName: "From Date",
+        headerName: t("masters:fromDate"),
         field: "fromDate",
         flex: 1,
         valueFormatter: ({ value }) => formatDate(value),
     },
     {
-        headerName: "To Date",
+        headerName: t("masters:toDate"),
         field: "toDate",
         flex: 1,
         valueFormatter: ({ value }) => formatDate(value),
     },
     {
-        headerName: "Status",
+        headerName: t("status"),
         field: "isActive",
         flex: 1,
-        cellRenderer: (
-            params: ICellRendererParams<FinancialYear, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
+        cellRenderer: StatusCellRenderer,
     }
 ];

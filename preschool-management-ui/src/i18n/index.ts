@@ -3,6 +3,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import enCommon from "./locales/en/common.json";
 import mrCommon from "./locales/mr/common.json";
+import enMasters from "./locales/en/masters.json";
+import mrMasters from "./locales/mr/masters.json";
 
 i18n
     .use(LanguageDetector)
@@ -11,9 +13,11 @@ i18n
         resources: {
             en: {
                 common: enCommon,
+                masters:enMasters
             },
             mr: {
                 common: mrCommon,
+                masters:mrMasters
             }
         },
 
@@ -27,6 +31,7 @@ i18n
         defaultNS: "common",
         ns: [
             "common",
+            "masters"
         ],
         interpolation: {
             escapeValue: false,

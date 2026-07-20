@@ -26,16 +26,11 @@
 
   "addRecord": "नवीन जोडा",
   "editRecord": "संपादित करा",
-  "addCategory":"प्रवर्ग नोंद",
-  "categoryMaster":"प्रवर्ग मास्टर",
-  "Category":"प्रवर्ग",
   "Language":"भाषा",
   "Translation":"अनुवाद",
   "AddTranslation" : "अनुवाद जोडा",
   "deleteCategory":"प्रवर्ग हटवा",
   "ID":"आयडी",
-  "category":"प्रवर्ग",
   "status":"स्थिती",
-  "action":"कार्यवाही",
-  "editCategory" : "प्रवर्ग संपादन करा"
+  "action":"कार्यवाही"  
 }

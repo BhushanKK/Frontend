@@ -1,25 +1,24 @@
-import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
-import { DeleteDialog } from "../../../components/master-grids";
+import MasterGrid from "../../../components/master-grids/MasterGrid";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
-import { useRole } from "../hooks/useRole";
-import { useRoleCrud } from "../hooks/useRoleCrud";
-import RoleForm from "../components/RoleForm";
-import type { Role, RoleFormValues } from "../types/role";
-import usePermission from "../../../hooks/usePermission";
-import { useTranslation } from "react-i18next";
-import { useMemo } from "react";
-import { getRoleColumns } from "../components/RoleColumns";
-import i18n from "../../../i18n";
+import { DeleteDialog } from "../../../components/master-grids";
 
-export default function RolePage() {
-    const { t } = useTranslation(["common", "masters"]);
+import { useBoard } from "../hooks/useBoard";
+import { useBoardCrud } from "../hooks/useBoardCrud";
+
+
+import usePermission from "../../../hooks/usePermission";
+import type { Board, BoardFormValues } from "../types/boardApi";
+import { boardColumns } from "../component/BoardColumns";
+import BoardForm from "../component/BoardForm";
+
+export default function BoardPage() {
     const {
-        roles,
+        boards,
         loading,
-        loadRoles,
-    } = useRole();
+        loadBoards,
+    } = useBoard();
 
     const {
         canAdd,
@@ -50,48 +49,43 @@ export default function RolePage() {
         handleCloseDelete,
 
         closeSnackbar,
-    } = useRoleCrud({
-        loadRoles,
+    } = useBoardCrud({
+        loadBoards,
     });
-    const roleColumns = useMemo(() => {
-        return getRoleColumns(t);
-    }, [t, i18n.language]);
 
-    const defaultValues: RoleFormValues = {
-        roleName: editingRow?.roleName ?? "",
+    const defaultValues: BoardFormValues = {
+        boardName: editingRow?.boardName ?? "",
         isActive: editingRow?.isActive ?? true,
 
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
                     languageCode: x.languageCode,
-                    roleName: x.roleName,
+                    boardName: x.boardName,
                 }))
                 : [
                     {
                         languageCode: "mr",
-                        roleName: "",
+                        boardName: "",
                     },
                 ],
     };
 
     return (
         <PageContainer>
-            <MasterGrid<Role>
-                title={t("masters:roleMaster")}
-                rowData={roles}
-                columnDefs={roleColumns}
+            <MasterGrid<Board>
+                title="Board Master"
+                rowData={boards}
+                columnDefs={boardColumns}
                 loading={loading}
-                addButtonText={t("masters:addRole")}
+                addButtonText="Add Board"
 
-                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
 
-                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -99,10 +93,10 @@ export default function RolePage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title={t("common:confirmDelete")}
+                title="Delete Board"
                 description={
                     selectedRow
-                        ? t("common:deleteConfirmation", { name: selectedRow.roleName })
+                        ? `Are you sure you want to delete "${selectedRow.boardName}"?`
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -113,14 +107,14 @@ export default function RolePage() {
                 open={openForm}
                 title={
                     editingRow
-                        ? t("masters:editRole")
-                        : t("masters:addRole")
+                        ? "Edit Board"
+                        : "Add Board"
                 }
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}
                 onSave={handleSave}
             >
-                <RoleForm />
+                <BoardForm />
             </MasterDialog>
 
             <AppSnackbar

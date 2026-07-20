@@ -1,0 +1,68 @@
+{
+  "addCategory": "Add Category",
+  "editCategory": "Edit Category",
+  "categoryMaster": "Category Master",
+  "category": "Category",
+  "Category": "Category",
+
+  "addRole": "Add Role",
+  "editRole": "Edit Role",
+  "roleMaster": "Role Master",
+  "role": "Role",
+  "Role": "Role",
+
+  "addFinancialYear": "Add Financial Year",
+  "editFinancialYear": "Edit Financial Year",
+  "financialYearMaster": "Financial Year Master",
+  "financialYear": "Financial Year",
+  "FinancialYear": "Financial Year",
+
+  "addAcademicYear": "Add Academic Year",
+  "editAcademicYear": "Edit Academic Year",
+  "academicYearMaster": "Academic Year Master",
+  "academicYear": "Academic Year",
+  "AcademicYear": "Academic Year",
+  "fromDate":"From Date",
+  "toDate":"To Date",
+  "addReligion": "Add Religion",
+  "editReligion": "Edit Religion",
+  "religionMaster": "Religion Master",
+  "religion": "Religion",
+  "Religion": "Religion",
+
+  "addCaste": "Add Caste",
+  "editCaste": "Edit Caste",
+  "casteMaster": "Caste Master",
+  "caste": "Caste",
+  "Caste": "Caste",
+
+  "addSection": "Add Section",
+  "editSection": "Edit Section",
+  "sectionMaster": "Section Master",
+  "section": "Section",
+  "Section": "Section",
+
+  "addState": "Add State",
+  "editState": "Edit State",
+  "stateMaster": "State Master",
+  "state": "State",
+  "State": "State",
+
+  "addDistrict": "Add District",
+  "editDistrict": "Edit District",
+  "districtMaster": "District Master",
+  "district": "District",
+  "District": "District",
+
+  "addBoard": "Add Board",
+  "editBoard": "Edit Board",
+  "boardMaster": "Board Master",
+  "board": "Board",
+  "Board": "Board",
+
+  "addCommittee": "Add Committee",
+  "editCommittee": "Edit Committee",
+  "committeeMaster": "Committee Master",
+  "committee": "Committee",
+  "Committee": "Committee"
+}

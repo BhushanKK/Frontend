@@ -1,19 +1,16 @@
-import type {
-    ColDef,
-    ICellRendererParams,
-} from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import { Chip } from "@mui/material";
-import type { Section } from "../types/section";
+import type { Board } from "../types/boardApi";
 
-export const sectionColumns: ColDef<Section>[] = [
+export const boardColumns: ColDef<Board>[] = [
     {
         headerName: "ID",
-        field: "sectionId",
+        field: "boardId",
         width: 100,
     },
     {
-        headerName: "Section Name",
-        field: "sectionName",
+        headerName: "Board Name",
+        field: "boardName",
         flex: 1,
     },
     {
@@ -21,7 +18,7 @@ export const sectionColumns: ColDef<Section>[] = [
         field: "isActive",
         width: 130,
         cellRenderer: (
-            params: ICellRendererParams<Section, boolean>
+            params: ICellRendererParams<Board, boolean>
         ) => (
             <Chip
                 label={params.value ? "Active" : "Inactive"}

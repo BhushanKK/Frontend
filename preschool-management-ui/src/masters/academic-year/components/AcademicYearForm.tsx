@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { AcademicYearFormValues } from "../../academic-year/types/academicYear";
+import { t } from "i18next";
 
 const languages = [
     { code: "en", name: "English" },
@@ -40,7 +41,7 @@ export default function AcademicYearForm() {
                     render={({ field, fieldState }) => (
                         <TextField
                             {...field}
-                            label="Academic Year"
+                            label={t("masters:academicYear")}
                             fullWidth
                             size="small"
                             error={!!fieldState.error}
@@ -59,7 +60,7 @@ export default function AcademicYearForm() {
                         <TextField
                             {...field}
                             type="date"
-                            label="From Date"
+                            label={t("masters:fromDate")}
                             fullWidth
                             size="small"
                             slotProps={{
@@ -82,7 +83,7 @@ export default function AcademicYearForm() {
                         <TextField
                             {...field}
                             type="date"
-                            label="To Date"
+                            label={t("masters:toDate")}
                             fullWidth
                             size="small"
                             slotProps={{
@@ -106,7 +107,7 @@ export default function AcademicYearForm() {
                         fontWeight: 600
                     }}
                 >
-                    Translations
+                    {t("Translation")}
                 </Typography>
                 {
                     fields.map((item, index) => (
@@ -132,7 +133,7 @@ export default function AcademicYearForm() {
                                             <TextField
                                                 {...field}
                                                 select
-                                                label="Language"
+                                                label={t("common:language")}
                                                 fullWidth
                                                 size="small"
                                             >
@@ -159,7 +160,7 @@ export default function AcademicYearForm() {
                                         render={({ field }) => (
                                             <TextField
                                                 {...field}
-                                                label="Translated Academic Year"
+                                                label={t("common:Translation")}
                                                 fullWidth
                                                 size="small"
                                             />
@@ -192,7 +193,7 @@ export default function AcademicYearForm() {
                         academicYearName: ""
                     })}
                 >
-                    Add Translation
+                    {t("AddTranslation")}
                 </Button>
             </Grid>
 
@@ -205,15 +206,41 @@ export default function AcademicYearForm() {
                         <FormControlLabel
                             label={
                                 field.value
-                                    ? "Active"
-                                    : "Inactive"
+                                    ? t("common:active")
+                                    : t("common:inactive")
                             }
                             control={
                                 <Switch
-                                    checked={field.value ?? false}
-                                    onChange={(e) =>
+                                    sx={{
+                                        "& .MuiSwitch-switchBase.Mui-checked":
+                                            {
+                                                color:
+                                                    "success.main",
+                                            },
+                                        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
+                                            {
+                                                backgroundColor:
+                                                    "success.main",
+                                            },
+                                        "& .MuiSwitch-track":
+                                            {
+                                                backgroundColor:
+                                                    field.value
+                                                        ? "success.main"
+                                                        : "error.main",
+                                                opacity: 1,
+                                            },
+                                    }}
+                                    checked={
+                                        field.value ??
+                                        false
+                                    }
+                                    onChange={(
+                                        e
+                                    ) =>
                                         field.onChange(
-                                            e.target.checked
+                                            e.target
+                                                .checked
                                         )
                                     }
                                 />

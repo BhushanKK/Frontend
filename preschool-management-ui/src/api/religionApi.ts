@@ -1,29 +1,49 @@
 import api from "./axios";
-import type { religion,religionFormValues,religionResponse } from "../masters/religion/types/religion";
 import type { ApiResponse } from "../types/auth";
+import type { Religion, ReligionFormValues } from "../masters/religion/types/religion";
 
-const BASE_URL="/religionMaster";
+const BASE_URL = "/ReligionMaster";
 
-export const getReligions = async(filter:boolean) =>{
-    const response = await api.get<religionResponse>(`${BASE_URL}/${filter}`);
+/**
+ * Get All Religions
+ */
+export const getReligions = async (filter: boolean): Promise<ApiResponse<Religion[]>> => {
+    const response = await api.get<ApiResponse<Religion[]>>(`${BASE_URL}/${filter}`);
     return response.data;
-}
-export const getReligionById= async (id:number) => {
-    const response=await api.get<religionResponse>(`${BASE_URL}/${id}`);
-    return response.data;
-}
+};
 
-export const createReligion = async(data:religionFormValues)=>{
-    const response = await api.post<ApiResponse<religion>>(BASE_URL,data);
+/**
+ * Get Religion By Id
+ */
+export const getReligionById = async (id: number)
+    : Promise<ApiResponse<Religion>> => {
+    const response = await api.get<ApiResponse<Religion>>(`${BASE_URL}/${id}`);
     return response.data;
-}
+};
 
-export const updateReligion = async(id:number,data:religionFormValues)=>{
-    const response = await api.put<ApiResponse<religion>>(`${BASE_URL}/${id}`,data);
+/**
+ * Create Religion
+ */
+export const createReligion = async (data: ReligionFormValues)
+    : Promise<ApiResponse<Religion>> => {
+    const response = await api.post<ApiResponse<Religion>>(BASE_URL, data);
     return response.data;
-}
+};
 
-export const deleteReligion = async(id:number) => {
-    const response = await api.delete<ApiResponse<religion>>(`${BASE_URL}/${id}`);
+/**
+ * Update Religion
+ */
+export const updateReligion = async (id: number, data: ReligionFormValues)
+    : Promise<ApiResponse<Religion>> => {
+    const response = await api.put<ApiResponse<Religion>>(`${BASE_URL}/${id}`, data);
     return response.data;
-}
+};
+
+/**
+ * Delete Religion
+ */
+export const deleteReligion = async (id: number)
+    : Promise<ApiResponse<null>> => {
+    const response = await api.delete<ApiResponse<null>>(`${BASE_URL}/${id}`);
+    return response.data;
+};

@@ -1,26 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
-import {
-    createFinancialYear,
-    updateFinancialYear,
-    deleteFinancialYear,
-    getFinancialYearById,
-} from "../../../api/financialYearApi";
-import type {
-    FinancialYear,
-    FinancialYearFormValues,
-} from "../types/financialYear";
 import type { ApiResponse } from "../../../types/auth";
+import type { Board, BoardFormValues } from "../types/boardApi";
+import {createBoard,updateBoard,deleteBoard,getBoardById} from "../../../api/boardApi";
 
 type SnackbarSeverity = "success" | "warning" | "error" | "info";
 
-interface UseFinancialYearCrudProps {
-    loadFinancialYears: () => Promise<void>;
+interface UseBoardCrudProps {
+    loadBoards: () => Promise<void>;
 }
 
-export function useFinancialYearCrud({
-    loadFinancialYears,
-}: UseFinancialYearCrudProps) {
+export function useBoardCrud({
+    loadBoards,
+}: UseBoardCrudProps) {
 
     // Dialog State
     const [openForm, setOpenForm] = useState(false);
@@ -28,14 +20,18 @@ export function useFinancialYearCrud({
 
     // Selected Rows
     const [editingRow, setEditingRow] =
-        useState<FinancialYear | null>(null);
+        useState<Board | null>(null);
 
     const [selectedRow, setSelectedRow] =
-        useState<FinancialYear | null>(null);
+        useState<Board | null>(null);
 
     // Snackbar
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarOpen, setSnackbarOpen] =
+        useState(false);
+
+    const [snackbarMessage, setSnackbarMessage] =
+        useState("");
+
     const [snackbarSeverity, setSnackbarSeverity] =
         useState<SnackbarSeverity>("success");
 
@@ -63,27 +59,25 @@ export function useFinancialYearCrud({
         setOpenForm(true);
     };
 
-    const handleEdit = async (row: FinancialYear) => {
+    const handleEdit = async (row: Board) => {
         try {
-            const response = await getFinancialYearById(
-                row.financialYearId
-            );
+            const response = await getBoardById(row.boardId);
 
             if (response.success) {
                 setEditingRow(response.data);
                 setOpenForm(true);
             } else {
-                showSnackbar("error", response.message);
+                showSnackbar(
+                    "error",
+                    response.message
+                );
             }
         } catch (error) {
-            console.error(
-                "Failed to load Financial Year:",
-                error
-            );
+            console.error(error);
 
             showSnackbar(
                 "error",
-                "Failed to load Financial Year details."
+                "Failed to load Board details."
             );
         }
     };
@@ -94,20 +88,23 @@ export function useFinancialYearCrud({
     };
 
     const handleSave = async (
-        data: FinancialYearFormValues
+        data: BoardFormValues
     ) => {
         try {
+
             const response = editingRow
-                ? await updateFinancialYear(
-                      editingRow.financialYearId,
-                      data
-                  )
-                : await createFinancialYear(data);
+                ? await updateBoard(
+                    editingRow.boardId,
+                    data
+                )
+                : await createBoard(data);
 
             switch (response.statusCode) {
+
                 case 200:
                 case 201:
-                    await loadFinancialYears();
+
+                    await loadBoards();
 
                     handleCloseForm();
 
@@ -115,39 +112,49 @@ export function useFinancialYearCrud({
                         "success",
                         response.message
                     );
+
                     break;
 
                 case 400:
+
                     showSnackbar(
                         "error",
                         response.message
                     );
+
                     break;
 
                 case 409:
+
                     showSnackbar(
                         "warning",
                         response.message
                     );
+
                     break;
 
                 default:
+
                     showSnackbar(
                         "error",
                         response.message
                     );
+
                     break;
             }
+
         } catch (error) {
-            if (
-                axios.isAxiosError<ApiResponse<number>>(error)
-            ) {
+
+            if (axios.isAxiosError<ApiResponse<number>>(error)) {
+
                 showSnackbar(
                     "error",
                     error.response?.data.message ??
-                        "Something went wrong."
+                    "Something went wrong."
                 );
+
             } else {
+
                 showSnackbar(
                     "error",
                     "Unexpected error occurred."
@@ -161,7 +168,7 @@ export function useFinancialYearCrud({
     //#region Delete
 
     const handleDelete = (
-        row: FinancialYear
+        row: Board
     ) => {
         setSelectedRow(row);
         setDeleteOpen(true);
@@ -173,16 +180,20 @@ export function useFinancialYearCrud({
     };
 
     const handleConfirmDelete = async () => {
-        if (!selectedRow) return;
+
+        if (!selectedRow)
+            return;
 
         try {
+
             const response =
-                await deleteFinancialYear(
-                    selectedRow.financialYearId
+                await deleteBoard(
+                    selectedRow.boardId
                 );
 
             if (response.success) {
-                await loadFinancialYears();
+
+                await loadBoards();
 
                 handleCloseDelete();
 
@@ -190,16 +201,20 @@ export function useFinancialYearCrud({
                     "info",
                     response.message
                 );
+
             } else {
+
                 showSnackbar(
                     "error",
                     response.message
                 );
             }
+
         } catch {
+
             showSnackbar(
                 "error",
-                "Failed to delete Financial Year."
+                "Failed to delete Board."
             );
         }
     };
@@ -207,6 +222,7 @@ export function useFinancialYearCrud({
     //#endregion
 
     return {
+
         // Form
         openForm,
         editingRow,

@@ -22,17 +22,12 @@
   "deleteConfirmation": "Are you sure you want to delete \"{{name}}\"?",
   "success": "Success",
   "warning": "Warning",
-  "error": "Error",
-  "addCategory":"Add Category",
+  "error": "Error",  
   "addRecord": "Add",
   "editRecord": "Edit",
-  "categoryMaster":"Category Master",
-  "Category":"Category",
-  "Language":"Language",
   "Translated" :"Translated",
+  "Language":"Language",
   "ID":"ID",
-  "category":"category",
   "status":"status",
-  "action":"Action",
-  "editCategory" : "Edit Category"
+  "action":"Action"  
 }
