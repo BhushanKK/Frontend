@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { getdivisions } from "../../../api/divsionApi";
 import type { division } from "../types/division";
+import { getdivisions } from "../../../api/divsionApi";
 
 
 export function useDivision() {

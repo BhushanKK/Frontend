@@ -10,12 +10,15 @@ import CategoryPage from "../masters/category/pages/CategoryPage";
 import CastePage from "../masters/caste/pages/CastePage";
 import MenuPage from "../masters/menu/pages/MenuPage";
 import RoleMenuPermissionPage from "../masters/rolemenu-permission/pages/RoleMenuPermissionPage";
-import SectionPage from "../masters/Section/pages/SectionPage";
-import HolidayPage from "../masters/holiday/pages/HolidayPage";
-import ReligionPage from "../masters/religion/pages/ReligionPage";
-import DivisionPage from "../masters/division/pages/DivisionPage";
-import DistrictPage from "../masters/district/pages/DistrictPage";
+import ChangePasswordPage from "../features/auth/ChangePasswordPage";
+import ForgotPasswordPage from "../features/auth/ForgotPasswordPage";
+import ResetPasswordPage from "../features/auth/ResetPasswordPage";
 import RolePage from "../masters/role/pages/RolePage";
+import HolidayPage from "../masters/holiday/pages/HolidayPage";
+import SectionPage from "../masters/Section/pages/SectionPage";
+import ReligionPage from "../masters/religion/pages/ReligionPage";
+import DistrictPage from "../masters/district/pages/DistrictPage";
+import DivisionPage from "../masters/division/pages/DivisionPage";
 
 export default function AppRoutes() {
   return (
@@ -25,14 +28,14 @@ export default function AppRoutes() {
         path="/login"
         element={<LoginPage />}
       />
-      {/* <Route
+       <Route
         path="/forgot-password"
         element={<ForgotPasswordPage />}
       />
       <Route
         path="/reset-password"
         element={<ResetPasswordPage />}
-      /> */}
+      /> 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
@@ -43,7 +46,7 @@ export default function AppRoutes() {
           />
 
           {/* Masters */}
-          <Route
+           <Route
             path="/masters/role"
             element={<RolePage />}
           />
@@ -71,6 +74,10 @@ export default function AppRoutes() {
           <Route
             path="/masters/rolemenu-permission"
             element={<RoleMenuPermissionPage />}
+          />
+          <Route
+            path="/change-password"
+            element={<ChangePasswordPage />}
           />
           <Route
             path="/masters/section"
