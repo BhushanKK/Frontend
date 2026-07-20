@@ -108,10 +108,10 @@ export default function FinancialYearPage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Financial Year"
+                title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? `Are you sure you want to delete "${selectedRow.financialYearName}"?`
+                        ? t("common:deleteConfirmation", { name: selectedRow.financialYearName })
                         : ""
                 }
                 onClose={handleCloseDelete}
