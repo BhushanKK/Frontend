@@ -7,10 +7,14 @@ import { useReligion } from "../hooks/useReligion";
 import { useReligionCrud } from "../hooks/useReligionCrud";
 import type { Religion, ReligionFormValues } from "../types/religion";
 import usePermission from "../../../hooks/usePermission";
-import { religionColumns } from "../components/religionColumns";
+import { getReligionColumns } from "../components/religionColumns";
 import ReligionForm from "../components/religionForm";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
+import i18n from "../../../i18n";
 
 export default function ReligionPage() {
+    const { t } = useTranslation(["common", "masters"]);
     const {
         religions,
         loading,
@@ -42,7 +46,9 @@ export default function ReligionPage() {
         handleCloseDelete,
         closeSnackbar,
     } = useReligionCrud({ loadReligions });
-
+const religionColumns = useMemo(() => {
+        return getReligionColumns(t);
+    }, [t, i18n.language]);
     const defaultValues: ReligionFormValues = {
         religionName: editingRow?.religionName ?? "",
         isMinority: editingRow?.isMinority ?? false,
@@ -67,11 +73,11 @@ export default function ReligionPage() {
     return (
         <PageContainer>
             <MasterGrid<Religion>
-                title="Religion Master"
+                title={t("masters:religionMaster")}
                 rowData={religions}
                 columnDefs={religionColumns}
                 loading={loading}
-                addButtonText="Add Religion"
+                addButtonText={t("masters:addReligion")}
 
                 // Permissions
                 canAdd={canAdd}
@@ -87,11 +93,10 @@ export default function ReligionPage() {
             />
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Religion"
+                title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ?
-                        `Are you sure you want to delete "${selectedRow.religionName}"?`
+                        ? t("common:deleteConfirmation", { name: selectedRow.religionName })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -100,7 +105,7 @@ export default function ReligionPage() {
 
             <MasterDialog
                 open={openForm}
-                title={editingRow ? "Edit Religion" : "Add Religion"}
+                title={editingRow ? t("masters:editReligion") : t("masters:addReligion")}
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}
                 onSave={handleSave}

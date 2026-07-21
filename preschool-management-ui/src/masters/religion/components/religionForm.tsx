@@ -14,6 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { ReligionFormValues, } from "../types/religion";
+import { t } from "i18next";
 
 const languages = [
     {
@@ -79,7 +80,7 @@ export default function ReligionForm() {
                     control={control}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={ field.value ? "Minority" : "Non Minority" }
+                            label={ field.value ? t("masters:isMinority") : t("masters:nonMinority") }
                             control={
                                 <Switch
                                     checked={ field.value ?? false }
@@ -99,7 +100,7 @@ export default function ReligionForm() {
                     variant="subtitle1"
                     sx={{ mb: 1, fontWeight: 600 }}
                 >
-                Translations
+                {t("common:Translation")}
                 </Typography>
                 {
                     fields.map(
@@ -151,7 +152,7 @@ export default function ReligionForm() {
                                             render={({field}) => (
                                                 <TextField
                                                     {...field}
-                                                    label="Translated Religion Name"
+                                                    label={t("common:Translation")}
                                                     fullWidth
                                                     size="small"
                                                 />
@@ -186,7 +187,7 @@ export default function ReligionForm() {
                             religionName:"" 
                         })
                     }
-                > Add Translation
+                > {t("common:AddTranslation")}
                 </Button>
             </Grid>
 
@@ -197,7 +198,7 @@ export default function ReligionForm() {
                     control={control}
                     render={({field}) => (
                         <FormControlLabel
-                            label={ field.value ? "Active" : "Inactive" }
+                            label={ field.value ? t("common:active") : t("common:inactive") }
                             control={
                                 <Switch
                                     checked={ field.value ?? false }

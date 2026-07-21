@@ -1,20 +1,22 @@
 import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import { Chip } from "@mui/material";
 import type { Religion } from "../types/religion";
+import type { TFunction } from "i18next";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const religionColumns: ColDef<Religion>[] = [
+export const getReligionColumns = (t: TFunction): ColDef<Religion>[] => [
     {
-        headerName: "ID",
+        headerName: t("common:ID"),
         field: "religionId",
         width: 100,
     },
     {
-        headerName: "Religion Name",
+        headerName: t("masters:religion"),
         field: "religionName",
         flex: 1,
     },
     {
-        headerName: "Minority",
+        headerName: t("masters:isMinority"),
         field: "isMinority",
         width: 130,
         cellRenderer: (
@@ -28,16 +30,9 @@ export const religionColumns: ColDef<Religion>[] = [
         ),
     },
     {
-        headerName: "Status",
+        headerName: t("status"),
         field: "isActive",
-        width: 130,
-        cellRenderer: (
-            params: ICellRendererParams<Religion, boolean>) => (
-            <Chip
-                label={ params.value ? "Active" : "Inactive" }
-                color={ params.value ? "success" : "error" }
-                size="small"
-            />
-        ),
-    },
+        flex: 1,
+        cellRenderer: StatusCellRenderer,
+    }
 ];

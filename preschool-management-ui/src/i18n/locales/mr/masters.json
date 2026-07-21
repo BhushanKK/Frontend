@@ -31,6 +31,8 @@
   "religionMaster": "धर्म मास्टर",
   "religion": "धर्म",
   "Religion": "धर्म",
+  "isMinority":"अल्पसंख्यांक",
+  "nonMinority":"अल्पसंख्याक नसलेले",
 
   "addCaste": "जात नोंद करा",
   "editCaste": "जात संपादित करा",
