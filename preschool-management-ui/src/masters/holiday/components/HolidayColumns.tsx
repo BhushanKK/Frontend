@@ -1,31 +1,61 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
+import type { ColDef } from "ag-grid-community";
+import type { TFunction } from "i18next";
+import type { Holiday } from "../types/Holiday";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
+import { getHolidayTypes } from "../../../lookup/holidayTypes";
+import { formatDate } from "../../../utils/dateFormatter";
 
-import { Chip } from "@mui/material";
-import type { holiday } from "../types/Holiday";
+export const getHolidayColumns = (
+    t: TFunction,
+    language: string
+): ColDef<Holiday>[] => {
+    const holidayTypes = getHolidayTypes(language);
 
-export const HolidayColumns: ColDef<holiday>[] = [
-    {
-        headerName: "ID",
-        field: "HolidayId",
-        width: 100,
-    },
-    {
-        headerName: "Holiday",
-        field: "HolidayName",
-        flex: 1
-    },
-    {
-        headerName: "Status",
-        field: "isActive",
-        flex: 1,
-        cellRenderer: (
-            param: ICellRendererParams<holiday, boolean>
-        ) => (
-            <Chip
-                label={param.value ? "Active" : "Inactive"}
-                color={param.value ? "success" : "error"}
-                size="small"
-            />
-        ),
-    }
-]
+    return [
+        {
+            headerName: t("common:ID"),
+            field: "holidayId",
+            width: 100,
+        },
+        {
+            headerName: t("masters:holiday"),
+            field: "holidayName",
+            flex: 1.5,
+        },
+        {
+            headerName: t("masters:holidayFromDate"),
+            field: "holidayFromDate",
+            flex: 1,
+            valueFormatter: (params) => formatDate(params.value, language),
+        },
+        {
+            headerName: t("masters:holidayToDate"),
+            field: "holidayToDate",
+            flex: 1,
+            valueFormatter: (params) => formatDate(params.value, language),
+        },
+        {
+            headerName: t("masters:holidayType"),
+            field: "holidayType",
+            flex: 1.5,
+            valueFormatter: (params) => {
+                const type = holidayTypes.find(
+                    (x) => x.id === params.value
+                );
+
+                return type?.name ?? "";
+            },
+        },
+        {
+            headerName: t("masters:description"),
+            field: "description",
+            flex: 2,
+        },
+        {
+            headerName: t("common:status"),
+            field: "isActive",
+            flex: 1,
+            cellRenderer: StatusCellRenderer,
+        },
+    ];
+};

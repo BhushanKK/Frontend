@@ -1,20 +1,42 @@
-export interface holiday{
-    HolidayId:number;
-    HolidayName:string;
-    isActive:boolean;
-    HolidayDate:Date;
-    HolidayType:string;
-    Description:string;
+export interface HolidayTranslation {
+    holidayTranslationId?: number;
+    holidayId?: number;
+    languageCode: string;
+    holidayName: string;
 }
 
-export interface holidayResponse{
-    success:boolean;
-    message:string;
-    statusCode:number;
-    data: holiday[];
+export interface Holiday {
+    holidayId: number;
+    holidayName: string;
+    holidayFromDate: string;
+    holidayToDate: string;
+    holidayType: number;
+    description?: string;
+    isActive: boolean;
+    translations: HolidayTranslation[];
 }
 
-export interface holidayFormValues{
-    HolidayName:string;
-    isActive:boolean;
+export interface HolidayResponse {
+    success: boolean;
+    message: string;
+    statusCode: number;
+    data: Holiday[];
+}
+
+export interface HolidayFormValues {
+    holidayName: string;
+    holidayFromDate: string;
+    holidayToDate: string;
+    holidayType: number;
+    description: string;
+    isActive: boolean;
+    translations: HolidayTranslation[];
+}
+
+/**
+ * Holiday Type Dropdown
+ */
+export interface HolidayTypeOption {
+    id: number;
+    name: string;
 }

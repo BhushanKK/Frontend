@@ -1,31 +1,26 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
+import type { ColDef } from "ag-grid-community";
+import type { TFunction } from "i18next";
 
-import { Chip } from "@mui/material";
-import type { division } from "../types/division";
+import type { Division } from "../types/division";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const DivisionColumns : ColDef<division>[] = [
+export const getDivisionColumns = (
+    t: TFunction
+): ColDef<Division>[] => [
     {
-        headerName: "Id",
+        headerName: t("common:ID"),
         field: "divisionId",
-        width: 100
+        width: 100,
     },
     {
-        headerName:"Division",
-        field:"divisionName",
-        width:100
+        headerName: t("masters:division"),
+        field: "divisionName",
+        flex: 1,
     },
     {
-        headerName: "Status",
+        headerName: t("common:status"),
         field: "isActive",
         flex: 1,
-        cellRenderer: (
-            params: ICellRendererParams<division, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
-    }
+        cellRenderer: StatusCellRenderer,
+    },
 ];

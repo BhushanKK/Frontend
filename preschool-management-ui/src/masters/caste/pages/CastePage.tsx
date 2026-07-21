@@ -12,6 +12,7 @@ import usePermission from "../../../hooks/usePermission";
 
 export default function CastePage() {
     const { castes, loading, loadCastes } = useCaste(false);
+    
     const {
         canAdd,
         canEdit,

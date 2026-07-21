@@ -11,10 +11,10 @@ import type { AcademicYear, AcademicYearFormValues } from "../types/academicYear
 import usePermission from "../../../hooks/usePermission";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import i18n from "../../../i18n";
 
 export default function AcademicYearPage() {
-const { t } = useTranslation(["common", "masters"]);
+const { t, i18n } = useTranslation(["common", "masters"]);
+const language = i18n.language;
   const {
     academicYears,
     loading,
@@ -55,7 +55,7 @@ const { t } = useTranslation(["common", "masters"]);
     loadAcademicYears,
   });
   const academicYearColumns = useMemo(() => {
-        return getAcademicYearColumns(t);
+        return getAcademicYearColumns(t,language);
   }, [t, i18n.language]);
   const defaultValues: AcademicYearFormValues = {
     academicYearName: editingRow?.academicYearName ?? "",

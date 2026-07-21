@@ -1,22 +1,29 @@
-import MasterGrid from "../../../components/master-grids/MasterGrid";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import PageContainer from "../../../components/common/PageContainer";
-import { DeleteDialog } from "../../../components/master-grids";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
-
-import { useDivisions } from "../hooks/useDivisionCrud";
-import DivisionForm from "../components/DivisionForm";
-import { DivisionColumns } from "../components/DivisionColumns";
-
+import MasterGrid from "../../../components/master-grids/MasterGrid";
+import { DeleteDialog } from "../../../components/master-grids";
 import usePermission from "../../../hooks/usePermission";
-import type { division } from "../types/division";
+import i18n from "../../../i18n";
 import { useDivision } from "../hooks/useDivision";
+import { useDivisionCrud } from "../hooks/useDivisionCrud";
+import { getDivisionColumns } from "../components/DivisionColumns";
+import DivisionForm from "../components/DivisionForm";
+import type { Division, DivisionFormValues } from "../types/division";
+
 export default function DivisionPage() {
+    const { t } = useTranslation([
+        "common",
+        "masters",
+    ]);
+
     const {
-        Division,
+        divisions,
         loading,
-        loadDivisions
-    } = useDivision();
+        loadDivisions,
+    } = useDivision(false);
 
     const {
         canAdd,
@@ -29,15 +36,17 @@ export default function DivisionPage() {
     const {
         openForm,
         editingRow,
+
         deleteOpen,
-        selectRow,
+        selectedRow,
+
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
 
         handleAdd,
         handleEdit,
-        handelSave,
+        handleSave,
         handleCloseForm,
 
         handleDelete,
@@ -45,37 +54,62 @@ export default function DivisionPage() {
         handleCloseDelete,
 
         closeSnackbar,
-    } = useDivisions({
+    } = useDivisionCrud({
         loadDivisions,
     });
 
+    const divisionColumns = useMemo(() => {
+        return getDivisionColumns(t);
+    }, [t, i18n.language]);
+
+    const defaultValues: DivisionFormValues = {
+        divisionName: editingRow?.divisionName ?? "",
+        isActive: editingRow?.isActive ?? true,
+
+        translations:
+            editingRow?.translations?.length
+                ? editingRow.translations.map((x) => ({
+                      languageCode: x.languageCode,
+                      divisionName: x.divisionName,
+                  }))
+                : [
+                      {
+                          languageCode: "mr",
+                          divisionName: "",
+                      },
+                  ],
+    };
+
     return (
         <PageContainer>
-
-            <MasterGrid<division>
-                title="Division Master"
-                rowData={Division}
-                columnDefs={DivisionColumns}
+            <MasterGrid<Division>
+                title={t("masters:divisionMaster")}
+                rowData={divisions}
+                columnDefs={divisionColumns}
                 loading={loading}
-                addButtonText="Add Division"
+                addButtonText={t("masters:addDivision")}
 
-                // Permission control
+                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
+
+                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
-                onDelete={handleDelete}       
+                onDelete={handleDelete}
             />
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Division"
+                title={t("common:confirmDelete")}
                 description={
-                    selectRow
-                        ? `Are you sure you want to delete "${selectRow.divisionName}"?`
+                    selectedRow
+                        ? t("common:deleteConfirmation", {
+                              name: selectedRow.divisionName,
+                          })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -86,15 +120,12 @@ export default function DivisionPage() {
                 open={openForm}
                 title={
                     editingRow
-                        ? "Edit Division"
-                        : "Add Division"
+                        ? t("masters:editDivision")
+                        : t("masters:addDivision")
                 }
-                defaultValues={{
-                    divisionName: editingRow?.divisionName ?? "",
-                    isActive: editingRow?.isActive ?? true,
-                }}
+                defaultValues={defaultValues}
                 onClose={handleCloseForm}
-                onSave={handelSave}
+                onSave={handleSave}
             >
                 <DivisionForm />
             </MasterDialog>

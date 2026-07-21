@@ -3,17 +3,18 @@ import MasterGrid from "../../../components/master-grids/MasterGrid";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
 import { DeleteDialog } from "../../../components/master-grids";
-
 import { useBoard } from "../hooks/useBoard";
 import { useBoardCrud } from "../hooks/useBoardCrud";
-
-
 import usePermission from "../../../hooks/usePermission";
 import type { Board, BoardFormValues } from "../types/boardApi";
-import { boardColumns } from "../component/BoardColumns";
+import { getBoardColumns } from "../component/BoardColumns";
 import BoardForm from "../component/BoardForm";
+import { t } from "i18next";
+import i18n from "../../../i18n";
+import { useMemo } from "react";
 
 export default function BoardPage() {
+
     const {
         boards,
         loading,
@@ -52,7 +53,9 @@ export default function BoardPage() {
     } = useBoardCrud({
         loadBoards,
     });
-
+    const boardColumns = useMemo(() => {
+            return getBoardColumns(t);
+        }, [t, i18n.language]);
     const defaultValues: BoardFormValues = {
         boardName: editingRow?.boardName ?? "",
         isActive: editingRow?.isActive ?? true,
@@ -74,11 +77,11 @@ export default function BoardPage() {
     return (
         <PageContainer>
             <MasterGrid<Board>
-                title="Board Master"
+                title={t("masters:boardMaster")}
                 rowData={boards}
                 columnDefs={boardColumns}
                 loading={loading}
-                addButtonText="Add Board"
+                addButtonText={t("masters:addBoard")}
 
                 canAdd={canAdd}
                 canEdit={canEdit}
@@ -93,10 +96,10 @@ export default function BoardPage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Board"
+                title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? `Are you sure you want to delete "${selectedRow.boardName}"?`
+                        ? t("common:deleteConfirmation", { name: selectedRow.boardName })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -107,8 +110,8 @@ export default function BoardPage() {
                 open={openForm}
                 title={
                     editingRow
-                        ? "Edit Board"
-                        : "Add Board"
+                        ? t("masters:editBoard")
+                        : t("masters:addBoard")
                 }
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}

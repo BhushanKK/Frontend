@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Public Holiday"
+  },
+  {
+    "id": 2,
+    "name": "Government Holiday"
+  },
+  {
+    "id": 3,
+    "name": "Collector Declared Holiday"
+  },
+  {
+    "id": 4,
+    "name": "School Holiday"
+  },
+  {
+    "id": 5,
+    "name": "Festival Holiday"
+  },
+  {
+    "id": 6,
+    "name": "Summer Vacation"
+  },
+  {
+    "id": 7,
+    "name": "Winter Vacation"
+  },
+  {
+    "id": 8,
+    "name": "Monsoon Vacation"
+  },
+  {
+    "id": 9,
+    "name": "Mid-Term Break"
+  },
+  {
+    "id": 10,
+    "name": "Exam Holiday"
+  },
+  {
+    "id": 11,
+    "name": "Election Holiday"
+  },
+  {
+    "id": 12,
+    "name": "Emergency Holiday"
+  },
+  {
+    "id": 13,
+    "name": "Local Holiday"
+  },
+  {
+    "id": 14,
+    "name": "Optional Holiday"
+  },
+  {
+    "id": 15,
+    "name": "Other"
+  }
+]

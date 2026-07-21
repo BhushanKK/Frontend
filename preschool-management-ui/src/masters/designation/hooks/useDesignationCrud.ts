@@ -1,0 +1,228 @@
+import { useState } from "react";
+import axios from "axios";
+import {
+    createDesignation,
+    updateDesignation,
+    deleteDesignation,
+    getDesignationById,
+} from "../../../api/designationApi";
+
+import type {
+    Designation,
+    DesignationFormValues,
+} from "../types/designation";
+
+import type { ApiResponse } from "../../../types/auth";
+
+type SnackbarSeverity = "success" | "warning" | "error" | "info";
+
+interface UseDesignationCrudProps {
+    loadDesignations: () => Promise<void>;
+}
+
+export function useDesignationCrud({
+    loadDesignations,
+}: UseDesignationCrudProps) {
+
+    // Dialog State
+    const [openForm, setOpenForm] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+
+    // Selected Rows
+    const [editingRow, setEditingRow] =
+        useState<Designation | null>(null);
+
+    const [selectedRow, setSelectedRow] =
+        useState<Designation | null>(null);
+
+    // Snackbar
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] =
+        useState<SnackbarSeverity>("success");
+
+    //#region Snackbar
+
+    const showSnackbar = (
+        severity: SnackbarSeverity,
+        message: string
+    ) => {
+        setSnackbarSeverity(severity);
+        setSnackbarMessage(message);
+        setSnackbarOpen(true);
+    };
+
+    const closeSnackbar = () => {
+        setSnackbarOpen(false);
+    };
+
+    //#endregion
+
+    //#region Form
+
+    const handleAdd = () => {
+        setEditingRow(null);
+        setOpenForm(true);
+    };
+
+    const handleEdit = async (row: Designation) => {
+        try {
+            const response = await getDesignationById(
+                row.designationId
+            );
+
+            if (response.success) {
+                setEditingRow(response.data);
+                setOpenForm(true);
+            } else {
+                showSnackbar("error", response.message);
+            }
+        } catch (error) {
+            console.error(
+                "Failed to load Designation:",
+                error
+            );
+
+            showSnackbar(
+                "error",
+                "Failed to load Designation details."
+            );
+        }
+    };
+
+    const handleCloseForm = () => {
+        setOpenForm(false);
+        setEditingRow(null);
+    };
+
+    const handleSave = async (
+        data: DesignationFormValues
+    ) => {
+        try {
+            const response = editingRow
+                ? await updateDesignation(
+                      editingRow.designationId,
+                      data
+                  )
+                : await createDesignation(data);
+
+            switch (response.statusCode) {
+                case 200:
+                case 201:
+                    await loadDesignations();
+
+                    handleCloseForm();
+
+                    showSnackbar(
+                        "success",
+                        response.message
+                    );
+                    break;
+
+                case 400:
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
+                    break;
+
+                case 409:
+                    showSnackbar(
+                        "warning",
+                        response.message
+                    );
+                    break;
+
+                default:
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
+                    break;
+            }
+        } catch (error) {
+            if (axios.isAxiosError<ApiResponse<number>>(error)) {
+                showSnackbar(
+                    "error",
+                    error.response?.data.message ??
+                        "Something went wrong."
+                );
+            } else {
+                showSnackbar(
+                    "error",
+                    "Unexpected error occurred."
+                );
+            }
+        }
+    };
+
+    //#endregion
+
+    //#region Delete
+
+    const handleDelete = (row: Designation) => {
+        setSelectedRow(row);
+        setDeleteOpen(true);
+    };
+
+    const handleCloseDelete = () => {
+        setDeleteOpen(false);
+        setSelectedRow(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!selectedRow) return;
+
+        try {
+            const response = await deleteDesignation(
+                selectedRow.designationId
+            );
+
+            if (response.success) {
+                await loadDesignations();
+
+                handleCloseDelete();
+
+                showSnackbar(
+                    "info",
+                    response.message
+                );
+            } else {
+                showSnackbar(
+                    "error",
+                    response.message
+                );
+            }
+        } catch {
+            showSnackbar(
+                "error",
+                "Failed to delete Designation."
+            );
+        }
+    };
+
+    //#endregion
+
+    return {
+        // Form
+        openForm,
+        editingRow,
+        handleAdd,
+        handleEdit,
+        handleSave,
+        handleCloseForm,
+
+        // Delete
+        deleteOpen,
+        selectedRow,
+        handleDelete,
+        handleConfirmDelete,
+        handleCloseDelete,
+
+        // Snackbar
+        snackbarOpen,
+        snackbarMessage,
+        snackbarSeverity,
+        closeSnackbar,
+    };
+}

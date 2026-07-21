@@ -1,8 +1,9 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
-import { Chip } from "@mui/material";
+import type { ColDef } from "ag-grid-community";
 import type { Board } from "../types/boardApi";
+import type { TFunction } from "i18next";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const boardColumns: ColDef<Board>[] = [
+export const getBoardColumns = (t: TFunction) : ColDef<Board>[] => [
     {
         headerName: "ID",
         field: "boardId",
@@ -14,17 +15,9 @@ export const boardColumns: ColDef<Board>[] = [
         flex: 1,
     },
     {
-        headerName: "Status",
+        headerName: t("common:status"),
         field: "isActive",
-        width: 130,
-        cellRenderer: (
-            params: ICellRendererParams<Board, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
-    },
+        flex: 1,
+        cellRenderer: StatusCellRenderer,
+    }
 ];

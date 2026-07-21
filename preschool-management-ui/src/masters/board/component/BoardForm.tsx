@@ -17,6 +17,7 @@ import {
     useFormContext,
 } from "react-hook-form";
 import type { BoardFormValues } from "../types/boardApi";
+import { t } from "i18next";
 
 const languages = [
     { code: "en", name: "English" },
@@ -42,7 +43,7 @@ export default function BoardForm() {
                     render={({ field, fieldState }) => (
                         <TextField
                             {...field}
-                            label="Board Name"
+                            label={t("masters:board")}
                             fullWidth
                             size="small"
                             error={!!fieldState.error}
@@ -61,7 +62,7 @@ export default function BoardForm() {
                         fontWeight: 600,
                     }}
                 >
-                    Translations
+                    {t("common:Translation")}
                 </Typography>
 
                 {fields.map((item, index) => (
@@ -86,7 +87,7 @@ export default function BoardForm() {
                                         <TextField
                                             {...field}
                                             select
-                                            label="Language"
+                                            label={t("common:Language")}
                                             fullWidth
                                             size="small"
                                         >
@@ -111,7 +112,7 @@ export default function BoardForm() {
                                     render={({ field }) => (
                                         <TextField
                                             {...field}
-                                            label="Translated Board Name"
+                                            label={t("common:Translation")}
                                             fullWidth
                                             size="small"
                                         />
@@ -143,7 +144,7 @@ export default function BoardForm() {
                         })
                     }
                 >
-                    Add Translation
+                    {t("common:AddTranslation")}
                 </Button>
             </Grid>
 
@@ -154,7 +155,7 @@ export default function BoardForm() {
                     control={control}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={field.value ? "Active" : "Inactive"}
+                            label={field.value ? t("common:active") : t("common:inactive")}
                             control={
                                 <Switch
                                     sx={{

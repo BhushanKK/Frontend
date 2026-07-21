@@ -23,6 +23,8 @@
   "success": "यशस्वी",
   "warning": "इशारा",
   "error": "त्रुटी",
+  "logo":"लोगो",
+  "slogan":"घोषवाक्य",
 
   "addRecord": "नवीन जोडा",
   "editRecord": "संपादित करा",

@@ -1,11 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
-
+import { createHoliday, updateHoliday, deleteHoliday, getHolidayById } from "../../../api/holidayApi";
+import type { Holiday, HolidayFormValues } from "../types/Holiday";
 import type { ApiResponse } from "../../../types/auth";
-import { createHoliday, deleteHoliday, updateHoliday } from "../../../api/holidayApi";
-import type { holiday, holidayFormValues } from "../types/Holiday";
 
-type SnackbarSeverity = "success" | "error" | "warning" | "info";
+type SnackbarSeverity =
+    | "success"
+    | "warning"
+    | "error"
+    | "info";
 
 interface UseHolidayCrudProps {
     loadHolidays: () => Promise<void>;
@@ -14,13 +17,29 @@ interface UseHolidayCrudProps {
 export function useHolidayCrud({
     loadHolidays,
 }: UseHolidayCrudProps) {
+
+    // Dialog State
     const [openForm, setOpenForm] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [editingRow, setEditingRow] = useState<holiday | null>(null);
-    const [selectedRow, setSelectedRow] = useState<holiday | null>(null);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>("success");
+
+    // Selected Rows
+    const [editingRow, setEditingRow] =
+        useState<Holiday | null>(null);
+
+    const [selectedRow, setSelectedRow] =
+        useState<Holiday | null>(null);
+
+    // Snackbar
+    const [snackbarOpen, setSnackbarOpen] =
+        useState(false);
+
+    const [snackbarMessage, setSnackbarMessage] =
+        useState("");
+
+    const [snackbarSeverity, setSnackbarSeverity] =
+        useState<SnackbarSeverity>("success");
+
+    //#region Snackbar
 
     const showSnackbar = (
         severity: SnackbarSeverity,
@@ -33,16 +52,43 @@ export function useHolidayCrud({
 
     const closeSnackbar = () => {
         setSnackbarOpen(false);
-    }
+    };
+
+    //#endregion
+
+    //#region Form
 
     const handleAdd = () => {
         setEditingRow(null);
         setOpenForm(true);
     };
 
-    const handleEdit = (row: holiday) => {
-        setEditingRow(row);
-        setOpenForm(true);
+    const handleEdit = async (row: Holiday) => {
+        try {
+            const response = await getHolidayById(
+                row.holidayId
+            );
+
+            if (response.success) {
+                setEditingRow(response.data);
+                setOpenForm(true);
+            } else {
+                showSnackbar(
+                    "error",
+                    response.message
+                );
+            }
+        } catch (error) {
+            console.error(
+                "Failed to load Holiday:",
+                error
+            );
+
+            showSnackbar(
+                "error",
+                "Failed to load Holiday details."
+            );
+        }
     };
 
     const handleCloseForm = () => {
@@ -50,41 +96,66 @@ export function useHolidayCrud({
         setEditingRow(null);
     };
 
-    const handleSave = async (data: holidayFormValues) => {
+    const handleSave = async (
+        data: HolidayFormValues
+    ) => {
         try {
             const response = editingRow
-                ? await updateHoliday(editingRow.HolidayId, data)
+                ? await updateHoliday(
+                      editingRow.holidayId,
+                      data
+                  )
                 : await createHoliday(data);
 
             switch (response.statusCode) {
-                case 409:
-                    showSnackbar("warning", response.message);
-                    break;
-                case 400:
-                    showSnackbar("error", response.message);
-                    break;
                 case 200:
                 case 201:
-                    handleCloseForm();
                     await loadHolidays();
-                    showSnackbar("success", response.message);
+
+                    handleCloseForm();
+
+                    showSnackbar(
+                        "success",
+                        response.message
+                    );
                     break;
+
+                case 400:
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
+                    break;
+
+                case 409:
+                    showSnackbar(
+                        "warning",
+                        response.message
+                    );
+                    break;
+
                 default:
-                    showSnackbar("error", response.message);
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
                     break;
             }
-
         } catch (error) {
-            showSnackbar("error",
-                axios.isAxiosError<ApiResponse<number>>(error)
-                    ? error.request?.data.message ?? "something went wrong"
-                    : "Unexpected error."
-            );
+            if (axios.isAxiosError<ApiResponse<number>>(error))
+                showSnackbar("error",error.response?.data.message ??"Something went wrong.");
+             else 
+                showSnackbar("error","Unexpected error occurred.");
         }
     };
 
+    //#endregion
 
-    const handleDelete = (row: holiday) => {
+    //#region Delete
+
+    const handleDelete = (
+        row: Holiday
+    ) => {
         setSelectedRow(row);
         setDeleteOpen(true);
     };
@@ -98,20 +169,38 @@ export function useHolidayCrud({
         if (!selectedRow) return;
 
         try {
-            const response = await deleteHoliday(selectedRow.HolidayId);
+            const response =
+                await deleteHoliday(
+                    selectedRow.holidayId
+                );
 
             if (response.success) {
                 await loadHolidays();
+
                 handleCloseDelete();
-                showSnackbar("info", response.message);
+
+                showSnackbar(
+                    "info",
+                    response.message
+                );
+            } else {
+                showSnackbar(
+                    "error",
+                    response.message
+                );
             }
-        } catch (error) {
-            showSnackbar("error", "Failed to delete Holiday.");
+        } catch {
+            showSnackbar(
+                "error",
+                "Failed to delete Holiday."
+            );
         }
-    }
+    };
+
+    //#endregion
 
     return {
-        //Form
+        // Form
         openForm,
         editingRow,
         handleAdd,
@@ -119,17 +208,17 @@ export function useHolidayCrud({
         handleSave,
         handleCloseForm,
 
-        //Delete
+        // Delete
         deleteOpen,
         selectedRow,
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,
 
-        //Snackbar
+        // Snackbar
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
-        closeSnackbar
-    }
+        closeSnackbar,
+    };
 }

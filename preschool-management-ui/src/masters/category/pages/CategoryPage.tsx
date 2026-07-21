@@ -48,7 +48,7 @@ export default function CategoryPage() {
     } = useCategoryCrud({
         loadCategories,
     });
-    
+
     const categoryColumns = useMemo(() => {
         return getCategoryColumns(t);
     }, [t, i18n.language]);
@@ -93,16 +93,16 @@ export default function CategoryPage() {
             />
 
             <DeleteDialog
-        open={deleteOpen}
-        title={t("common:confirmDelete")}
-        description={
-          selectedRow
-              ? t("common:deleteConfirmation", { name: selectedRow.categoryName })
-              : ""                
-        }
-        onClose={handleCloseDelete}
-        onConfirm={handleConfirmDelete}
-      />
+                open={deleteOpen}
+                title={t("common:confirmDelete")}
+                description={
+                    selectedRow
+                        ? t("common:deleteConfirmation", { name: selectedRow.categoryName })
+                        : ""
+                }
+                onClose={handleCloseDelete}
+                onConfirm={handleConfirmDelete}
+            />
 
             <MasterDialog
                 open={openForm}

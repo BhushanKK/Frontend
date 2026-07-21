@@ -1,36 +1,40 @@
 import { useCallback, useEffect, useState } from "react";
-import type { holiday } from "../types/Holiday";
 import { getHolidays } from "../../../api/holidayApi";
+import type { Holiday } from "../types/Holiday";
+import { useLanguageStore } from "../../../store/languageStore";
 
-
-export function useHoliday(filter:boolean) {
-    const [Holiday, setHoliday] = useState<holiday[]>([]);
+export function useHoliday() {
+    const [holidays, setHolidays] = useState<Holiday[]>([]);
     const [loading, setLoading] = useState(false);
 
+    // Reload data when application language changes
+    const language = useLanguageStore((state) => state.language);
+
     const loadHolidays = useCallback(async () => {
-        setLoading(false);
+        setLoading(true);
 
         try {
-            const response = await getHolidays(filter);
-            if (response.success)
-                setHoliday(response.data);
-            else
-                setHoliday([]);
-        } catch (error) {
-            setHoliday([]);
-        }
-        finally {
+            const response = await getHolidays();
+
+            if (response.success) {
+                setHolidays(response.data);
+            } else {
+                setHolidays([]);
+            }
+        } catch {
+            setHolidays([]);
+        } finally {
             setLoading(false);
         }
     }, []);
 
     useEffect(() => {
         loadHolidays();
-    }, [loadHolidays])
+    }, [loadHolidays, language]);
 
     return {
-        Holiday,
+        holidays,
         loading,
-        loadHolidays
+        loadHolidays,
     };
 }

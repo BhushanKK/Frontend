@@ -3,21 +3,19 @@ import type { Category } from "../types/category";
 import type { TFunction } from "i18next";
 import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const getCategoryColumns = (
-    t: TFunction
-): ColDef<Category>[] => [
+export const getCategoryColumns = (t: TFunction) : ColDef<Category>[] => [
     {
-        headerName: t("ID"),
+        headerName: t("common:ID"),
         field: "categoryId",
         width: 100,
     },
     {
-        headerName: t("category"),
+        headerName: t("masters:category"),
         field: "categoryName",
         flex: 1,
     },
     {
-        headerName: t("status"),
+        headerName: t("common:status"),
         field: "isActive",
         flex: 1,
         cellRenderer: StatusCellRenderer,

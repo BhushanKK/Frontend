@@ -6,11 +6,14 @@ import { DeleteDialog } from "../../../components/master-grids";
 import { useSection } from "../hooks/useSection";
 import { useSectionCrud } from "../hooks/useSectionCrud";
 import SectionForm from "../components/SectionForm";
-import { sectionColumns } from "../components/SectionColumns";
+import { getSectionColumns } from "../components/SectionColumns";
 import type { Section, SectionFormValues } from "../types/section";
 import usePermission from "../../../hooks/usePermission";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 
 export default function SectionPage() {
+    const { t, i18n } = useTranslation("masters");
     const {
         sections,
         loading,
@@ -24,7 +27,7 @@ export default function SectionPage() {
         canExport,
         canPrint,
     } = usePermission();
-console.log(usePermission);
+
     const {
         openForm,
         editingRow,
@@ -49,7 +52,9 @@ console.log(usePermission);
     } = useSectionCrud({
         loadSections,
     });
-
+    const sectionColumns = useMemo(() => {
+            return getSectionColumns(t);
+        }, [t, i18n.language]);
     const defaultValues: SectionFormValues = {
         sectionName: editingRow?.sectionName ?? "",
         isActive: editingRow?.isActive ?? true,
@@ -71,11 +76,11 @@ console.log(usePermission);
     return (
         <PageContainer>
             <MasterGrid<Section>
-                title="Section Master"
+                title={t("masters:sectionMaster")}
                 rowData={sections}
                 columnDefs={sectionColumns}
                 loading={loading}
-                addButtonText="Add Section"
+                addButtonText={t("addSection")}
 
                 // Permissions
                 canAdd={canAdd}
@@ -92,10 +97,10 @@ console.log(usePermission);
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Section"
+                title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? `Are you sure you want to delete "${selectedRow.sectionName}"?`
+                        ? t("common:deleteConfirmation", { name: selectedRow.sectionName })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -106,8 +111,8 @@ console.log(usePermission);
                 open={openForm}
                 title={
                     editingRow
-                        ? "Edit Section"
-                        : "Add Section"
+                        ? t("masters:editSection")
+                        : t("masters:addSection")
                 }
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}

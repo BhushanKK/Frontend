@@ -18,6 +18,7 @@ import {
 } from "react-hook-form";
 
 import type { SectionFormValues } from "../types/section";
+import { t } from "i18next";
 
 const languages = [
     { code: "en", name: "English" },
@@ -44,7 +45,7 @@ export default function SectionForm() {
                     render={({ field, fieldState }) => (
                         <TextField
                             {...field}
-                            label="Section Name"
+                            label={t("masters:section")}
                             fullWidth
                             size="small"
                             error={!!fieldState.error}
@@ -63,7 +64,7 @@ export default function SectionForm() {
                         fontWeight: 600,
                     }}
                 >
-                    Translations
+                    {t("common:Translation")}
                 </Typography>
 
                 {fields.map((item, index) => (
@@ -88,7 +89,7 @@ export default function SectionForm() {
                                         <TextField
                                             {...field}
                                             select
-                                            label="Language"
+                                            label={t("common:Language")}
                                             fullWidth
                                             size="small"
                                         >
@@ -113,7 +114,7 @@ export default function SectionForm() {
                                     render={({ field }) => (
                                         <TextField
                                             {...field}
-                                            label="Translated Section Name"
+                                            label={t("common:Translation")}
                                             fullWidth
                                             size="small"
                                         />
@@ -145,7 +146,7 @@ export default function SectionForm() {
                         })
                     }
                 >
-                    Add Translation
+                    {t("common:AddTranslation")}
                 </Button>
             </Grid>
 
@@ -158,8 +159,8 @@ export default function SectionForm() {
                         <FormControlLabel
                             label={
                                 field.value
-                                    ? "Active"
-                                    : "Inactive"
+                                    ? t("common:active")
+                                    : t("common:inactive")
                             }
                             control={
                                 <Switch

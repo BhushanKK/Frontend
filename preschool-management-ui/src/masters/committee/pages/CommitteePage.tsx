@@ -6,7 +6,6 @@ import {
     IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
 import MasterDialog from "../../../components/common/MasterDialog";
@@ -18,6 +17,8 @@ import { useCommittee } from "../hooks/useCommittee";
 import { useCommitteeCrud } from "../hooks/useCommitteeCrud";
 import type { CommitteeMaster } from "../types/committee";
 import usePermission from "../../../hooks/usePermission";
+import i18n from "../../../i18n";
+import { t } from "i18next";
 
 export default function CommitteePage() {
     const [selectedLogoUrl, setSelectedLogoUrl] = useState<string | null>(null);
@@ -61,19 +62,18 @@ export default function CommitteePage() {
         loadCommittees,
     });
 
-    const committeeColumns = useMemo(
-        () => getCommitteeColumns(setSelectedLogoUrl),
-        []
-    );
-
+    const committeeColumns = useMemo(() => {
+            return getCommitteeColumns(t,setSelectedLogoUrl);
+        }, [t, i18n.language]);
+    
     return (
         <PageContainer>
             <MasterGrid<CommitteeMaster>
-                title="Committee Master"
+                title={t("masters:committeeMaster")}
                 rowData={committees}
                 columnDefs={committeeColumns}
                 loading={loading}
-                addButtonText="Add Committee"
+                addButtonText={t("masters:addCommittee")}
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
@@ -144,7 +144,7 @@ export default function CommitteePage() {
 
             <MasterDialog
                 open={openForm}
-                title={editingRow ? "Edit Committee" : "Add Committee"}
+                title={editingRow ? t("masters:editCommittee") : t("masters:addCommittee")}
                 defaultValues={{
                     committeeName: editingRow?.committeeName ?? "",
                     slogan: editingRow?.slogan ?? "",

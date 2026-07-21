@@ -22,13 +22,17 @@
   "academicYearMaster": "Academic Year Master",
   "academicYear": "Academic Year",
   "AcademicYear": "Academic Year",
+  
   "fromDate":"From Date",
   "toDate":"To Date",
+  
   "addReligion": "Add Religion",
   "editReligion": "Edit Religion",
   "religionMaster": "Religion Master",
   "religion": "Religion",
   "Religion": "Religion",
+  "isMinority":"Minoriy",
+  "nonMinority":"Non Minority",
 
   "addCaste": "Add Caste",
   "editCaste": "Edit Caste",
@@ -64,5 +68,46 @@
   "editCommittee": "Edit Committee",
   "committeeMaster": "Committee Master",
   "committee": "Committee",
-  "Committee": "Committee"
+  "Committee": "Committee",
+  "logo":"Logo",
+  "uploadLogo":"Upload Logo",
+  "slogan":"Slogan",
+  "logoPreview" : "Logo Preview",
+  "noLogo":"No Logo",
+
+  "addMedium": "Add Medium",
+  "editMedium": "Edit Medium",
+  "mediumMaster": "Medium Master",
+  "medium": "Medium",
+  "Medium": "Medium",
+
+  "addStandard": "Add Standard",
+  "editStandard": "Edit Standard",
+  "standardMaster": "Standard Master",
+  "standard": "Standard",
+  "Standard": "Standard",
+
+  "addDivision": "Add Division",
+  "editDivision": "Edit Division",
+  "divisionMaster": "Division Master",
+  "division": "Division",
+  "Division": "Division",
+
+  "holidayMaster": "Holiday Master",
+  "holiday": "Holiday",
+  "addHoliday": "Add Holiday",
+  "editHoliday": "Edit Holiday",
+  "holidayFromDate": "From Date",
+  "holidayToDate": "To Date",
+  "holidayType": "Holiday Type",
+  "description": "Description",
+  "publicHoliday": "Public Holiday",
+  "optionalHoliday": "Optional Holiday",
+  "festivalHoliday": "Festival Holiday",
+
+   "designationMaster": "Designation Master",
+  "designation": "Designation",
+  "Designation": "Designation",
+  "addDesignation": "Add Designation",
+  "editDesignation": "Edit Designation"
 }

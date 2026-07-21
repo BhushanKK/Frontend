@@ -1,6 +1,8 @@
 import { Box } from "@mui/material";
 import type { ColDef } from "ag-grid-community";
+import type { TFunction } from "i18next";
 import type { CommitteeMaster } from "../types/committee";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
 const FILE_BASE_URL = import.meta.env.VITE_FILE_BASE_URL;
 
@@ -15,22 +17,25 @@ const getLogoUrl = (path?: string | null) => {
 };
 
 export const getCommitteeColumns = (
+    t: TFunction,
     onLogoClick: (logoUrl: string) => void
 ): ColDef<CommitteeMaster>[] => [
     {
-        headerName: "Logo",
+        headerName: t("masters:logo"),
         field: "logoPath",
-        width: 100,
+        width: 110,
         cellRenderer: (params: any) => {
             const logoUrl = getLogoUrl(params.value);
 
-            if (!logoUrl) return "No Logo";
+            if (!logoUrl) {
+                return t("masters:logo");
+            }
 
             return (
                 <Box
                     component="img"
                     src={logoUrl}
-                    alt={params.data?.committeeName ?? "Committee Logo"}
+                    alt={params.data?.committeeName ?? t("masters:committeeLogo")}
                     onClick={() => onLogoClick(logoUrl)}
                     sx={{
                         width: 50,
@@ -46,19 +51,20 @@ export const getCommitteeColumns = (
             );
         },
     },
-
-    // keep your other existing columns here
     {
-        headerName: "Committee Name",
+        headerName: t("masters:committee"),
         field: "committeeName",
+        flex: 1,
     },
     {
-        headerName: "Slogan",
+        headerName: t("masters:slogan"),
         field: "slogan",
+        flex: 1,
     },
     {
-        headerName: "Status",
+        headerName: t("common:status"),
         field: "isActive",
-        cellRenderer: (params: any) => params.value ? "Active" : "Inactive",
+        flex: 1,
+        cellRenderer: StatusCellRenderer,
     },
 ];

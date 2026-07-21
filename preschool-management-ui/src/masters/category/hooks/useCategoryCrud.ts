@@ -63,12 +63,6 @@ export function useCategoryCrud({
             setOpenForm(true);
         } catch (error) {
             console.error("Get Category By Id Error:", error);
-
-            if (axios.isAxiosError(error)) {
-                console.log(error.response?.status);
-                console.log(error.response?.data);
-            }
-
             showSnackbar(
                 "error",
                 "Failed to load category details."

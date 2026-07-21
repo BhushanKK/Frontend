@@ -14,6 +14,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { Controller, useFormContext } from "react-hook-form";
 import type { CommitteeMasterFormValues } from "../types/committee";
+import { t } from "i18next";
 
 interface CommitteeFormProps {
     existingLogo?: string | null;
@@ -29,9 +30,7 @@ const getLogoUrl = (path?: string | null) => {
         path.startsWith("https://") ||
         path.startsWith("blob:") ||
         path.startsWith("data:")
-    ) {
-        return path;
-    }
+    ) return path;
 
     return `${FILE_BASE_URL}/${path.replace(/^\/+/, "")}`;
 };
@@ -47,12 +46,8 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
         if (logo instanceof File) {
             const objectUrl = URL.createObjectURL(logo);
             setPreviewUrl(objectUrl);
-
-            return () => {
-                URL.revokeObjectURL(objectUrl);
-            };
+            return () => URL.revokeObjectURL(objectUrl);
         }
-
         setPreviewUrl(getLogoUrl(existingLogo));
     }, [logo, existingLogo]);
 
@@ -65,7 +60,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                     render={({ field, fieldState }) => (
                         <TextField
                             {...field}
-                            label="Committee Name"
+                            label={t("masters:committee")}
                             fullWidth
                             size="small"
                             error={!!fieldState.error}
@@ -82,7 +77,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                     render={({ field, fieldState }) => (
                         <TextField
                             {...field}
-                            label="Slogan"
+                            label={t("masters:slogan")}
                             fullWidth
                             size="small"
                             multiline
@@ -101,7 +96,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                     render={({ field, fieldState }) => (
                         <>
                             <Button variant="outlined" component="label">
-                                Upload Logo
+                                {t("masters:uploadLogo")}
                                 <input
                                     hidden
                                     type="file"
@@ -128,7 +123,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
 
             <Grid size={12}>
                 <Typography variant="body2" sx={{ mb: 1 }}>
-                    Logo Preview
+                    {t("masters:logoPreview")}
                 </Typography>
 
                 {previewUrl ? (
@@ -150,7 +145,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                     />
                 ) : (
                     <Typography variant="body2" color="text.secondary">
-                        No Logo
+                        {t("masters:noLogo")}
                     </Typography>
                 )}
             </Grid>
@@ -161,7 +156,7 @@ export default function CommitteeForm({ existingLogo }: CommitteeFormProps) {
                     control={control}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={field.value ? "Active" : "Inactive"}
+                            label={field.value ? t("common:active") : t("common:inactive")}
                             control={
                                 <Switch
                                     checked={!!field.value}
