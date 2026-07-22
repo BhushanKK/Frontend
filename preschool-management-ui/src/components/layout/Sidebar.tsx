@@ -9,9 +9,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+
 import type { SidebarMenu } from "../../masters/menu/utils/SidebarMenu";
 import type { Menu } from "../../masters/menu/types/menu";
 import { getMenus } from "../../api/menuApi";
@@ -27,69 +29,53 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
-
+export default function Sidebar({
+  mobileOpen,
+  onClose,
+}: SidebarProps) {
   const { i18n } = useTranslation();
+
   const [menus, setMenus] = useState<SidebarMenu[]>([]);
-  const [openMenus, setOpenMenus] =
-    useState<Record<number, boolean>>({});
-  const permissions =
-    usePermissionStore(
-      state => state.permissions
-    );
+  const [openMenus, setOpenMenus] = useState<Record<number, boolean>>({});
+
+  const permissions = usePermissionStore(
+    (state) => state.permissions
+  );
 
   const loadMenus = useCallback(async () => {
     try {
-      const response =
-        await getMenus(true);
-      const menuTree =
-        buildMenuTree(
-          permissions,
-          response.data as Menu[]
-        );
-      setMenus(menuTree);
-    }
-    catch (error) {
-      console.error(
-        "Failed to load menus",
-        error
-      );
-    }
-  }, [
-    permissions
-  ]);
+      const response = await getMenus(true);
 
-  /*
-    Reload sidebar whenever:
-    - Permission changes
-    - Language changes
-  */
+      const tree = buildMenuTree(
+        permissions,
+        response.data as Menu[]
+      );
+
+      setMenus(tree);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [permissions]);
+
   useEffect(() => {
     if (permissions.length > 0) {
       loadMenus();
     }
+  }, [permissions, i18n.language, loadMenus]);
 
-  }, [
-    permissions,
-    i18n.language,
-    loadMenus
-  ]);
-
-  const toggleMenu = (
-    menuId: number
-  ) => {
-    setOpenMenus(prev => ({
+  const toggleMenu = (id: number) => {
+    setOpenMenus((prev) => ({
       ...prev,
-      [menuId]:
-        !prev[menuId]
+      [id]: !prev[id],
     }));
   };
 
   const renderMenu = (
     menu: SidebarMenu,
-    level: number = 0
+    level = 0
   ) => {
     const hasChildren = menu.children.length > 0;
+
     if (!hasChildren) {
       return (
         <ListItemButton
@@ -98,18 +84,42 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           to={menu.menuUrl ?? "#"}
           onClick={onClose}
           sx={{
-            pl: 2 + (level * 2),
+            mx: 1.5,
+            my: 0.4,
+            pl: 2 + level * 2.5,
+            borderRadius: 3,
+            color: "rgba(255,255,255,.90)",
+
+            "& .MuiListItemIcon-root": {
+              color: "inherit",
+              minWidth: 38,
+            },
+
+            "&:hover": {
+              bgcolor: "rgba(255,255,255,.12)",
+            },
+
             "&.active": {
-              bgcolor: "action.selected",
-              color: "primary.main",
+              bgcolor: "rgba(255,255,255,.18)",
+              color: "#fff",
+              fontWeight: 700,
+              boxShadow: "0 8px 20px rgba(0,0,0,.18)",
             },
           }}
         >
           <ListItemIcon>
             {getIcon(menu.icon)}
           </ListItemIcon>
+
           <ListItemText
-            primary={menu.menuName}
+            primary={
+              <Typography
+                sx={{fontSize:14,
+                fontWeight:500}}
+              >
+                {menu.menuName}
+              </Typography>
+            }
           />
         </ListItemButton>
       );
@@ -118,11 +128,22 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     return (
       <Box key={menu.menuId}>
         <ListItemButton
-          onClick={() =>
-            toggleMenu(menu.menuId)
-          }
+          onClick={() => toggleMenu(menu.menuId)}
           sx={{
-            pl: 2 + (level * 2),
+            mx: 1.5,
+            my: 0.4,
+            pl: 2 + level * 2.5,
+            borderRadius: 3,
+            color: "#fff",
+
+            "& .MuiListItemIcon-root": {
+              color: "#fff",
+              minWidth: 38,
+            },
+
+            "&:hover": {
+              bgcolor: "rgba(255,255,255,.12)",
+            },
           }}
         >
           <ListItemIcon>
@@ -130,8 +151,21 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           </ListItemIcon>
 
           <ListItemText
-            primary={menu.menuName} />
-          {openMenus[menu.menuId] ? <ExpandLess /> : <ExpandMore />}
+            primary={
+              <Typography sx={{
+                fontSize:14,
+                fontWeight:500}}
+              >
+                {menu.menuName}
+              </Typography>
+            }
+          />
+
+          {openMenus[menu.menuId] ? (
+            <ExpandLess fontSize="small" />
+          ) : (
+            <ExpandMore fontSize="small" />
+          )}
         </ListItemButton>
 
         <Collapse
@@ -140,14 +174,9 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           unmountOnExit
         >
           <List disablePadding>
-            {
-              menu.children.map(child =>
-                renderMenu(
-                  child,
-                  level + 1
-                )
-              )
-            }
+            {menu.children.map((child) =>
+              renderMenu(child, level + 1)
+            )}
           </List>
         </Collapse>
       </Box>
@@ -155,91 +184,116 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   };
 
   const drawerContent = (
-    <Box>
-      {/* Logo */}
-      <Box
-        sx={{
-          height: 64,
-          display: "flex",
-          alignItems: "center",
-          px: 2,
-          bgcolor:
-            "background.paper"
-        }}
-      >
-        <Box
-          component="img"
-          src={logo}
-          alt="Logo"
-          sx={{
-            height: 55,
-            width: "auto",
-            objectFit: "contain"
-          }}
-        />
-      </Box>
+    <>
+<Box
+  sx={{
+    height: 72,
+    minHeight: 72,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    bgcolor: "#FFFFFF",
+    borderBottom: "1px solid #E8EDF7",
+    boxSizing: "border-box",
+    px: 2,
+  }}
+>
+  <Box
+    component="img"
+    src={logo}
+    alt="Logo"
+    sx={{
+      height: 70,
+      width: "auto",
+      objectFit: "contain",
+      display: "block",
+    }}
+  />
+</Box>
+
+<Divider />
+
       <Divider />
 
-      <List sx={{ py: 1 }}>
-        {
-          menus.map(menu =>
-            renderMenu(menu)
-          )
-        }
-      </List>
-    </Box>
+      {/* Menu */}
+
+      <Box
+        sx={{
+          mt: 1,
+          overflowY: "auto",
+          height: "calc(100vh - 72px)",
+          "&::-webkit-scrollbar": {
+            width: 6,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "rgba(255,255,255,.25)",
+            borderRadius: 10,
+          },
+        }}
+      >
+        <List>{menus.map((m) => renderMenu(m))}</List>
+      </Box>
+    </>
   );
 
   return (
     <>
       {/* Mobile */}
+
       <Drawer
         variant="temporary"
         open={mobileOpen}
         onClose={onClose}
         ModalProps={{
-          keepMounted: true
+          keepMounted: true,
         }}
         sx={{
           display: {
             xs: "block",
-            sm: "none"
+            sm: "none",
           },
+
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: "border-box",
-            height: "100vh",
+            borderRadius: 0,
+            borderRight: "1px solid #E5E7EB",
 
             background:
-              "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
+              "linear-gradient(180deg,#1E3A8A 0%,#2852C7 50%,#3366FF 100%)",
 
-            color: "#ffffff",
-
-            borderRight: "none",
-          }
+            color: "#fff",
+          },
         }}
       >
         {drawerContent}
       </Drawer>
 
       {/* Desktop */}
+
       <Drawer
         variant="permanent"
         open
         sx={{
           display: {
             xs: "none",
-            sm: "block"
+            sm: "block",
           },
+
           width: drawerWidth,
           flexShrink: 0,
+
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: "border-box",
-            height: "100vh",
-            bgcolor:
-              "#fff"
-          }
+            borderRadius: 0,
+            borderRight: "1px solid #E5E7EB",
+            
+
+            background:
+              "linear-gradient(180deg,#1E3A8A 0%,#2852C7 50%,#3366FF 100%)",
+
+            color: "#fff",
+            overflowX: "hidden",
+          },
         }}
       >
         {drawerContent}

@@ -1,31 +1,36 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import {
     AppBar,
-    Avatar,
-    Badge,
-    Box,
-    FormControl,
-    IconButton,
-    Menu,
-    MenuItem,
-    Select,
     Toolbar,
+    Box,
+    IconButton,
+    OutlinedInput,
+    InputAdornment,
+    FormControl,
+    Select,
+    MenuItem,
+    Badge,
+    Avatar,
     Typography,
+    Menu,
+    Divider,
 } from "@mui/material";
+
 import {
     Menu as MenuIcon,
+    Search,
     NotificationsNone,
-    Logout,
     Person,
     LockReset,
-    Translate,
+    Logout,
 } from "@mui/icons-material";
 
+import { drawerWidth } from "./Sidebar";
 import { useAuthStore } from "../../store/authStore";
 import { useLanguageStore } from "../../store/languageStore";
-import { drawerWidth } from "./Sidebar";
-import { t } from "i18next";
 
 interface HeaderProps {
     onMenuClick: () => void;
@@ -34,35 +39,21 @@ interface HeaderProps {
 export default function Header({
     onMenuClick,
 }: HeaderProps) {
+
+    const { t } = useTranslation("common");
+
     const navigate = useNavigate();
 
-    const logout = useAuthStore((state) => state.logout);
+    const logout = useAuthStore((s) => s.logout);
 
-    const language = useLanguageStore((state) => state.language);
-    const setLanguage = useLanguageStore((state) => state.setLanguage);
+    const language = useLanguageStore((s) => s.language);
+    const setLanguage = useLanguageStore((s) => s.setLanguage);
 
     const [anchorEl, setAnchorEl] =
         useState<null | HTMLElement>(null);
 
-    const open = Boolean(anchorEl);
-
-    const handleProfileClick = (
-        event: React.MouseEvent<HTMLElement>
-    ) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleChangePassword = () => {
-        handleClose();
-        navigate("/change-password");
-    };
-
     const handleLogout = () => {
-        handleClose();
+        setAnchorEl(null);
         logout();
         navigate("/login", {
             replace: true,
@@ -72,166 +63,269 @@ export default function Header({
     return (
         <AppBar
             position="fixed"
+            elevation={0}
             sx={{
-                width: {
-                    sm: `calc(100% - ${drawerWidth}px)`,
-                },
-                ml: {
-                    sm: `${drawerWidth}px`,
-                },
-                backgroundColor: "#fff",
-                color: "#111827",
-                borderBottom: "1px solid #E5E7EB",
+                width: { sm: `calc(100% - ${drawerWidth}px)` },
+                ml: { sm: `${drawerWidth}px` },
+
+                bgcolor: "#F4F7FC",
+                color: "text.primary",
+
+                borderRadius: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+
                 boxShadow: "none",
-                zIndex: (theme) =>
-                    theme.zIndex.drawer + 1,
+                borderBottom: "1px solid #E8EDF7",
+
+                zIndex: (theme) => theme.zIndex.drawer + 1,
             }}
         >
             <Toolbar
                 sx={{
-                    minHeight: "64px !important",
+                    minHeight: "72px !important",
                     px: 3,
-                    display: "flex",
-                    justifyContent: "space-between",
+                    gap: 2,
                 }}
             >
-                {/* Mobile Menu */}
-                <IconButton
-                    edge="start"
-                    onClick={onMenuClick}
-                    sx={{
-                        mr: 2,
-                        display: {
-                            xs: "flex",
-                            sm: "none",
-                        },
-                    }}
-                >
-                    <MenuIcon />
-                </IconButton>
 
-                {/* Application Name */}
-                <Typography
-                    variant="h6"
-                    sx={{
-                        fontWeight: 700,
-                        color: "#111827",
-                        fontSize: "20px",
-                    }}
-                >
-                    School Management System
-                </Typography>
+                {/* Left Section */}
 
-                {/* Right Section */}
                 <Box
                     sx={{
                         display: "flex",
                         alignItems: "center",
+                        flex: 1,
                         gap: 2,
                     }}
                 >
-                    {/* Language */}
-                    <Box
+                    <IconButton
+                        onClick={onMenuClick}
                         sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
+                            display: {
+                                xs: "flex",
+                                sm: "none",
+                            },
                         }}
                     >
-                        <Translate
-                            fontSize="small"
-                            sx={{
-                                color: "#6B7280",
-                            }}
-                        />
-
-                        <FormControl
-                            size="small"
-                            sx={{
-                                minWidth: 120,
-                            }}
-                        >
-                            <Select
-                                value={language}
-                                onChange={(e) =>
-                                    setLanguage(
-                                        e.target.value as
-                                            | "en"
-                                            | "mr"
-                                            | "hi"
-                                    )
-                                }
-                            >
-                                <MenuItem value="en">
-                                    English
-                                </MenuItem>
-
-                                <MenuItem value="mr">
-                                    मराठी
-                                </MenuItem>
-
-                                <MenuItem value="hi">
-                                    हिन्दी
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-
-                    {/* Notification */}
-                    <IconButton>
-                        <Badge
-                            badgeContent={5}
-                            color="error"
-                            sx={{
-                                "& .MuiBadge-badge": {
-                                    fontSize: "10px",
-                                },
-                            }}
-                        >
-                            <NotificationsNone />
-                        </Badge>
+                        <MenuIcon />
                     </IconButton>
 
-                    {/* Profile */}
-                    <IconButton
-                        onClick={handleProfileClick}
+                    <OutlinedInput
+                        size="small"
+                        placeholder={t("search")}
+                        startAdornment={
+                            <InputAdornment position="start">
+                                <Search color="action" />
+                            </InputAdornment>
+                        }
+                        sx={{
+                            width: {
+                                xs: "100%",
+                                md: 340,
+                            },
+                            bgcolor: "#FFFFFF",
+                            borderRadius: "18px",
+                            height: 46,
+                            boxShadow: "0 2px 8px rgba(0,0,0,.04)",
+
+                            "& fieldset": {
+                                borderColor: "#EEF2F7",
+                            },
+
+                            "&:hover fieldset": {
+                                borderColor: "#2563EB",
+                            },
+
+                            "&.Mui-focused fieldset": {
+                                borderColor: "#2563EB",
+                            },
+                        }}
+                    />
+                </Box>
+
+                {/* Language */}
+
+                <FormControl size="small">
+                    <Select
+                        value={language}
+                        onChange={(e) =>
+                            setLanguage(
+                                e.target.value as
+                                | "en"
+                                | "mr"
+                                | "hi"
+                            )
+                        }
+                        sx={{
+                            bgcolor: "#FFFFFF",
+                            borderRadius: "18px",
+                            minWidth: 130,
+                            height: 46,
+
+                            "& fieldset": {
+                                borderColor: "#EEF2F7",
+                            },
+                        }}
                     >
-                        <Avatar
+                        <MenuItem value="en">
+                            English
+                        </MenuItem>
+
+                        <MenuItem value="mr">
+                            मराठी
+                        </MenuItem>
+
+                        <MenuItem value="hi">
+                            हिन्दी
+                        </MenuItem>
+                    </Select>
+                </FormControl>
+
+                {/* Notification */}
+
+                <IconButton
+                    sx={{
+                        width: 46,
+                        height: 46,
+                        bgcolor: "#FFFFFF",
+                        border: "1px solid #EEF2F7",
+
+                        "&:hover": {
+                            bgcolor: "#F8FAFD",
+                        },
+                    }}
+                >
+                    <Badge
+                        badgeContent={5}
+                        color="error"
+                    >
+                        <NotificationsNone />
+                    </Badge>
+                </IconButton>
+
+                <Divider
+                    orientation="vertical"
+                    flexItem
+                />
+
+                {/* Profile */}
+
+                <Box
+                    onClick={(e) =>
+                        setAnchorEl(
+                            e.currentTarget
+                        )
+                    }
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                        cursor: "pointer",
+                        px: 1,
+
+                        "&:hover": {
+                            opacity: 0.9,
+                        },
+                    }}
+                >
+                    <Avatar
+                        sx={{
+                            width: 42,
+                            height: 42,
+                            bgcolor: "#2563EB",
+                            fontWeight: 700,
+                        }}
+                    >
+                        A
+                    </Avatar>
+
+                    <Box
+                        sx={{
+                            display: {
+                                xs: "none",
+                                md: "block",
+                            },
+                        }}
+                    >
+                        <Typography
                             sx={{
-                                width: 38,
-                                height: 38,
-                                bgcolor: "#2563EB",
-                                fontSize: "16px",
+                                fontWeight: 700,
+                                fontSize: 15,
+                                lineHeight: 1.2,
                             }}
                         >
-                            A
-                        </Avatar>
-                    </IconButton>
+                            Administrator
+                        </Typography>
+
+                        <Typography
+                            variant="caption"
+                            sx={{
+                                color: "text.secondary",
+                            }}
+                        >
+                            Super Admin
+                        </Typography>
+                    </Box>
                 </Box>
 
                 {/* Profile Menu */}
+
                 <Menu
                     anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
+                    open={Boolean(anchorEl)}
+                    onClose={() => setAnchorEl(null)}
+                    slotProps={{
+                        paper: {
+                            sx: {
+                                borderRadius: 3,
+                                minWidth: 220,
+                                mt: 1,
+                                boxShadow: "0 10px 30px rgba(0,0,0,.12)",
+                            },
+                        },
+                    }}
                 >
-                    <MenuItem onClick={handleClose}>
-                        <Person sx={{ mr: 1 }} />
-                        {t("common:myProfile")}
+                    <MenuItem
+                        onClick={() =>
+                            setAnchorEl(null)
+                        }
+                    >
+                        <Person
+                            sx={{ mr: 1.5 }}
+                        />
+                        {t("myProfile")}
                     </MenuItem>
 
                     <MenuItem
-                        onClick={handleChangePassword}
+                        onClick={() => {
+                            setAnchorEl(null);
+                            navigate(
+                                "/change-password"
+                            );
+                        }}
                     >
-                        <LockReset sx={{ mr: 1 }} />
-                        {t("common:changePassword")}
+                        <LockReset
+                            sx={{ mr: 1.5 }}
+                        />
+                        {t("changePassword")}
                     </MenuItem>
 
-                    <MenuItem onClick={handleLogout}>
-                        <Logout sx={{ mr: 1 }} />
-                        {t("common:logout")}
+                    <Divider />
+
+                    <MenuItem
+                        onClick={handleLogout}
+                        sx={{
+                            color: "error.main",
+                        }}
+                    >
+                        <Logout
+                            sx={{ mr: 1.5 }}
+                        />
+                        {t("logout")}
                     </MenuItem>
                 </Menu>
+
             </Toolbar>
         </AppBar>
     );
