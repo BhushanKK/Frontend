@@ -1,21 +1,39 @@
 import { useCallback, useEffect, useState } from "react";
-import { getMenus, getParentMenus, getAllRoles } from "../../../api/menuApi";
+import {
+    getMenus,
+    getParentMenus,
+    getAllRoles,
+} from "../../../api/menuApi";
 import type { Menu, ParentMenu, Role } from "../types/menu";
+import { useLanguageStore } from "../../../store/languageStore";
 
 export function useMenu() {
+
+    const language = useLanguageStore(
+        (state) => state.language
+    );
 
     const [menus, setMenus] = useState<Menu[]>([]);
     const [parentMenus, setParentMenus] = useState<ParentMenu[]>([]);
     const [roles, setRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState(false);
+
+
     const loadMenus = useCallback(async () => {
+
         setLoading(true);
+
         try {
+
             const response = await getMenus(false);
-            if (response.success)
+
+            if (response.success) {
                 setMenus(response.data);
-            else
+            }
+            else {
                 setMenus([]);
+            }
+
         }
         catch {
             setMenus([]);
@@ -23,39 +41,68 @@ export function useMenu() {
         finally {
             setLoading(false);
         }
+
     }, []);
 
+
     const loadParentMenus = useCallback(async () => {
+
         try {
+
             const response = await getParentMenus();
-            if (response.success)
+
+            if (response.success) {
                 setParentMenus(response.data);
-            else
+            }
+            else {
                 setParentMenus([]);
+            }
+
         }
         catch {
             setParentMenus([]);
         }
+
     }, []);
 
+
     const loadRoles = useCallback(async () => {
+
         try {
+
             const response = await getAllRoles();
-            if (response.success)
-                setRoles(response.data.filter(x => x.isActive));
-            else
+
+            if (response.success) {
+                setRoles(
+                    response.data.filter(x => x.isActive)
+                );
+            }
+            else {
                 setRoles([]);
+            }
+
         }
         catch {
             setRoles([]);
         }
+
     }, []);
 
+
+
     useEffect(() => {
+
         loadMenus();
         loadParentMenus();
         loadRoles();
-    }, [loadMenus, loadParentMenus, loadRoles]);
+
+    }, [
+        loadMenus,
+        loadParentMenus,
+        loadRoles,
+        language
+    ]);
+
 
     return {
         menus,
@@ -64,6 +111,6 @@ export function useMenu() {
         loading,
         loadMenus,
         loadParentMenus,
-        loadRoles,
+        loadRoles
     };
 }

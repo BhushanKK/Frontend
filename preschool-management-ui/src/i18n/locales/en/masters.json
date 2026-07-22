@@ -109,5 +109,12 @@
   "designation": "Designation",
   "Designation": "Designation",
   "addDesignation": "Add Designation",
-  "editDesignation": "Edit Designation"
+  "editDesignation": "Edit Designation",
+
+  "menuMaster": "Menu Master",
+  "addMenu": "Add Menu",
+  "menuName": "Menu",
+  "parentMenu":"Main Menu",
+  "displayOrder":"Display Order",
+  "menu":"Menu"
 }

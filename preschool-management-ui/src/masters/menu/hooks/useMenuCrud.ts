@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { createMenu, updateMenu, deleteMenu } from "../../../api/menuApi";
+import { createMenu, updateMenu, deleteMenu, getMenuById } from "../../../api/menuApi";
 import type { Menu, MenuFormValues } from "../types/menu";
 import type { ApiResponse } from "../../../types/auth";
 
@@ -45,9 +45,27 @@ export function useMenuCrud({
     };
 
     // Edit
-    const handleEdit = (row: Menu) => {
-        setEditingRow(row);
-        setOpenForm(true);
+    const handleEdit = async (row: Menu) => {
+        console.log("Menu Row:", row);
+
+        try {
+            const response = await getMenuById(row.menuId);
+            console.log("GetById Response:", response);
+            console.log("GetById Data:", response.data);
+            console.log("Menu Id:", response.data?.menuId);
+            if (response.success) {
+                setEditingRow({
+                    ...response.data,
+                    menuId: row.menuId
+                });
+
+                setOpenForm(true);
+            } else {
+                showSnackbar("error", response.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     // Close Form
@@ -59,16 +77,18 @@ export function useMenuCrud({
     // Save
     const handleSave = async (data: MenuFormValues) => {
 
-        const payload = {
+        const payload: MenuFormValues = {
             ...data,
             roleIds: (data.roles ?? [])
                 .map(role => role.roleId)
                 .join(","),
+            translations: data.translations ?? []
         };
 
         try {
 
             const response = editingRow
+
                 ? await updateMenu(editingRow.menuId, payload)
                 : await createMenu(payload);
 
@@ -76,6 +96,7 @@ export function useMenuCrud({
 
                 case 409:
                     showSnackbar("warning", response.message);
+
                     break;
 
                 case 400:
@@ -104,6 +125,7 @@ export function useMenuCrud({
             );
         }
     };
+
     // Delete
     const handleDelete = (row: Menu) => {
         setSelectedRow(row);
@@ -132,13 +154,14 @@ export function useMenuCrud({
                 showSnackbar("info", response.message);
             }
 
-        } catch {
+        } catch (error) {
 
             showSnackbar(
                 "error",
-                "Failed to delete menu."
+                axios.isAxiosError<ApiResponse<number>>(error)
+                    ? error.response?.data.message ?? "Failed to delete menu."
+                    : "Failed to delete menu."
             );
-
         }
     };
 

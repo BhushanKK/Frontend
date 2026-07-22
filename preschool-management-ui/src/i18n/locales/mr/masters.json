@@ -109,5 +109,12 @@
   "designation": "पदनाम",
   "Designation": "पदनाम",
   "addDesignation": "पदनाम नोंद करा",
-  "editDesignation": "पदनाम संपादित करा"
+  "editDesignation": "पदनाम संपादित करा",
+   "menuMaster": "मेनू मास्टर",
+  "addMenu": "मेनू जोडा",
+  "menuName": "मेनू",
+  "parentMenu":" मुख्य मेनू",
+  "menuUrl":"मेनू लिंक",
+  "displayOrder":"प्रदर्शन क्रम",
+  "menu":"मेनू"
 }

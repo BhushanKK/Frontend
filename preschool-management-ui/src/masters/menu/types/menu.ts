@@ -1,3 +1,8 @@
+export interface MenuTranslation {
+    languageCode: string;
+    menuName: string;
+}
+
 export interface Menu {
     menuId: number;
     menuName: string;
@@ -9,6 +14,8 @@ export interface Menu {
     isPublic: boolean;
     isActive: boolean;
     roleIds?: string;
+
+    translations: MenuTranslation[];
 }
 
 export interface MenuResponse {
@@ -20,15 +27,24 @@ export interface MenuResponse {
 
 export interface MenuFormValues {
     parentMenuId: number | null;
+
     menuName: string;
+
     menuUrl: string;
+
     icon: string;
+
     displayOrder: number;
+
     isPublic: boolean;
+
     isActive: boolean;
 
-    roleIds?: string;   // sent to API
-    roles?: Role[];      // used by UI only
+    roleIds?: string;
+
+    roles?: Role[];
+
+    translations: MenuTranslation[];
 }
 
 export interface ParentMenu {
@@ -46,5 +62,5 @@ export interface DropdownResponse {
 export interface Role {
     roleId: number;
     roleName: string;
-    isActive:boolean;
+    isActive: boolean;
 }

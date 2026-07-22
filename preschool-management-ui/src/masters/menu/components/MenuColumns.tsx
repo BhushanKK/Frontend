@@ -1,67 +1,41 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
-import { Chip } from "@mui/material";
+import type { ColDef } from "ag-grid-community";
+import type { TFunction } from "i18next";
+
 import type { Menu } from "../types/menu";
 
-export const menuColumns: ColDef<Menu>[] = [
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
+
+export const getMenuColumns = (t: TFunction): ColDef<Menu>[] => [
     {
-        headerName: "ID",
+        headerName: t("common:ID"),
         field: "menuId",
-        width: 90,
+        width: 100,
     },
     {
-        headerName: "Menu Name",
+        headerName: t("masters:menuName"),
         field: "menuName",
-        flex: 1.5,
-    },
-    {
-        headerName: "Parent Menu",
-        field: "parentMenuName",
-        flex: 1.5,
-        valueGetter: (params) => params.data?.parentMenuName || "-",
-    },
-    {
-        headerName: "Menu URL",
-        field: "menuUrl",
-        flex: 2,
-        valueGetter: (params) => params.data?.menuUrl || "-",
-    },
-    {
-        headerName: "Icon",
-        field: "icon",
         flex: 1,
-        valueGetter: (params) => params.data?.icon || "-",
     },
     {
-        headerName: "Display Order",
+        headerName: t("masters:parentMenu"),
+        field: "parentMenuName",
+        flex: 1,
+    },
+    {
+        headerName: t("masters:menuUrl"),
+        field: "menuUrl",
+        flex: 1,
+    },
+    {
+        headerName: t("masters:displayOrder"),
         field: "displayOrder",
-        width: 130,
+        width: 150,
+
     },
     {
-        headerName: "Public",
-        field: "isPublic",
-        width: 120,
-        cellRenderer: (
-            params: ICellRendererParams<Menu, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Yes" : "No"}
-                color={params.value ? "info" : "default"}
-                size="small"
-            />
-        ),
-    },
-    {
-        headerName: "Status",
+        headerName: t("common:status"),
         field: "isActive",
-        width: 120,
-        cellRenderer: (
-            params: ICellRendererParams<Menu, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
+        flex: 1,
+        cellRenderer: StatusCellRenderer,
     },
 ];
