@@ -22,12 +22,7 @@ import type {
     CategoryFormValues,
 } from "../types/category";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function CategoryForm() {
     const {
@@ -115,7 +110,7 @@ export default function CategoryForm() {
                                                                 key={lang.code}
                                                                 value={lang.code}
                                                             >
-                                                                {lang.name}
+                                                                {lang.label}
                                                             </MenuItem>
                                                         )
                                                     )

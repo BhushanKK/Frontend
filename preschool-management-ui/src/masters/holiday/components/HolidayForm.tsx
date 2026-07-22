@@ -23,12 +23,7 @@ import { t } from "i18next";
 import type { HolidayFormValues } from "../types/Holiday";
 import { useLanguageStore } from "../../../store/languageStore";
 import { getHolidayTypes } from "../../../lookup/holidayTypes";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function HolidayForm() {
     const { control } =
@@ -232,22 +227,13 @@ export default function HolidayForm() {
                                                 fullWidth
                                                 size="small"
                                             >
-                                                {languages.map(
-                                                    (
-                                                        lang
-                                                    ) => (
-                                                        <MenuItem
-                                                            key={
-                                                                lang.code
-                                                            }
-                                                            value={
-                                                                lang.code
-                                                            }
-                                                        >
-                                                            {
-                                                                lang.name
-                                                            }
-                                                        </MenuItem>
+                                                {languages.map((lang) => (
+                                                    <MenuItem
+                                                        key={ lang.code }
+                                                        value={ lang.code }
+                                                    >
+                                                    { lang.label }
+                                                    </MenuItem>
                                                     )
                                                 )}
                                             </TextField>

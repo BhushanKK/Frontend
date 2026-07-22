@@ -24,12 +24,7 @@ import type {
     Role,
 } from "../types/menu";
 import { menuIcons } from "../utils/menuIcons";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 interface MenuFormProps {
     parentMenus: ParentMenu[];
@@ -251,7 +246,7 @@ export default function MenuForm({
                                         key={lang.code}
                                         value={lang.code}
                                     >
-                                        {lang.name}
+                                        {lang.label}
                                     </MenuItem>
                                 ))}
                             </TextField>

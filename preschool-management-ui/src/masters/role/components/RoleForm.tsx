@@ -19,12 +19,7 @@ import {
 
 import type { RoleFormValues } from "../types/role";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function RoleForm() {
     const { control } =
@@ -128,7 +123,7 @@ export default function RoleForm() {
                                                             }
                                                         >
                                                             {
-                                                                lang.name
+                                                                lang.label
                                                             }
                                                         </MenuItem>
                                                     )

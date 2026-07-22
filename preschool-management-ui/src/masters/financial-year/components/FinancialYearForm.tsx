@@ -18,12 +18,7 @@ import {
 } from "react-hook-form";
 import type { FinancialYearFormValues } from "../types/financialYear";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function FinancialYearForm() {
     const { control } =
@@ -146,7 +141,7 @@ export default function FinancialYearForm() {
                                                     key={lang.code}
                                                     value={lang.code}
                                                 >
-                                                    {lang.name}
+                                                    {lang.label}
                                                 </MenuItem>
                                             ))}
                                         </TextField>

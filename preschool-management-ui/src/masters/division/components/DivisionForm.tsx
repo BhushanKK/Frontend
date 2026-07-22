@@ -19,12 +19,7 @@ import {
 
 import type { DivisionFormValues } from "../types/division";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function DivisionForm() {
     const { control } =
@@ -105,21 +100,13 @@ export default function DivisionForm() {
                                             fullWidth
                                             size="small"
                                         >
-                                            {languages.map(
-                                                (
-                                                    lang
-                                                ) => (
+                                            {
+                                            languages.map((lang) => (
                                                     <MenuItem
-                                                        key={
-                                                            lang.code
-                                                        }
-                                                        value={
-                                                            lang.code
-                                                        }
+                                                        key={ lang.code }
+                                                        value={ lang.code }
                                                     >
-                                                        {
-                                                            lang.name
-                                                        }
+                                                    { lang.label }
                                                     </MenuItem>
                                                 )
                                             )}

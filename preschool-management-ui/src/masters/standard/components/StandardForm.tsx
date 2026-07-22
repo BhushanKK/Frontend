@@ -19,12 +19,7 @@ import {
 
 import type { StandardFormValues } from "../types/standard";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function StandardForm() {
     const { control } =
@@ -134,7 +129,7 @@ export default function StandardForm() {
                                                             }
                                                         >
                                                             {
-                                                                lang.name
+                                                                lang.label
                                                             }
                                                         </MenuItem>
                                                     )

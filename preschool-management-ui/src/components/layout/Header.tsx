@@ -31,6 +31,7 @@ import {
 import { drawerWidth } from "./Sidebar";
 import { useAuthStore } from "../../store/authStore";
 import { useLanguageStore } from "../../store/languageStore";
+import { languages, type LanguageCode } from "../../utils/languages";
 
 interface HeaderProps {
     onMenuClick: () => void;
@@ -150,35 +151,23 @@ export default function Header({
                     <Select
                         value={language}
                         onChange={(e) =>
-                            setLanguage(
-                                e.target.value as
-                                | "en"
-                                | "mr"
-                                | "hi"
-                            )
+                            setLanguage(e.target.value as LanguageCode)
                         }
                         sx={{
                             bgcolor: "#FFFFFF",
                             borderRadius: "18px",
                             minWidth: 130,
                             height: 46,
-
                             "& fieldset": {
                                 borderColor: "#EEF2F7",
                             },
                         }}
                     >
-                        <MenuItem value="en">
-                            English
-                        </MenuItem>
-
-                        <MenuItem value="mr">
-                            मराठी
-                        </MenuItem>
-
-                        <MenuItem value="hi">
-                            हिन्दी
-                        </MenuItem>
+                        {languages.map((lang) => (
+                            <MenuItem key={lang.code} value={lang.code}>
+                                {lang.label}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
 

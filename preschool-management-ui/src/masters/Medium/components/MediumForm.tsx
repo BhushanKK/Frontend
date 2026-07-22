@@ -14,12 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { MediumFormValues } from "../types/medium";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function MediumForm() {
     const { control } =
@@ -116,7 +111,7 @@ export default function MediumForm() {
                                                         }
                                                     >
                                                         {
-                                                            lang.name
+                                                            lang.label
                                                         }
                                                     </MenuItem>
                                                 )

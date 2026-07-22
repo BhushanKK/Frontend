@@ -18,12 +18,7 @@ import {
 } from "react-hook-form";
 import type { DesignationFormValues } from "../types/designation";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function DesignationForm() {
     const { control } =
@@ -98,7 +93,7 @@ export default function DesignationForm() {
                                                     key={lang.code}
                                                     value={lang.code}
                                                 >
-                                                    {lang.name}
+                                                    {lang.label}
                                                 </MenuItem>
                                             ))}
                                         </TextField>

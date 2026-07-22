@@ -14,12 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { AcademicYearFormValues } from "../../academic-year/types/academicYear";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" }
-];
+import { languages } from "../../../utils/languages";
 
 export default function AcademicYearForm() {
     const { control } =
@@ -138,12 +133,12 @@ export default function AcademicYearForm() {
                                                 size="small"
                                             >
                                                 {
-                                                    languages.map(lang => (
+                                                    languages.map((language) => (
                                                         <MenuItem
-                                                            key={lang.code}
-                                                            value={lang.code}
+                                                            key={language.code}
+                                                            value={language.code}
                                                         >
-                                                            {lang.name}
+                                                            {language.label}
                                                         </MenuItem>
                                                     ))
                                                 }
@@ -213,23 +208,23 @@ export default function AcademicYearForm() {
                                 <Switch
                                     sx={{
                                         "& .MuiSwitch-switchBase.Mui-checked":
-                                            {
-                                                color:
-                                                    "success.main",
-                                            },
+                                        {
+                                            color:
+                                                "success.main",
+                                        },
                                         "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
-                                            {
-                                                backgroundColor:
-                                                    "success.main",
-                                            },
+                                        {
+                                            backgroundColor:
+                                                "success.main",
+                                        },
                                         "& .MuiSwitch-track":
-                                            {
-                                                backgroundColor:
-                                                    field.value
-                                                        ? "success.main"
-                                                        : "error.main",
-                                                opacity: 1,
-                                            },
+                                        {
+                                            backgroundColor:
+                                                field.value
+                                                    ? "success.main"
+                                                    : "error.main",
+                                            opacity: 1,
+                                        },
                                     }}
                                     checked={
                                         field.value ??

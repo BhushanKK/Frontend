@@ -15,22 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { ReligionFormValues, } from "../types/religion";
 import { t } from "i18next";
-
-const languages = [
-    {
-        code: "en",
-        name: "English",
-    },
-    {
-        code: "mr",
-        name: "मराठी",
-    },
-    {
-        code: "hi",
-        name: "हिंदी",
-    },
-];
-
+import { languages } from "../../../utils/languages";
 
 export default function ReligionForm() {
     const {
@@ -134,7 +119,7 @@ export default function ReligionForm() {
                                                                     key={ lang.code }
                                                                     value={ lang.code }
                                                                 >
-                                                                { lang.name }
+                                                                { lang.label }
                                                                 </MenuItem>
                                                             )
                                                         )

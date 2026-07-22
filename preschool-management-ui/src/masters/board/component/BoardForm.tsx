@@ -18,12 +18,7 @@ import {
 } from "react-hook-form";
 import type { BoardFormValues } from "../types/boardApi";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function BoardForm() {
     const { control } = useFormContext<BoardFormValues>();
@@ -91,14 +86,16 @@ export default function BoardForm() {
                                             fullWidth
                                             size="small"
                                         >
-                                            {languages.map((lang) => (
-                                                <MenuItem
-                                                    key={lang.code}
-                                                    value={lang.code}
-                                                >
-                                                    {lang.name}
-                                                </MenuItem>
-                                            ))}
+                                            {
+                                                languages.map((language) => (
+                                                    <MenuItem
+                                                        key={language.code}
+                                                        value={language.code}
+                                                    >
+                                                        {language.label}
+                                                    </MenuItem>
+                                                ))
+                                            }
                                         </TextField>
                                     )}
                                 />

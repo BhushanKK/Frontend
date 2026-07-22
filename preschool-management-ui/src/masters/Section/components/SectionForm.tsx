@@ -19,12 +19,7 @@ import {
 
 import type { SectionFormValues } from "../types/section";
 import { t } from "i18next";
-
-const languages = [
-    { code: "en", name: "English" },
-    { code: "mr", name: "मराठी" },
-    { code: "hi", name: "हिंदी" },
-];
+import { languages } from "../../../utils/languages";
 
 export default function SectionForm() {
     const { control } =
@@ -98,7 +93,7 @@ export default function SectionForm() {
                                                     key={lang.code}
                                                     value={lang.code}
                                                 >
-                                                    {lang.name}
+                                                    {lang.label}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
