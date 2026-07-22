@@ -34,5 +34,33 @@
   "deleteCategory":"प्रवर्ग हटवा",
   "ID":"आयडी",
   "status":"स्थिती",
-  "action":"कार्यवाही"  
+  "action":"कार्यवाही",
+  "changePassword":"पासवर्ड बदला",
+  "myProfile":"माझी प्रोफाइल",
+  "logout":"लॉगआउट",
+
+  "changePassword": "पासवर्ड बदला",
+  "passwordSecureNote": "आपले खाते सुरक्षित ठेवण्यासाठी मजबूत पासवर्ड तयार करा.",
+  "currentPassword": "सध्याचा पासवर्ड",
+  "newPassword": "नवीन पासवर्ड",
+  "confirmPassword": "पासवर्डची पुष्टी करा",
+  "passwordRequirements": "पासवर्ड आवश्यकता",
+  "passwordStrength": "पासवर्डची ताकद",
+
+  "minimumEightChars": "किमान ८ अक्षरे असावीत",
+  "oneUpperCase": "किमान एक मोठे इंग्रजी अक्षर (A-Z) असावे",
+  "oneLowerCase": "किमान एक लहान इंग्रजी अक्षर (a-z) असावे",
+  "oneNumber": "किमान एक अंक असावा",
+  "oneSpecialChar": "किमान एक विशेष चिन्ह असावे",
+
+  "weak": "कमकुवत",
+  "medium": "मध्यम",
+  "strong": "मजबूत",
+
+  "pleaseFillAllFields": "कृपया सर्व माहिती भरा.",
+  "passwordMinimumEightChars": "पासवर्डमध्ये किमान ८ अक्षरे असावीत.",
+  "passwordMismatch": "नवीन पासवर्ड आणि पुष्टी केलेला पासवर्ड जुळत नाही.",
+  "unableToChangePassword": "पासवर्ड बदलता आला नाही."
+
+
 }

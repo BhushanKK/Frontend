@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -29,8 +29,11 @@ import {
 import { changePassword } from "../../api/authApi";
 import type { ChangePasswordRequest } from "../../types/auth";
 import { useAuthStore } from "../../store/authStore";
+import { useTranslation } from "react-i18next";
 
 const ChangePasswordPage = () => {
+    const { t, i18n } = useTranslation("common");
+
     const navigate = useNavigate();
     const logout = useAuthStore((state) => state.logout);
     const [loading, setLoading] = useState(false);
@@ -82,36 +85,31 @@ const ChangePasswordPage = () => {
 
     const getPasswordStrength = (password: string) => {
         let score = 0;
-        if (password.length >= 8)
-            score++;
 
-        if (/[A-Z]/.test(password))
-            score++;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
 
-        if (/[0-9]/.test(password))
-            score++;
-
-        if (/[^A-Za-z0-9]/.test(password))
-            score++;
-
-        if (score <= 1) {
+        if (score <= 2) {
             return {
-                label: "Weak",
+                label: t("weak"),
                 value: 25,
                 color: "error" as const,
             };
         }
 
-        if (score <= 3) {
+        if (score <= 4) {
             return {
-                label: "Medium",
+                label: t("medium"),
                 value: 60,
                 color: "warning" as const,
             };
         }
 
         return {
-            label: "Strong",
+            label: t("strong"),
             value: 100,
             color: "success" as const,
         };
@@ -134,7 +132,7 @@ const ChangePasswordPage = () => {
             setSnackbar({
                 open: true,
                 severity: "warning",
-                message: "Please fill all fields.",
+                message: t("pleaseFillAllFields")
             });
             return false;
         }
@@ -144,8 +142,7 @@ const ChangePasswordPage = () => {
             setSnackbar({
                 open: true,
                 severity: "warning",
-                message:
-                    "Password must contain at least 8 characters.",
+                message: t("passwordMinimumEightChars")
             });
             return false;
         }
@@ -155,8 +152,7 @@ const ChangePasswordPage = () => {
             setSnackbar({
                 open: true,
                 severity: "warning",
-                message:
-                    "New password and confirm password do not match.",
+                message: t("passwordMismatch")
             });
 
             return false;
@@ -208,7 +204,7 @@ const ChangePasswordPage = () => {
                 severity: "error",
                 message:
                     error?.response?.data?.message ??
-                    "Unable to change password.",
+                    t("unableToChangePassword")
             });
         }
         finally {
@@ -261,21 +257,19 @@ const ChangePasswordPage = () => {
                                 <LockReset fontSize="large" />
                             </Avatar>
 
-                            <Typography sx={{
-                                variant: "h5",
+                            <Typography variant="h5" sx={{
                                 fontWeight: 700
                             }}
                             >
-                                Change Password
+                                {t("common:changePassword")}
                             </Typography>
 
-                            <Typography sx={{
-                                variant: "body2",
+                            <Typography variant="body2" sx={{
                                 color: "text.secondary",
                                 mt: 1
                             }}
                             >
-                                Keep your account secure by updating your password regularly.
+                                {t("common:passwordSecureNote")}
                             </Typography>
                         </Box>
 
@@ -289,7 +283,7 @@ const ChangePasswordPage = () => {
 
                                 <TextField
                                     fullWidth
-                                    label="Current Password"
+                                    label={t("common:currentPassword")}
                                     size="small"
                                     margin="normal"
                                     type={showCurrent ? "text" : "password"}
@@ -312,7 +306,7 @@ const ChangePasswordPage = () => {
 
                                 <TextField
                                     fullWidth
-                                    label="New Password"
+                                    label={t("common:newPassword")}
                                     margin="normal"
                                     type={showNew ? "text" : "password"}
                                     value={form.newPassword}
@@ -334,7 +328,7 @@ const ChangePasswordPage = () => {
 
                                 <Box sx={{ mt: 2 }} >
                                     <Typography sx={{ variant: "body2", fontWeight: 600 }}>
-                                        Password Strength : {passwordStrength.label}
+                                        {t("passwordStrength")} : {passwordStrength.label}
                                     </Typography>
 
                                     <LinearProgress
@@ -353,7 +347,7 @@ const ChangePasswordPage = () => {
                                     fullWidth
                                     size="small"
                                     margin="normal"
-                                    label="Confirm Password"
+                                    label={t("common:confirmPassword")}
                                     type={showConfirm ? "text" : "password"}
                                     value={form.confirmPassword}
                                     onChange={handleChange("confirmPassword")}
@@ -386,21 +380,20 @@ const ChangePasswordPage = () => {
                                         height: "100%",
                                     }}
                                 >
-                                    <Typography sx={{
-                                        variant: "h6",
+                                    <Typography variant="h6" sx={{
                                         fontWeight: 500,
                                         mb: 2
                                     }}
                                     >
-                                        Password Requirements
+                                        {t("common:passwordRequirements")}
                                     </Typography>
 
                                     <Stack spacing={1}>
-                                        <Typography>✅ Minimum 8 characters</Typography>
-                                        <Typography>✅ At least one uppercase letter</Typography>
-                                        <Typography>✅ At least one lowercase letter</Typography>
-                                        <Typography>✅ At least one number</Typography>
-                                        <Typography>✅ At least one special character</Typography>
+                                        <Typography>✅ {t("common:minimumEightChars")}</Typography>
+                                        <Typography>✅ {t("common:oneUpperCase")}</Typography>
+                                        <Typography>✅ {t("common:oneLowerCase")}</Typography>
+                                        <Typography>✅ {t("common:oneNumber")}</Typography>
+                                        <Typography>✅ {t("common:oneSpecialChar")}</Typography>
                                     </Stack>
                                 </Paper>
                             </Grid>
@@ -426,7 +419,7 @@ const ChangePasswordPage = () => {
                                     fontWeight: 600,
                                 }}
                             >
-                                Cancel
+                                {t("common:cancel")}
                             </Button>
 
                             <Button
@@ -449,11 +442,10 @@ const ChangePasswordPage = () => {
                                         color="inherit"
                                     />
                                 ) : (
-                                    "Change Password"
+                                    t("changePassword")
                                 )}
                             </Button>
                         </Stack>
-
                     </CardContent>
                 </Card>
             </Box>

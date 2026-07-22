@@ -25,6 +25,7 @@ import {
 import { useAuthStore } from "../../store/authStore";
 import { useLanguageStore } from "../../store/languageStore";
 import { drawerWidth } from "./Sidebar";
+import { t } from "i18next";
 
 interface HeaderProps {
     onMenuClick: () => void;
@@ -216,19 +217,19 @@ export default function Header({
                 >
                     <MenuItem onClick={handleClose}>
                         <Person sx={{ mr: 1 }} />
-                        My Profile
+                        {t("common:myProfile")}
                     </MenuItem>
 
                     <MenuItem
                         onClick={handleChangePassword}
                     >
                         <LockReset sx={{ mr: 1 }} />
-                        Change Password
+                        {t("common:changePassword")}
                     </MenuItem>
 
                     <MenuItem onClick={handleLogout}>
                         <Logout sx={{ mr: 1 }} />
-                        Logout
+                        {t("common:logout")}
                     </MenuItem>
                 </Menu>
             </Toolbar>
