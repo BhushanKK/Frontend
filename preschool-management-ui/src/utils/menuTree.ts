@@ -1,9 +1,9 @@
 import type { Menu } from "../masters/menu/types/menu";
 import type { SidebarMenu } from "../masters/menu/utils/SidebarMenu";
-import type { UserPermission } from "../types/UserPermission";
+import type { UserPermissions } from "../types/userPermission";
 
 export const buildMenuTree = (
-    permissions: UserPermission[],
+    permissions: UserPermissions[],
     menus: Menu[]
 ): SidebarMenu[] => {
 
