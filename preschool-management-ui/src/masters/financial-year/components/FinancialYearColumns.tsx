@@ -4,7 +4,7 @@ import { formatDate } from "../../../utils/dateFormatter";
 import type { TFunction } from "i18next";
 import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const getFinancialYearColumns = (t: TFunction): ColDef<FinancialYear>[] => [
+export const getFinancialYearColumns = (t: TFunction,language: string): ColDef<FinancialYear>[] => [
     {
         headerName: t("ID"),
         field: "financialYearId",
@@ -19,13 +19,13 @@ export const getFinancialYearColumns = (t: TFunction): ColDef<FinancialYear>[] =
         headerName: t("masters:fromDate"),
         field: "fromDate",
         flex: 1,
-        valueFormatter: ({ value }) => formatDate(value),
+        valueFormatter: ({ value }) => formatDate(value, language),
     },
     {
         headerName: t("masters:toDate"),
         field: "toDate",
         flex: 1,
-        valueFormatter: ({ value }) => formatDate(value),
+        valueFormatter: ({ value }) => formatDate(value, language),
     },
     {
         headerName: t("status"),

@@ -15,6 +15,7 @@ import { getFinancialYearColumns } from "../components/FinancialYearColumns";
 
 export default function FinancialYearPage() {
     const { t } = useTranslation(["common", "masters"]);
+    const language = i18n.language;
     const {
         financialYears,
         loading,
@@ -55,8 +56,8 @@ export default function FinancialYearPage() {
         loadFinancialYears,
     });
      const financialYearColumns = useMemo(() => {
-        return getFinancialYearColumns(t);
-    }, [t, i18n.language]);
+            return getFinancialYearColumns(t,language);
+      }, [t, i18n.language]);
     const defaultValues: FinancialYearFormValues = {
         financialYearName:
             editingRow?.financialYearName ?? "",
