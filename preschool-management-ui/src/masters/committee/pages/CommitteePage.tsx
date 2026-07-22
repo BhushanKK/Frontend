@@ -17,10 +17,10 @@ import { useCommittee } from "../hooks/useCommittee";
 import { useCommitteeCrud } from "../hooks/useCommitteeCrud";
 import type { CommitteeMaster } from "../types/committee";
 import usePermission from "../../../hooks/usePermission";
-import i18n from "../../../i18n";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export default function CommitteePage() {
+    const { t, i18n } = useTranslation(["common", "masters"]);
     const [selectedLogoUrl, setSelectedLogoUrl] = useState<string | null>(null);
 
     const {

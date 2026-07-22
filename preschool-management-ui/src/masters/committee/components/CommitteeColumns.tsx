@@ -16,10 +16,9 @@ const getLogoUrl = (path?: string | null) => {
     return `${FILE_BASE_URL}/${path.replace(/^\/+/, "")}`;
 };
 
-export const getCommitteeColumns = (
-    t: TFunction,
-    onLogoClick: (logoUrl: string) => void
-): ColDef<CommitteeMaster>[] => [
+export const getCommitteeColumns = (t: TFunction,onLogoClick: (logoUrl: string) => void)
+: ColDef<CommitteeMaster>[] => 
+    [
     {
         headerName: t("masters:logo"),
         field: "logoPath",
