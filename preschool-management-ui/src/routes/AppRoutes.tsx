@@ -121,10 +121,6 @@ export default function AppRoutes() {
             element={<StandardPage />}
           />
           <Route
-            path="/masters/division"
-            element={<DivisionPage />}
-          />
-          <Route
             path="/masters/designation"
             element={<DesignationPage />}
           />

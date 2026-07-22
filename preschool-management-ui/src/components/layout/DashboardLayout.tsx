@@ -17,6 +17,8 @@ export default function DashboardLayout() {
                 display: "flex",
                 minHeight: "100vh",
                 bgcolor: "#F5F7FB",
+                overflowX: "hidden",
+                overflowY: "auto",
             }}
         >
             {/* Header */}
@@ -32,24 +34,26 @@ export default function DashboardLayout() {
 
             {/* Main Content */}
             <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    background: "#F5F7FB",
-                    minHeight: "calc(100vh - 64px)",
-                    p: 1.5,   // reduced from 3
-                }}
-            >
+    component="main"
+    sx={{
+        flexGrow: 1,
+        background: "#F5F7FB",
+        minHeight: "100vh",
+        p: 1.5,
+        overflow: "hidden",
+    }}
+>
                 {/* Header Spacer */}
                 <Toolbar />
 
                 {/* Page Content */}
                 <Box
-                    sx={{
-                        width: "100%",
-                    }}
-                >
-                    <Outlet />
+    sx={{
+        width: "100%",
+        height: "100%",
+    }}
+>
+    <Outlet />
                 </Box>
             </Box>
         </Box>
