@@ -13,11 +13,15 @@ import CasteForm from "../components/CasteForm";
 import type { Caste, CasteFormValues } from "../types/caste";
 
 export default function CastePage() {
-    const { t, i18n } = useTranslation("masters");
+    const { t, i18n } = useTranslation(["common", "masters"]);
 
     const {
         castes,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadCastes,
     } = useCaste(false);
 
@@ -32,6 +36,7 @@ export default function CastePage() {
     const {
         openForm,
         editingRow,
+
         deleteOpen,
         selectedRow,
 
@@ -64,25 +69,31 @@ export default function CastePage() {
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
-                      languageCode: x.languageCode,
-                      casteName: x.casteName,
-                  }))
+                    languageCode: x.languageCode,
+                    casteName: x.casteName,
+                }))
                 : [
-                      {
-                          languageCode: "mr",
-                          casteName: "",
-                      },
-                  ],
+                    {
+                        languageCode: "mr",
+                        casteName: "",
+                    },
+                ],
     };
 
     return (
         <PageContainer>
             <MasterGrid<Caste>
-                title={t("casteMaster")}
+                title={t("masters:casteMaster")}
                 rowData={castes}
                 columnDefs={casteColumns}
                 loading={loading}
-                addButtonText={t("addCaste")}
+
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+
+                addButtonText={t("masters:addCaste")}
 
                 // Permissions
                 canAdd={canAdd}
@@ -103,8 +114,8 @@ export default function CastePage() {
                 description={
                     selectedRow
                         ? t("common:deleteConfirmation", {
-                              name: selectedRow.casteName,
-                          })
+                            name: selectedRow.casteName,
+                        })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -115,8 +126,8 @@ export default function CastePage() {
                 open={openForm}
                 title={
                     editingRow
-                        ? t("editCaste")
-                        : t("addCaste")
+                        ? t("masters:editCaste")
+                        : t("masters:addCaste")
                 }
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}

@@ -1,36 +1,41 @@
 import { useCallback, useEffect, useState } from "react";
-import { getDesignations } from "../../../api/designationApi";
-import type { Designation } from "../types/designation";
+import { getStates } from "../../../api/stateApi";
+import type { State } from "../types/state";
 import type {
     PaginationRequest,
     PaginatedResult,
 } from "../../../types/pagination";
 import { useLanguageStore } from "../../../store/languageStore";
 
-export function useDesignation(filter: boolean) {
-    const language = useLanguageStore((state) => state.language);
+export function useStates(filter: boolean) {
+    const language = useLanguageStore(
+        (state) => state.language
+    );
+
     const [loading, setLoading] = useState(false);
 
-    const [request, setRequest] = useState<PaginationRequest>({
-        pageNumber: 1,
-        pageSize: 10,
-        filter,
-        searchText: "",
-    });
+    const [request, setRequest] =
+        useState<PaginationRequest>({
+            pageNumber: 1,
+            pageSize: 10,
+            filter,
+            searchText: "",
+        });
 
     const [result, setResult] =
-        useState<PaginatedResult<Designation>>();
+        useState<PaginatedResult<State>>();
 
-    const loadDesignations = useCallback(async () => {
+    const loadStates = useCallback(async () => {
         setLoading(true);
 
         try {
-            const response = await getDesignations(request);
+            const response = await getStates(request);
 
             if (response.success)
                 setResult(response.data);
             else
                 setResult(undefined);
+
         } catch {
             setResult(undefined);
         } finally {
@@ -38,10 +43,9 @@ export function useDesignation(filter: boolean) {
         }
     }, [request]);
 
-
     useEffect(() => {
-        loadDesignations();
-    }, [loadDesignations, language]);
+        loadStates();
+    }, [loadStates, language]);
 
     const setPageNumber = (pageNumber: number) => {
         setRequest((prev) => ({
@@ -67,18 +71,18 @@ export function useDesignation(filter: boolean) {
     };
 
     const refresh = () => {
-        loadDesignations();
+        loadStates();
     };
 
     return {
         loading,
-        designations: result?.items ?? [],
+        states: result?.items ?? [],
         pagination: result,
         request,
         setPageNumber,
         setPageSize,
         setSearchText,
         refresh,
-        loadDesignations,
+        loadStates,
     };
 }

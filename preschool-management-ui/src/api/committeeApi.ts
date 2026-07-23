@@ -1,21 +1,15 @@
 import api from "./axios";
-
-import type {
-    CommitteeMaster,
-    CommitteeMasterFormValues,
-    CommitteeMasterResponse,
-} from "../masters/committee/types/committee";
-
+import type { CommitteeMaster, CommitteeMasterFormValues } from "../masters/committee/types/committee";
 import type { ApiResponse } from "../types/auth";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/CommitteeMaster";
 
 // Get All
-export const getCommittees = async (filter: boolean) => {
-    const response = await api.get<CommitteeMasterResponse>(
-        `${BASE_URL}/${filter}`
-    );
-
+export const getCommittees = async (request: PaginationRequest)
+    : Promise<ApiResponse<PaginatedResult<CommitteeMaster>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<CommitteeMaster>>>(
+        BASE_URL, { params: request });
     return response.data;
 };
 

@@ -1,16 +1,21 @@
 import api from "./axios";
-import type { Caste, CasteFormValues, CasteResponse } from "../masters/caste/types/caste";
+import type { Caste, CasteFormValues } from "../masters/caste/types/caste";
 import { getCategories } from "../api/categoryApi";
 import type { ApiResponse } from "../types/auth";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/CasteMaster";
 
-export const getAllCategories = async () => {
-    return await getCategories(true);
+export const getAllCategories = async (
+    request: PaginationRequest
+) => {
+    return await getCategories(request);
 };
 
-export const getCastes = async (filter:boolean) => {
-    const response = await api.get<CasteResponse>(`${BASE_URL}/${filter}`);
+export const getCastes = async (request: PaginationRequest)
+: Promise<ApiResponse<PaginatedResult<Caste>>> => {
+    const response =await api.get<ApiResponse<PaginatedResult<Caste>>>(
+    BASE_URL,{params: request});
     return response.data;
 };
 

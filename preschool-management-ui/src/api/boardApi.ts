@@ -1,15 +1,18 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
 import type { Board, BoardFormValues } from "../masters/board/types/boardApi";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/BoardMaster";
 
 /**
  * Get All Boards
  */
-export const getBoards = async (): Promise<ApiResponse<Board[]>> => {
-    const response = await api.get<ApiResponse<Board[]>>(BASE_URL);
 
+export const getBoards = async (request: PaginationRequest)
+: Promise<ApiResponse<PaginatedResult<Board>>> => {
+    const response =await api.get<ApiResponse<PaginatedResult<Board>>>(
+    BASE_URL,{params: request});
     return response.data;
 };
 

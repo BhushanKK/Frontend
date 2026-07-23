@@ -1,19 +1,17 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
 import type { FinancialYear, FinancialYearFormValues } from "../masters/financial-year/types/financialYear";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/FinancialYearMaster";
 
 /**
  * Get All Financial Years
  */
-export const getFinancialYears = async (
-    filter: boolean
-): Promise<ApiResponse<FinancialYear[]>> => {
-    const response = await api.get<ApiResponse<FinancialYear[]>>(
-        `${BASE_URL}/${filter}`
-    );
-
+export const getFinancialYears = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<FinancialYear>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<FinancialYear>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

@@ -1,14 +1,17 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
 import type { Holiday, HolidayFormValues } from "../masters/holiday/types/Holiday";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/HolidayMaster";
 
 /**
  * Get All Holidays
  */
-export const getHolidays = async (): Promise<ApiResponse<Holiday[]>> => {
-    const response = await api.get<ApiResponse<Holiday[]>>(BASE_URL);
+export const getHolidays = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Holiday>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Holiday>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

@@ -1,19 +1,17 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
 import type { Section, SectionFormValues } from "../masters/Section/types/section"
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/SectionMaster";
 
 /**
  * Get All Sections
  */
-export const getSections = async (
-    filter: boolean
-): Promise<ApiResponse<Section[]>> => {
-    const response = await api.get<ApiResponse<Section[]>>(
-        `${BASE_URL}/${filter}`
-    );
-
+export const getSections = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Section>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Section>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

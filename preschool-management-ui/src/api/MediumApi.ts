@@ -1,14 +1,17 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
 import type { Medium, MediumFormValues } from "../masters/Medium/types/medium";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/MediumMaster";
 
 /**
  * Get All Mediums
  */
-export const getMediums = async (): Promise<ApiResponse<Medium[]>> => {
-    const response = await api.get<ApiResponse<Medium[]>>(BASE_URL);
+export const getMediums = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Medium>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Medium>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

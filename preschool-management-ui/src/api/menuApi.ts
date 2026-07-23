@@ -1,13 +1,16 @@
 import api from "./axios";
 import type { Menu, MenuFormValues, MenuResponse, DropdownResponse } from "../masters/menu/types/menu";
 import type { ApiResponse } from "../types/auth";
-import { getRoles } from "./roleApi";
+import { getRoleDropdown, getRoles } from "./roleApi";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/MenuMaster";
 
 // Get All Menus
-export const getMenus = async (filter:boolean) => {
-    const response = await api.get<MenuResponse>(`${BASE_URL}/${filter}`);
+export const getMenus = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Menu>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Menu>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 
@@ -55,5 +58,5 @@ export const getParentMenus = async () => {
 };
 
 export const getAllRoles = async () => {
-    return await getRoles();
+    return await getRoleDropdown();
 };

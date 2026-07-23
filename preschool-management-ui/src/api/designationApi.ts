@@ -4,19 +4,17 @@ import type {
     Designation,
     DesignationFormValues,
 } from "../masters/designation/types/designation";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/DesignationMaster";
 
 /**
  * Get All Designations
  */
-export const getDesignations = async (
-    filter: boolean
-): Promise<ApiResponse<Designation[]>> => {
-    const response = await api.get<ApiResponse<Designation[]>>(
-        `${BASE_URL}/${filter}`
-    );
-
+export const getDesignations = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Designation>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Designation>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

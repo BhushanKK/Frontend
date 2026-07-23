@@ -1,36 +1,80 @@
 import { useCallback, useEffect, useState } from "react";
 import { getCommittees } from "../../../api/committeeApi";
 import type { CommitteeMaster } from "../types/committee";
+import type {
+    PaginationRequest,
+    PaginatedResult,
+} from "../../../types/pagination";
+import { useLanguageStore } from "../../../store/languageStore";
 
 export function useCommittee(filter: boolean) {
-    const [committees, setCommittees] = useState<CommitteeMaster[]>([]);
+    const language = useLanguageStore((state) => state.language);
     const [loading, setLoading] = useState(false);
 
+    const [request, setRequest] = useState<PaginationRequest>({
+        pageNumber: 1,
+        pageSize: 10,
+        filter,
+        searchText: "",
+    });
+
+    const [result, setResult] =
+        useState<PaginatedResult<CommitteeMaster>>();
+        
     const loadCommittees = useCallback(async () => {
         setLoading(true);
-
         try {
-            const response = await getCommittees(filter);
-
-            if (response.success) {
-                setCommittees(response.data);
-            } else {
-                setCommittees([]);
-            }
+            const response = await getCommittees(request);
+            if (response.success)
+                setResult(response.data);
+            else
+                setResult(undefined);
         } catch {
-            setCommittees([]);
+            setResult(undefined);
         } finally {
             setLoading(false);
         }
-    }, [filter]);
+    }, [request]);
 
     useEffect(() => {
         loadCommittees();
-    }, [loadCommittees]);
+    }, [loadCommittees, language]);
 
+    const setPageNumber = (pageNumber: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageNumber,
+        }));
+    };
+
+    const setPageSize = (pageSize: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageSize,
+            pageNumber: 1,
+        }));
+    };
+
+    const setSearchText = (searchText: string) => {
+        setRequest((prev) => ({
+            ...prev,
+            searchText,
+            pageNumber: 1,
+        }));
+    };
+
+    const refresh = () => {
+        loadCommittees();
+    };
     return {
-        committees,
         loading,
+        committees: result?.items ?? [],
+        pagination: result,
+        request,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
+        refresh,
         loadCommittees,
     };
 }

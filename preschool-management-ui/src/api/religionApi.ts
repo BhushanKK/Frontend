@@ -1,14 +1,17 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
 import type { Religion, ReligionFormValues } from "../masters/religion/types/religion";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/ReligionMaster";
 
 /**
  * Get All Religions
  */
-export const getReligions = async (filter: boolean): Promise<ApiResponse<Religion[]>> => {
-    const response = await api.get<ApiResponse<Religion[]>>(`${BASE_URL}/${filter}`);
+export const getReligions = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Religion>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Religion>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

@@ -1,25 +1,40 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
 import { DeleteDialog } from "../../../components/master-grids";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
+
 import { useRole } from "../hooks/useRole";
 import { useRoleCrud } from "../hooks/useRoleCrud";
+
 import RoleForm from "../components/RoleForm";
-import type { Role, RoleFormValues } from "../types/role";
-import usePermission from "../../../hooks/usePermission";
-import { useTranslation } from "react-i18next";
-import { useMemo } from "react";
 import { getRoleColumns } from "../components/RoleColumns";
-import i18n from "../../../i18n";
+
+import type {
+    Role,
+    RoleFormValues,
+} from "../types/role";
+
+import usePermission from "../../../hooks/usePermission";
 
 export default function RolePage() {
-    const { t } = useTranslation(["common", "masters"]);
+    const { t, i18n } = useTranslation([
+        "common",
+        "masters",
+    ]);
+
     const {
         roles,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadRoles,
-    } = useRole();
+    } = useRole(false);
 
     const {
         canAdd,
@@ -53,13 +68,17 @@ export default function RolePage() {
     } = useRoleCrud({
         loadRoles,
     });
+
     const roleColumns = useMemo(() => {
         return getRoleColumns(t);
     }, [t, i18n.language]);
 
     const defaultValues: RoleFormValues = {
-        roleName: editingRow?.roleName ?? "",
-        isActive: editingRow?.isActive ?? true,
+        roleName:
+            editingRow?.roleName ?? "",
+
+        isActive:
+            editingRow?.isActive ?? true,
 
         translations:
             editingRow?.translations?.length
@@ -82,16 +101,20 @@ export default function RolePage() {
                 rowData={roles}
                 columnDefs={roleColumns}
                 loading={loading}
+
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+
                 addButtonText={t("masters:addRole")}
 
-                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
 
-                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -102,7 +125,12 @@ export default function RolePage() {
                 title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? t("common:deleteConfirmation", { name: selectedRow.roleName })
+                        ? t(
+                            "common:deleteConfirmation",
+                            {
+                                name: selectedRow.roleName,
+                            }
+                        )
                         : ""
                 }
                 onClose={handleCloseDelete}

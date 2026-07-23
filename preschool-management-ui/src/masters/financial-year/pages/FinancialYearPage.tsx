@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
 import { DeleteDialog } from "../../../components/master-grids";
@@ -6,19 +8,20 @@ import AppSnackbar from "../../../components/common/AppSnackbar";
 import { useFinancialYear } from "../hooks/useFinancialYear";
 import { useFinancialYearCrud } from "../hooks/useFinancialYearCrud";
 import FinancialYearForm from "../components/FinancialYearForm";
-import type { FinancialYear, FinancialYearFormValues } from "../types/financialYear";
-import usePermission from "../../../hooks/usePermission";
-import { useTranslation } from "react-i18next";
-import { useMemo } from "react";
-import i18n from "../../../i18n";
 import { getFinancialYearColumns } from "../components/FinancialYearColumns";
+import type { FinancialYear,FinancialYearFormValues } from "../types/financialYear";
+import usePermission from "../../../hooks/usePermission";
 
 export default function FinancialYearPage() {
-    const { t } = useTranslation(["common", "masters"]);
-    const language = i18n.language;
+    const { t, i18n } = useTranslation(["common", "masters"]);
+
     const {
         financialYears,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadFinancialYears,
     } = useFinancialYear(false);
 
@@ -52,12 +55,15 @@ export default function FinancialYearPage() {
         handleCloseDelete,
 
         closeSnackbar,
+
     } = useFinancialYearCrud({
         loadFinancialYears,
     });
-     const financialYearColumns = useMemo(() => {
-            return getFinancialYearColumns(t,language);
-      }, [t, i18n.language]);
+
+    const financialYearColumns = useMemo(() => {
+        return getFinancialYearColumns(t, i18n.language);
+    }, [t, i18n.language]);
+
     const defaultValues: FinancialYearFormValues = {
         financialYearName:
             editingRow?.financialYearName ?? "",
@@ -74,15 +80,15 @@ export default function FinancialYearPage() {
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
-                      languageCode: x.languageCode,
-                      financialYearName: x.financialYearName,
-                  }))
+                    languageCode: x.languageCode,
+                    financialYearName: x.financialYearName,
+                }))
                 : [
-                      {
-                          languageCode: "mr",
-                          financialYearName: "",
-                      },
-                  ],
+                    {
+                        languageCode: "mr",
+                        financialYearName: "",
+                    },
+                ],
     };
 
     return (
@@ -92,16 +98,23 @@ export default function FinancialYearPage() {
                 rowData={financialYears}
                 columnDefs={financialYearColumns}
                 loading={loading}
+
+                pagination={pagination}
+
+                onPageChange={setPageNumber}
+
+                onPageSizeChange={setPageSize}
+
+                onSearch={setSearchText}
+
                 addButtonText={t("masters:addFinancialYear")}
 
-                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
 
-                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -112,7 +125,9 @@ export default function FinancialYearPage() {
                 title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? t("common:deleteConfirmation", { name: selectedRow.financialYearName })
+                        ? t("common:deleteConfirmation", {
+                            name: selectedRow.financialYearName,
+                        })
                         : ""
                 }
                 onClose={handleCloseDelete}

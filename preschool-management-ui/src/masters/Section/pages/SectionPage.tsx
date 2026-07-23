@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import PageContainer from "../../../components/common/PageContainer";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
@@ -9,14 +11,20 @@ import SectionForm from "../components/SectionForm";
 import { getSectionColumns } from "../components/SectionColumns";
 import type { Section, SectionFormValues } from "../types/section";
 import usePermission from "../../../hooks/usePermission";
-import { useTranslation } from "react-i18next";
-import { useMemo } from "react";
 
 export default function SectionPage() {
-    const { t, i18n } = useTranslation("masters");
+    const { t, i18n } = useTranslation([
+        "common",
+        "masters",
+    ]);
+
     const {
         sections,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadSections,
     } = useSection(false);
 
@@ -52,9 +60,11 @@ export default function SectionPage() {
     } = useSectionCrud({
         loadSections,
     });
+
     const sectionColumns = useMemo(() => {
-            return getSectionColumns(t);
-        }, [t, i18n.language]);
+        return getSectionColumns(t);
+    }, [t, i18n.language]);
+
     const defaultValues: SectionFormValues = {
         sectionName: editingRow?.sectionName ?? "",
         isActive: editingRow?.isActive ?? true,
@@ -80,16 +90,20 @@ export default function SectionPage() {
                 rowData={sections}
                 columnDefs={sectionColumns}
                 loading={loading}
-                addButtonText={t("addSection")}
 
-                // Permissions
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+
+                addButtonText={t("masters:addSection")}
+
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
 
-                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -100,7 +114,9 @@ export default function SectionPage() {
                 title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? t("common:deleteConfirmation", { name: selectedRow.sectionName })
+                        ? t("common:deleteConfirmation", {
+                            name: selectedRow.sectionName,
+                        })
                         : ""
                 }
                 onClose={handleCloseDelete}

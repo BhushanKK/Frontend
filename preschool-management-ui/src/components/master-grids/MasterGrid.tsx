@@ -1,21 +1,46 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
-import type { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
-import { Box, Card, Divider } from "@mui/material";
+import type {
+  ColDef,
+  GridApi,
+  GridReadyEvent,
+} from "ag-grid-community";
+
+import {
+  Box,
+  Card,
+  Divider,
+  Stack,
+  Typography,
+  Pagination,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
+
 import LoadingOverlay from "./LoadingOverlay";
 import NoRowsOverlay from "./NoRowsOverlay";
 import ActionCellRenderer from "./ActionCellRenderer";
 import MasterToolbar from "./MasterToolbar";
+
 import { useTranslation } from "react-i18next";
 import agGridEn from "../../i18n/locales/en/agGrid.en";
 import agGridMr from "../../i18n/locales/mr/agGrid.mr";
 
+import type { PaginatedResult } from "../../types/pagination";
 
 interface MasterGridProps<T> {
   title: string;
   rowData: T[];
   columnDefs: ColDef<T>[];
+
   loading?: boolean;
+
+  pagination?: PaginatedResult<T>;
+
+  onPageChange?: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  onSearch?: (searchText: string) => void;
 
   canAdd?: boolean;
   canEdit?: boolean;
@@ -37,20 +62,33 @@ export default function MasterGrid<T>({
   title,
   rowData,
   columnDefs,
+
   loading = false,
+
+  pagination,
+  onPageChange,
+  onPageSizeChange,
+  onSearch,
+
   canAdd = false,
   canEdit = false,
   canDelete = false,
   canExport = false,
+
   addButtonText = "Add",
+
   onAdd,
   onEdit,
   onDelete,
+
   showActions = true,
   showToolbar = true,
 }: MasterGridProps<T>) {
   const gridRef = useRef<AgGridReact<T>>(null);
+
   const { t, i18n } = useTranslation();
+
+  const [gridApi, setGridApi] = useState<GridApi<T> | null>(null);
 
   const localeText = useMemo(() => {
     switch (i18n.language) {
@@ -61,19 +99,18 @@ export default function MasterGrid<T>({
     }
   }, [i18n.language]);
 
-  const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const finalColumnDefs = useMemo<ColDef<T>[]>(() => {
-
-    if (!showActions)
-      return columnDefs;
+    if (!showActions) return columnDefs;
 
     return [
       ...columnDefs,
       {
-        headerName: t("action"),
+        headerName: t("common:action"),
         width: 120,
         sortable: false,
         filter: false,
+        floatingFilter: false,
+        resizable: false,
 
         cellStyle: {
           display: "flex",
@@ -92,23 +129,18 @@ export default function MasterGrid<T>({
         ),
       },
     ];
-
   }, [
     columnDefs,
+    showActions,
     onEdit,
     onDelete,
     canEdit,
     canDelete,
-    showActions,
-    t
+    t,
   ]);
 
-  const onGridReady = (params: GridReadyEvent) => {
+  const onGridReady = (params: GridReadyEvent<T>) => {
     setGridApi(params.api);
-  };
-
-  const handleSearch = (value: string) => {
-    gridApi?.setGridOption("quickFilterText", value);
   };
 
   const handleExport = () => {
@@ -130,7 +162,7 @@ export default function MasterGrid<T>({
           <MasterToolbar
             title={title}
             addButtonText={addButtonText}
-            onSearch={handleSearch}
+            onSearch={onSearch ?? (() => {})}
             onExport={handleExport}
             onAdd={onAdd}
             showExport={canExport}
@@ -148,7 +180,7 @@ export default function MasterGrid<T>({
           width: "100%",
           border: "1px solid",
           borderColor: "divider",
-          borderRadius: 2,
+          borderRadius: 0.5,
           overflow: "hidden",
         }}
       >
@@ -160,9 +192,6 @@ export default function MasterGrid<T>({
           onGridReady={onGridReady}
           loading={loading}
           animateRows
-          pagination
-          paginationPageSize={10}
-          paginationPageSizeSelector={[10, 20, 50, 100]}
           rowHeight={36}
           headerHeight={38}
           localeText={localeText}
@@ -171,12 +200,65 @@ export default function MasterGrid<T>({
           defaultColDef={{
             sortable: true,
             filter: true,
-            floatingFilter: true,
+            floatingFilter: false,
             resizable: true,
             flex: 1,
           }}
         />
       </Box>
+
+      {pagination && (
+        <Stack
+          direction="row"
+          
+          sx={{ mt: 2,justifyContent:"space-between",
+          alignItems:"center" }}
+        >
+          <Typography variant="body2">
+            Showing{" "}
+            {pagination.totalCount === 0
+              ? 0
+              : (pagination.pageNumber - 1) * pagination.pageSize + 1}
+            {" - "}
+            {pagination.totalCount === 0
+              ? 0
+              : Math.min(
+                  pagination.pageNumber * pagination.pageSize,
+                  pagination.totalCount
+                )}
+            {" of "}
+            {pagination.totalCount}
+          </Typography>
+
+          <Stack
+            direction="row"
+            sx={{spacing:2,
+            alignItems:"center"}}
+          >
+            <FormControl size="small" sx={{ minWidth: 90 }}>
+              <Select
+                value={pagination.pageSize}
+                onChange={(e) =>
+                  onPageSizeChange?.(Number(e.target.value))
+                }
+              >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={100}>100</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Pagination
+              color="primary"
+              shape="rounded"
+              page={pagination.pageNumber}
+              count={pagination.totalPages || 1}
+              onChange={(_, page) => onPageChange?.(page)}
+            />
+          </Stack>
+        </Stack>
+      )}
     </Card>
   );
 }

@@ -2,40 +2,44 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import PageContainer from "../../../components/common/PageContainer";
+import MasterGrid from "../../../components/master-grids/MasterGrid";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
-import MasterGrid from "../../../components/master-grids/MasterGrid";
 import { DeleteDialog } from "../../../components/master-grids";
 
-import { useMenu } from "../hooks/useMenu";
-import { useMenuCrud } from "../hooks/useMenuCrud";
-import MenuForm from "../components/MenuForm";
-import { getMenuColumns } from "../components/MenuColumns";
-
-import type {
-    Menu,
-    MenuFormValues,
-} from "../types/menu";
+import { useStates } from "../hooks/useStates";
+import { useStateCrud } from "../hooks/useStateCrud";
 
 import usePermission from "../../../hooks/usePermission";
 
-export default function MenuPage() {
+import type {
+    State,
+    StateFormValues,
+} from "../types/state";
+import { getStateColumns } from "../component/stateColumns";
+import StateForm from "../component/stateForm";
+
+
+
+export default function StatePage() {
     const { t, i18n } = useTranslation([
         "common",
         "masters",
     ]);
 
+    const language = i18n.language;
+
     const {
-        menus,
-        parentMenus,
-        roles,
+        states,
         loading,
         pagination,
+
         setPageNumber,
         setPageSize,
         setSearchText,
-        loadMenus,
-    } = useMenu(false);
+
+        loadStates,
+    } = useStates(false);
 
     const {
         canAdd,
@@ -48,71 +52,68 @@ export default function MenuPage() {
     const {
         openForm,
         editingRow,
+
         deleteOpen,
         selectedRow,
+
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
+
         handleAdd,
         handleEdit,
         handleSave,
+
         handleCloseForm,
+
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,
+
         closeSnackbar,
-    } = useMenuCrud({
-        loadMenus,
+    } = useStateCrud({
+        loadStates,
     });
 
-    const menuColumns = useMemo(() => {
-        return getMenuColumns(t);
-    }, [t, i18n.language]);
+    const stateColumns = useMemo(() => {
+        return getStateColumns(t);
+    }, [t, language]);
 
-    const selectedRoles =
-        editingRow?.roleIds
-            ? roles.filter((role) =>
-                  editingRow.roleIds!
-                      .split(",")
-                      .includes(role.roleId.toString())
-              )
-            : [];
+    const defaultValues: StateFormValues = {
+        stateName:
+            editingRow?.stateName ?? "",
 
-    const defaultValues: MenuFormValues = {
-        parentMenuId: editingRow?.parentMenuId ?? null,
-        menuName: editingRow?.menuName ?? "",
-        menuUrl: editingRow?.menuUrl ?? "",
-        icon: editingRow?.icon ?? "",
-        displayOrder: editingRow?.displayOrder ?? 1,
-        isPublic: editingRow?.isPublic ?? false,
-        isActive: editingRow?.isActive ?? true,
-        roleIds: editingRow?.roleIds ?? "",
-        roles: selectedRoles,
+        isActive:
+            editingRow?.isActive ?? true,
+
         translations:
             editingRow?.translations?.length
-                ? editingRow.translations
+                ? editingRow.translations.map((x) => ({
+                    languageCode: x.languageCode,
+                    stateName: x.stateName,
+                }))
                 : [
-                      {
-                          languageCode: "mr",
-                          menuName: "",
-                      },
-                  ],
+                    {
+                        languageCode: "mr",
+                        stateName: "",
+                    },
+                ],
     };
 
     return (
         <PageContainer>
-            <MasterGrid<Menu>
-                title={t("masters:menuMaster")}
-                rowData={menus}
-                columnDefs={menuColumns}
+            <MasterGrid<State>
+                title={t("masters:stateMaster")}
+                rowData={states}
+                columnDefs={stateColumns}
                 loading={loading}
+
+                addButtonText={t("masters:addState")}
 
                 pagination={pagination}
                 onPageChange={setPageNumber}
                 onPageSizeChange={setPageSize}
                 onSearch={setSearchText}
-
-                addButtonText={t("masters:addMenu")}
 
                 canAdd={canAdd}
                 canEdit={canEdit}
@@ -130,30 +131,31 @@ export default function MenuPage() {
                 title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? t("common:deleteConfirmation", {
-                              name: selectedRow.menuName,
-                          })
+                        ? t(
+                              "common:deleteConfirmation",
+                              {
+                                  name:
+                                      selectedRow.stateName,
+                              }
+                          )
                         : ""
                 }
                 onClose={handleCloseDelete}
                 onConfirm={handleConfirmDelete}
             />
 
-            <MasterDialog<MenuFormValues>
+            <MasterDialog
                 open={openForm}
                 title={
                     editingRow
-                        ? t("masters:editMenu")
-                        : t("masters:addMenu")
+                        ? t("masters:editState")
+                        : t("masters:addState")
                 }
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}
                 onSave={handleSave}
             >
-                <MenuForm
-                    parentMenus={parentMenus}
-                    roles={roles}
-                />
+                <StateForm />
             </MasterDialog>
 
             <AppSnackbar

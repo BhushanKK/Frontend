@@ -6,19 +6,17 @@ import AppSnackbar from "../../../components/common/AppSnackbar";
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import { DeleteDialog } from "../../../components/master-grids";
 import usePermission from "../../../hooks/usePermission";
-import i18n from "../../../i18n";
 import { useStandard } from "../hooks/useStandard";
 import { useStandardCrud } from "../hooks/useStandardCrud";
 import { getStandardColumns } from "../components/StandardColumns";
 import StandardForm from "../components/StandardForm";
-
 import type {
     Standard,
     StandardFormValues,
 } from "../types/standard";
 
 export default function StandardPage() {
-    const { t } = useTranslation([
+    const { t, i18n } = useTranslation([
         "common",
         "masters",
     ]);
@@ -26,6 +24,10 @@ export default function StandardPage() {
     const {
         standards,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadStandards,
     } = useStandard(false);
 
@@ -73,15 +75,15 @@ export default function StandardPage() {
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
-                      languageCode: x.languageCode,
-                      standardName: x.standardName,
-                  }))
+                    languageCode: x.languageCode,
+                    standardName: x.standardName,
+                }))
                 : [
-                      {
-                          languageCode: "mr",
-                          standardName: "",
-                      },
-                  ],
+                    {
+                        languageCode: "mr",
+                        standardName: "",
+                    },
+                ],
     };
 
     return (
@@ -91,16 +93,20 @@ export default function StandardPage() {
                 rowData={standards}
                 columnDefs={standardColumns}
                 loading={loading}
+
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+
                 addButtonText={t("masters:addStandard")}
 
-                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
 
-                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -112,8 +118,8 @@ export default function StandardPage() {
                 description={
                     selectedRow
                         ? t("common:deleteConfirmation", {
-                              name: selectedRow.standardName,
-                          })
+                            name: selectedRow.standardName,
+                        })
                         : ""
                 }
                 onClose={handleCloseDelete}

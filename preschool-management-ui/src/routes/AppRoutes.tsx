@@ -24,6 +24,7 @@ import CommitteePage from "../masters/committee/pages/CommitteePage";
 import MediumPage from "../masters/Medium/pages/MediumPage";
 import StandardPage from "../masters/standard/pages/StandardPage";
 import DesignationPage from "../masters/designation/pages/DesignationPage";
+import StatePage from "../masters/state/pages/statePage";
 
 export default function AppRoutes() {
   return (
@@ -99,6 +100,10 @@ export default function AppRoutes() {
            <Route
             path="/masters/division"
             element={<DivisionPage />}
+          />
+          <Route
+            path="/masters/state"
+            element={<StatePage />}
           />
           <Route
             path="/masters/district"

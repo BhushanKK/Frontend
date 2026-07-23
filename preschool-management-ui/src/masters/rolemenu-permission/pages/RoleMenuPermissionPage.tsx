@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Button, Card, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
-import { useRole } from "../../role/hooks/useRole";
 import { useRoleMenuPermission } from "../hooks/useRoleMenuPermission";
 import { RoleMenuPermissionColumns } from "../components/RoleMenuPermissionColumns";
 import PageContainer from "../../../components/common/PageContainer";
 import { MasterGrid } from "../../../components/master-grids";
 import AppSnackbar from "../../../components/common/AppSnackbar";
 import type { RoleMenuPermission } from "../types/roleMenuPermission";
+import { useRoleDropdown } from "../../../hooks/useRoleDropdown";
 
 export default function RoleMenuPermissionPage() {
     const [roleId, setRoleId] = useState(0);
     const {
-        roles,
-    } = useRole();
+    roles,
+} = useRoleDropdown();
 
     const {
         permissions,

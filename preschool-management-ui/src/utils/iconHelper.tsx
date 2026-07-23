@@ -1,33 +1,15 @@
-import {
-    Dashboard,
-    AccountTree,
-    Person,
-    Menu,
-    CalendarMonth,
-    CalendarToday,
-    TempleHindu,
-    Category,
-    Groups,
-    HelpOutlined,
-} from "@mui/icons-material";
-
-const iconMap = {
-    Dashboard,
-    AccountTree,
-    Person,
-    Menu,
-    CalendarMonth,
-    CalendarToday,
-    TempleHindu,
-    Category,
-    Groups,
-};
+import * as MuiIcons from "@mui/icons-material";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutlined";
 
 export const getIcon = (iconName?: string) => {
-    const Icon =
-        iconName && iconMap[iconName as keyof typeof iconMap]
-            ? iconMap[iconName as keyof typeof iconMap]
-            : HelpOutlined;
+    if (!iconName) {
+        return <HelpOutlineIcon fontSize="small" />;
+    }
 
-    return <Icon fontSize="small" />;
+    const Icon =
+        MuiIcons[iconName as keyof typeof MuiIcons];
+
+    return Icon
+        ? <Icon fontSize="small" />
+        : <HelpOutlineIcon fontSize="small" />;
 };

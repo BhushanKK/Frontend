@@ -1,19 +1,17 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
-import type { AcademicYear, AcademicYearFormValues, AcademicYearResponse } from "../masters/academic-year/types/academicYear";
+import type { AcademicYear, AcademicYearFormValues } from "../masters/academic-year/types/academicYear";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/AcademicYearmaster";
 
 /**
  * Get All Academic Years
  */
-export const getAcademicYears = async (
-    filter: boolean
-): Promise<ApiResponse<AcademicYear[]>> => {
-    const response = await api.get<ApiResponse<AcademicYear[]>>(
-        `${BASE_URL}/${filter}`
-    );
-
+export const getAcademicYears = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<AcademicYear>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<AcademicYear>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

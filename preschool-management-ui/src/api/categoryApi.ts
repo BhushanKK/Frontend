@@ -1,14 +1,14 @@
 import api from "./axios";
 import type { Category,CategoryFormValues } from "../masters/category/types/category";
 import type { ApiResponse } from "../types/auth";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL="/CategoryMaster";
 
-export const getCategories = async (filter: boolean) => {
-    const response = await api.get<ApiResponse<Category[]>>(
-        `${BASE_URL}/${filter}`
-    );
-
+export const getCategories = async (request: PaginationRequest)
+: Promise<ApiResponse<PaginatedResult<Category>>> => {
+    const response =await api.get<ApiResponse<PaginatedResult<Category>>>(
+    BASE_URL,{params: request});
     return response.data;
 };
 

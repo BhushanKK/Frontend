@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import PageContainer from "../../../components/common/PageContainer";
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import MasterDialog from "../../../components/common/MasterDialog";
@@ -9,17 +11,21 @@ import usePermission from "../../../hooks/usePermission";
 import type { Board, BoardFormValues } from "../types/boardApi";
 import { getBoardColumns } from "../component/BoardColumns";
 import BoardForm from "../component/BoardForm";
-import { t } from "i18next";
-import i18n from "../../../i18n";
-import { useMemo } from "react";
 
 export default function BoardPage() {
-
+    const { t, i18n } = useTranslation(["common", "masters"]);
+    const language = i18n.language;
     const {
         boards,
         loading,
+        pagination,
+
+        setPageNumber,
+        setPageSize,
+        setSearchText,
+
         loadBoards,
-    } = useBoard();
+    } = useBoard(false);
 
     const {
         canAdd,
@@ -43,6 +49,7 @@ export default function BoardPage() {
         handleAdd,
         handleEdit,
         handleSave,
+
         handleCloseForm,
 
         handleDelete,
@@ -50,23 +57,28 @@ export default function BoardPage() {
         handleCloseDelete,
 
         closeSnackbar,
+
     } = useBoardCrud({
         loadBoards,
     });
-    const boardColumns = useMemo(() => {
-            return getBoardColumns(t);
-        }, [t, i18n.language]);
-    const defaultValues: BoardFormValues = {
-        boardName: editingRow?.boardName ?? "",
-        isActive: editingRow?.isActive ?? true,
 
+    const boardColumns = useMemo(() => {
+        return getBoardColumns(t);
+    }, [t, language]);
+
+    const defaultValues: BoardFormValues = {
+        boardName:
+            editingRow?.boardName ?? "",
+        isActive:
+            editingRow?.isActive ?? true,
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
                     languageCode: x.languageCode,
                     boardName: x.boardName,
                 }))
-                : [
+                :
+                [
                     {
                         languageCode: "mr",
                         boardName: "",
@@ -82,18 +94,19 @@ export default function BoardPage() {
                 columnDefs={boardColumns}
                 loading={loading}
                 addButtonText={t("masters:addBoard")}
-
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
-
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
-
             <DeleteDialog
                 open={deleteOpen}
                 title={t("common:confirmDelete")}
@@ -105,21 +118,15 @@ export default function BoardPage() {
                 onClose={handleCloseDelete}
                 onConfirm={handleConfirmDelete}
             />
-
             <MasterDialog
                 open={openForm}
-                title={
-                    editingRow
-                        ? t("masters:editBoard")
-                        : t("masters:addBoard")
-                }
+                title={editingRow ? t("masters:editBoard") : t("masters:addBoard")}
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}
                 onSave={handleSave}
             >
                 <BoardForm />
             </MasterDialog>
-
             <AppSnackbar
                 open={snackbarOpen}
                 message={snackbarMessage}

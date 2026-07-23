@@ -1,40 +1,81 @@
 import { useCallback, useEffect, useState } from "react";
 import { getBoards } from "../../../api/boardApi";
-import { useLanguageStore } from "../../../store/languageStore";
 import type { Board } from "../types/boardApi";
+import type { PaginationRequest, PaginatedResult } from "../../../types/pagination";
+import { useLanguageStore } from "../../../store/languageStore";
 
-export function useBoard() {
-    const [boards, setBoards] = useState<Board[]>([]);
+export function useBoard(filter: boolean) {
+    const language = useLanguageStore((state) => state.language);
     const [loading, setLoading] = useState(false);
 
-    // Reload data when language changes
-    const language = useLanguageStore((state) => state.language);
+    const [request, setRequest] = useState<PaginationRequest>({
+        pageNumber: 1,
+        pageSize: 10,
+        filter,
+        searchText: "",
+    });
+
+    const [result, setResult] =
+        useState<PaginatedResult<Board>>();
 
     const loadBoards = useCallback(async () => {
         setLoading(true);
 
         try {
-            const response = await getBoards();
+            const response = await getBoards(request);
 
-            if (response.success) {
-                setBoards(response.data);
-            } else {
-                setBoards([]);
-            }
+            if (response.success)
+                setResult(response.data);
+            else
+                setResult(undefined);
+
         } catch {
-            setBoards([]);
+            setResult(undefined);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [request]);
 
     useEffect(() => {
         loadBoards();
     }, [loadBoards, language]);
 
+    const setPageNumber = (pageNumber: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageNumber,
+        }));
+    };
+
+    const setPageSize = (pageSize: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageSize,
+            pageNumber: 1,
+        }));
+    };
+
+    const setSearchText = (searchText: string) => {
+        setRequest((prev) => ({
+            ...prev,
+            searchText,
+            pageNumber: 1,
+        }));
+    };
+
+    const refresh = () => {
+        loadBoards();
+    };
+
     return {
-        boards,
         loading,
+        boards: result?.items ?? [],
+        pagination: result,
+        request,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
+        refresh,
         loadBoards,
     };
 }

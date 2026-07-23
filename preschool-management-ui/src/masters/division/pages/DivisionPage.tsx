@@ -6,7 +6,6 @@ import AppSnackbar from "../../../components/common/AppSnackbar";
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import { DeleteDialog } from "../../../components/master-grids";
 import usePermission from "../../../hooks/usePermission";
-import i18n from "../../../i18n";
 import { useDivision } from "../hooks/useDivision";
 import { useDivisionCrud } from "../hooks/useDivisionCrud";
 import { getDivisionColumns } from "../components/DivisionColumns";
@@ -14,14 +13,19 @@ import DivisionForm from "../components/DivisionForm";
 import type { Division, DivisionFormValues } from "../types/division";
 
 export default function DivisionPage() {
-    const { t } = useTranslation([
+
+    const { t, i18n } = useTranslation([
         "common",
         "masters",
     ]);
-
+    
     const {
         divisions,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadDivisions,
     } = useDivision(false);
 
@@ -36,10 +40,8 @@ export default function DivisionPage() {
     const {
         openForm,
         editingRow,
-
         deleteOpen,
         selectedRow,
-
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
@@ -48,12 +50,10 @@ export default function DivisionPage() {
         handleEdit,
         handleSave,
         handleCloseForm,
-
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,
-
-        closeSnackbar,
+        closeSnackbar
     } = useDivisionCrud({
         loadDivisions,
     });
@@ -63,21 +63,27 @@ export default function DivisionPage() {
     }, [t, i18n.language]);
 
     const defaultValues: DivisionFormValues = {
-        divisionName: editingRow?.divisionName ?? "",
-        isActive: editingRow?.isActive ?? true,
+        divisionName:
+            editingRow?.divisionName ?? "",
+
+        isActive:
+            editingRow?.isActive ?? true,
 
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
-                      languageCode: x.languageCode,
-                      divisionName: x.divisionName,
-                  }))
+                    languageCode:
+                        x.languageCode,
+
+                    divisionName:
+                        x.divisionName,
+                }))
                 : [
-                      {
-                          languageCode: "mr",
-                          divisionName: "",
-                      },
-                  ],
+                    {
+                        languageCode: "mr",
+                        divisionName: "",
+                    },
+                ],
     };
 
     return (
@@ -87,16 +93,16 @@ export default function DivisionPage() {
                 rowData={divisions}
                 columnDefs={divisionColumns}
                 loading={loading}
-                addButtonText={t("masters:addDivision")}
-
-                // Permissions
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+                addButtonText={ t("masters:addDivision") }
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
-
-                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -104,12 +110,10 @@ export default function DivisionPage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title={t("common:confirmDelete")}
+                title={ t("common:confirmDelete") }
                 description={
                     selectedRow
-                        ? t("common:deleteConfirmation", {
-                              name: selectedRow.divisionName,
-                          })
+                        ? t("common:deleteConfirmation",{name:selectedRow.divisionName,})
                         : ""
                 }
                 onClose={handleCloseDelete}

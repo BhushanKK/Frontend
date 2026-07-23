@@ -4,15 +4,28 @@ import type {
     Role,
     RoleFormValues,
 } from "../masters/role/types/role";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/RoleMaster";
 
 /**
  * Get All Roles
  */
-export const getRoles = async (
-): Promise<ApiResponse<Role[]>> => {
-    const response = await api.get<ApiResponse<Role[]>>(BASE_URL);
+export const getRoles = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Role>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Role>>>
+    (BASE_URL,{params: request});
+    return response.data;
+};
+
+/**
+ * Bind Roles for Dropdown
+ */
+export const getRoleDropdown = async () => {
+    const response = await api.get<ApiResponse<Role[]>>(
+        "/RoleMaster/Dropdown"
+    );
+
     return response.data;
 };
 

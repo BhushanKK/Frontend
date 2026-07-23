@@ -1,39 +1,82 @@
 import { useCallback, useEffect, useState } from "react";
 import { getReligions } from "../../../api/religionApi";
 import type { Religion } from "../types/religion";
+import type {
+    PaginationRequest,
+    PaginatedResult,
+} from "../../../types/pagination";
 import { useLanguageStore } from "../../../store/languageStore";
 
 export function useReligion(filter: boolean) {
-    const [religions, setReligions] = useState<Religion[]>([]);
+    const language = useLanguageStore((state) => state.language);
     const [loading, setLoading] = useState(false);
 
-    // Refresh data when language changes
-    const language = useLanguageStore(
-        (state) => state.language
-    );
+    const [request, setRequest] = useState<PaginationRequest>({
+        pageNumber: 1,
+        pageSize: 10,
+        filter,
+        searchText: "",
+    });
+
+    const [result, setResult] = useState<PaginatedResult<Religion>>();
+
     const loadReligions = useCallback(async () => {
         setLoading(true);
+
         try {
-            const response = await getReligions(filter);
-            if (response.success) {
-                setReligions(response.data);
-            } else {
-                setReligions([]);
-            }
+            const response = await getReligions(request);
+
+            if (response.success)
+                setResult(response.data);
+            else
+                setResult(undefined);
         } catch {
-            setReligions([]);
+            setResult(undefined);
         } finally {
             setLoading(false);
         }
-    }, [filter]);
+    }, [request]);
 
     useEffect(() => {
         loadReligions();
     }, [loadReligions, language]);
 
+    const setPageNumber = (pageNumber: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageNumber,
+        }));
+    };
+
+    const setPageSize = (pageSize: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageSize,
+            pageNumber: 1,
+        }));
+    };
+
+    const setSearchText = (searchText: string) => {
+        setRequest((prev) => ({
+            ...prev,
+            searchText,
+            pageNumber: 1,
+        }));
+    };
+
+    const refresh = () => {
+        loadReligions();
+    };
+
     return {
-        religions,
         loading,
+        religions: result?.items ?? [],
+        pagination: result,
+        request,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
+        refresh,
         loadReligions,
     };
 }

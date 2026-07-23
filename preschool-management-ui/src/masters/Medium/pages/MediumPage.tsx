@@ -6,16 +6,14 @@ import AppSnackbar from "../../../components/common/AppSnackbar";
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import { DeleteDialog } from "../../../components/master-grids";
 import usePermission from "../../../hooks/usePermission";
-import i18n from "../../../i18n";
 import { useMedium } from "../hooks/useMedium";
 import { useMediumCrud } from "../hooks/useMediumCrud";
 import MediumForm from "../components/MediumForm";
 import { getMediumColumns } from "../components/MediumColumns";
-
 import type { Medium, MediumFormValues } from "../types/medium";
 
 export default function MediumPage() {
-    const { t } = useTranslation([
+    const { t, i18n } = useTranslation([
         "common",
         "masters",
     ]);
@@ -23,8 +21,12 @@ export default function MediumPage() {
     const {
         mediums,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadMediums,
-    } = useMedium();
+    } = useMedium(false);
 
     const {
         canAdd,
@@ -64,21 +66,24 @@ export default function MediumPage() {
     }, [t, i18n.language]);
 
     const defaultValues: MediumFormValues = {
-        mediumName: editingRow?.mediumName ?? "",
-        isActive: editingRow?.isActive ?? true,
+        mediumName:
+            editingRow?.mediumName ?? "",
+
+        isActive:
+            editingRow?.isActive ?? true,
 
         translations:
             editingRow?.translations?.length
                 ? editingRow.translations.map((x) => ({
-                      languageCode: x.languageCode,
-                      mediumName: x.mediumName,
-                  }))
+                    languageCode: x.languageCode,
+                    mediumName: x.mediumName,
+                }))
                 : [
-                      {
-                          languageCode: "mr",
-                          mediumName: "",
-                      },
-                  ],
+                    {
+                        languageCode: "mr",
+                        mediumName: "",
+                    },
+                ],
     };
 
     return (
@@ -88,16 +93,20 @@ export default function MediumPage() {
                 rowData={mediums}
                 columnDefs={mediumColumns}
                 loading={loading}
+
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+
                 addButtonText={t("masters:addMedium")}
 
-                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
 
-                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -108,9 +117,12 @@ export default function MediumPage() {
                 title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? t("common:deleteConfirmation", {
-                              name: selectedRow.mediumName,
-                          })
+                        ? t(
+                            "common:deleteConfirmation",
+                            {
+                                name: selectedRow.mediumName,
+                            }
+                        )
                         : ""
                 }
                 onClose={handleCloseDelete}

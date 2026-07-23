@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Box, Dialog, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "react-i18next";
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
 import MasterDialog from "../../../components/common/MasterDialog";
@@ -12,7 +13,6 @@ import { useCommittee } from "../hooks/useCommittee";
 import { useCommitteeCrud } from "../hooks/useCommitteeCrud";
 import type { CommitteeMaster } from "../types/committee";
 import usePermission from "../../../hooks/usePermission";
-import { useTranslation } from "react-i18next";
 
 export default function CommitteePage() {
     const { t, i18n } = useTranslation(["common", "masters"]);
@@ -21,6 +21,10 @@ export default function CommitteePage() {
     const {
         committees,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadCommittees,
     } = useCommittee(false);
 
@@ -51,16 +55,15 @@ export default function CommitteePage() {
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,
-
         closeSnackbar,
     } = useCommitteeCrud({
         loadCommittees,
     });
 
     const committeeColumns = useMemo(() => {
-            return getCommitteeColumns(t,setSelectedLogoUrl);
-        }, [t, i18n.language]);
-    
+        return getCommitteeColumns(t, setSelectedLogoUrl);
+    }, [t, i18n.language]);
+
     return (
         <PageContainer>
             <MasterGrid<CommitteeMaster>
@@ -68,6 +71,10 @@ export default function CommitteePage() {
                 rowData={committees}
                 columnDefs={committeeColumns}
                 loading={loading}
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
                 addButtonText={t("masters:addCommittee")}
                 canAdd={canAdd}
                 canEdit={canEdit}
@@ -107,7 +114,6 @@ export default function CommitteePage() {
                     >
                         <CloseIcon />
                     </IconButton>
-
                     <Box
                         component="img"
                         src={selectedLogoUrl ?? ""}
@@ -127,10 +133,10 @@ export default function CommitteePage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Committee"
+                title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? `Are you sure you want to delete "${selectedRow.committeeName}"?`
+                        ? t("common:deleteConfirmation",{name: selectedRow.committeeName})
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -139,13 +145,19 @@ export default function CommitteePage() {
 
             <MasterDialog
                 open={openForm}
-                title={editingRow ? t("masters:editCommittee") : t("masters:addCommittee")}
-                defaultValues={{
-                    committeeName: editingRow?.committeeName ?? "",
-                    slogan: editingRow?.slogan ?? "",
-                    isActive: editingRow?.isActive ?? true,
+                title={
+                    editingRow
+                        ? t("masters:editCommittee")
+                        : t("masters:addCommittee")
+                }
 
-                    // File inputs cannot be pre-populated
+                defaultValues={{
+                    committeeName:
+                        editingRow?.committeeName ?? "",
+                    slogan:
+                        editingRow?.slogan ?? "",
+                    isActive:
+                       editingRow?.isActive ?? true,
                     logo: null,
                 }}
                 onClose={handleCloseForm}
@@ -158,6 +170,7 @@ export default function CommitteePage() {
                 open={snackbarOpen}
                 message={snackbarMessage}
                 severity={snackbarSeverity}
+
                 onClose={closeSnackbar}
             />
         </PageContainer>

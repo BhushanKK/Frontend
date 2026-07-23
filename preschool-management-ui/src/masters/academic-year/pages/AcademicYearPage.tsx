@@ -15,12 +15,17 @@ import { useMemo } from "react";
 export default function AcademicYearPage() {
 const { t, i18n } = useTranslation(["common", "masters"]);
 const language = i18n.language;
-  const {
+ const {
     academicYears,
     loading,
-    loadAcademicYears
-  } = useAcademicYear(false);
+    pagination,
 
+    setPageNumber,
+    setPageSize,
+    setSearchText,
+
+    loadAcademicYears,
+} = useAcademicYear(false);
   const {
     canAdd,
     canEdit,
@@ -82,21 +87,28 @@ const language = i18n.language;
   return (
     <PageContainer>
       <MasterGrid<AcademicYear>
-        title={t("masters:academicYearMaster")}
-        rowData={academicYears}
-        columnDefs={academicYearColumns}
-        loading={loading}
-        addButtonText = {t("masters:addAcademicYear")}
-        // Permissions
-        canAdd={canAdd}
-        canEdit={canEdit}
-        canDelete={canDelete}
-        canExport={canExport}
-        canPrint={canPrint}
-        onAdd={handleAdd}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+    title={t("masters:academicYearMaster")}
+    rowData={academicYears}
+    columnDefs={academicYearColumns}
+    loading={loading}
+    addButtonText={t("masters:addAcademicYear")}
+
+    pagination={pagination}
+
+    onPageChange={setPageNumber}
+    onPageSizeChange={setPageSize}
+    onSearch={setSearchText}
+
+    canAdd={canAdd}
+    canEdit={canEdit}
+    canDelete={canDelete}
+    canExport={canExport}
+    canPrint={canPrint}
+
+    onAdd={handleAdd}
+    onEdit={handleEdit}
+    onDelete={handleDelete}
+/>
 
       {/* Delete Confirmation */}
       <DeleteDialog

@@ -8,7 +8,6 @@ import AppSnackbar from "../../../components/common/AppSnackbar";
 import { DeleteDialog } from "../../../components/master-grids";
 
 import usePermission from "../../../hooks/usePermission";
-import { useLanguageStore } from "../../../store/languageStore";
 
 import { useHoliday } from "../hooks/useHoliday";
 import { useHolidayCrud } from "../hooks/useHolidayCrud";
@@ -22,20 +21,20 @@ import type {
 } from "../types/Holiday";
 
 export default function HolidayPage() {
-    const { t } = useTranslation([
+    const { t, i18n } = useTranslation([
         "common",
         "masters",
     ]);
 
-    const language = useLanguageStore(
-        (state) => state.language
-    );
-
     const {
         holidays,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadHolidays,
-    } = useHoliday();
+    } = useHoliday(false);
 
     const {
         canAdd,
@@ -71,14 +70,12 @@ export default function HolidayPage() {
     });
 
     const holidayColumns = useMemo(() => {
-        return getHolidayColumns(
-            t,
-            language
-        );
-    }, [t, language]);
+        return getHolidayColumns(t, i18n.language);
+    }, [t, i18n.language]);
 
     const defaultValues: HolidayFormValues = {
-        holidayName: editingRow?.holidayName ?? "",
+        holidayName:
+            editingRow?.holidayName ?? "",
 
         holidayFromDate:
             editingRow?.holidayFromDate?.split("T")[0] ?? "",
@@ -86,9 +83,14 @@ export default function HolidayPage() {
         holidayToDate:
             editingRow?.holidayToDate?.split("T")[0] ?? "",
 
-        holidayType: editingRow?.holidayType ?? 1,
-        description: editingRow?.description ?? "",
-        isActive: editingRow?.isActive ?? true,
+        holidayType:
+            editingRow?.holidayType ?? 1,
+
+        description:
+            editingRow?.description ?? "",
+
+        isActive:
+            editingRow?.isActive ?? true,
 
         translations:
             editingRow?.translations?.length
@@ -107,15 +109,17 @@ export default function HolidayPage() {
     return (
         <PageContainer>
             <MasterGrid<Holiday>
-                title={t(
-                    "masters:holidayMaster"
-                )}
+                title={t("masters:holidayMaster")}
                 rowData={holidays}
                 columnDefs={holidayColumns}
                 loading={loading}
-                addButtonText={t(
-                    "masters:addHoliday"
-                )}
+
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+
+                addButtonText={t("masters:addHoliday")}
 
                 canAdd={canAdd}
                 canEdit={canEdit}
@@ -130,9 +134,7 @@ export default function HolidayPage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title={t(
-                    "common:confirmDelete"
-                )}
+                title={t("common:confirmDelete")}
                 description={
                     selectedRow
                         ? t(
@@ -143,31 +145,19 @@ export default function HolidayPage() {
                         )
                         : ""
                 }
-                onClose={
-                    handleCloseDelete
-                }
-                onConfirm={
-                    handleConfirmDelete
-                }
+                onClose={handleCloseDelete}
+                onConfirm={handleConfirmDelete}
             />
 
             <MasterDialog
                 open={openForm}
                 title={
                     editingRow
-                        ? t(
-                            "masters:editHoliday"
-                        )
-                        : t(
-                            "masters:addHoliday"
-                        )
+                        ? t("masters:editHoliday")
+                        : t("masters:addHoliday")
                 }
-                defaultValues={
-                    defaultValues
-                }
-                onClose={
-                    handleCloseForm
-                }
+                defaultValues={defaultValues}
+                onClose={handleCloseForm}
                 onSave={handleSave}
             >
                 <HolidayForm />

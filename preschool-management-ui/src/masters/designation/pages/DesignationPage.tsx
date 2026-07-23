@@ -1,36 +1,32 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-
 import MasterGrid from "../../../components/master-grids/MasterGrid";
 import PageContainer from "../../../components/common/PageContainer";
 import { DeleteDialog } from "../../../components/master-grids";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
-
 import usePermission from "../../../hooks/usePermission";
-
 import { useDesignation } from "../hooks/useDesignation";
 import { useDesignationCrud } from "../hooks/useDesignationCrud";
-
 import DesignationForm from "../components/DesignationForm";
 import { getDesignationColumns } from "../components/DesignationColumns";
-
-import type {
-    Designation,
-    DesignationFormValues,
-} from "../types/designation";
+import type { Designation, DesignationFormValues } from "../types/designation";
 
 export default function DesignationPage() {
+
     const { t, i18n } = useTranslation([
         "common",
         "masters",
     ]);
-
     const language = i18n.language;
 
     const {
         designations,
         loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
         loadDesignations,
     } = useDesignation(false);
 
@@ -45,10 +41,8 @@ export default function DesignationPage() {
     const {
         openForm,
         editingRow,
-
         deleteOpen,
         selectedRow,
-
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
@@ -56,13 +50,10 @@ export default function DesignationPage() {
         handleAdd,
         handleEdit,
         handleSave,
-
         handleCloseForm,
-
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,
-
         closeSnackbar,
     } = useDesignationCrud({
         loadDesignations,
@@ -81,76 +72,64 @@ export default function DesignationPage() {
 
         translations:
             editingRow?.translations?.length
-                ? editingRow.translations.map((x) => ({
-                      languageCode:
-                          x.languageCode,
-                      designationName:
-                          x.designationName,
-                  }))
-                : [
-                      {
-                          languageCode: "mr",
-                          designationName: "",
-                      },
-                  ],
-    };
+                ?
+                editingRow.translations.map((x) => ({
+                    languageCode:
+                        x.languageCode,
+                    designationName:
+                        x.designationName,
+                }))
+                :
+                [
+                    {
+                        languageCode: "mr",
 
+                        designationName: "",
+                    },
+                ],
+    };
     return (
         <PageContainer>
             <MasterGrid<Designation>
-                title={t(
-                    "masters:designationMaster"
-                )}
+                title={t("masters:designationMaster")}
                 rowData={designations}
                 columnDefs={designationColumns}
                 loading={loading}
-                addButtonText={t(
-                    "masters:addDesignation"
-                )}
-
-                
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+                addButtonText={ t("masters:addDesignation") }
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
-
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
-
-            {/* Delete Confirmation */}
             <DeleteDialog
                 open={deleteOpen}
-                title={t(
-                    "common:confirmDelete"
-                )}
+                title = { t("common:confirmDelete") }
+
                 description={
                     selectedRow
-                        ? t(
-                              "common:deleteConfirmation",
-                              {
-                                  name: selectedRow.designationName,
-                              }
-                          )
-                        : ""
+                        ?
+                        t("common:deleteConfirmation",{ name: selectedRow.designationName,})
+                        :
+                        ""
                 }
                 onClose={handleCloseDelete}
                 onConfirm={handleConfirmDelete}
             />
 
-            {/* Add / Edit Dialog */}
             <MasterDialog
                 open={openForm}
                 title={
                     editingRow
-                        ? t(
-                              "masters:editDesignation"
-                          )
-                        : t(
-                              "masters:addDesignation"
-                          )
+                        ? t("masters:editDesignation")
+                        : t("masters:addDesignation")
                 }
                 defaultValues={defaultValues}
                 onClose={handleCloseForm}
@@ -158,8 +137,6 @@ export default function DesignationPage() {
             >
                 <DesignationForm />
             </MasterDialog>
-
-            {/* Snackbar */}
             <AppSnackbar
                 open={snackbarOpen}
                 message={snackbarMessage}

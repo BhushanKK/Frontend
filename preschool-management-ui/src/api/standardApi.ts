@@ -4,14 +4,17 @@ import type {
     Standard,
     StandardFormValues,
 } from "../masters/standard/types/standard";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/StandardMaster";
 
 /**
  * Get All Standards
  */
-export const getStandards = async (filter: boolean): Promise<ApiResponse<Standard[]>> => {
-    const response = await api.get<ApiResponse<Standard[]>>(`${BASE_URL}/${filter}`);
+export const getStandards = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Standard>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Standard>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 

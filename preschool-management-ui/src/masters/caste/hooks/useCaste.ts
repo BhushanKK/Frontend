@@ -1,40 +1,83 @@
 import { useCallback, useEffect, useState } from "react";
 import { getCastes } from "../../../api/casteApi";
 import type { Caste } from "../types/caste";
+import type {
+    PaginationRequest,
+    PaginatedResult,
+} from "../../../types/pagination";
 import { useLanguageStore } from "../../../store/languageStore";
 
 export function useCaste(filter: boolean) {
-    const [castes, setCastes] = useState<Caste[]>([]);
+    const language = useLanguageStore((state) => state.language);
     const [loading, setLoading] = useState(false);
 
-    // Subscribe to selected language
-    const language = useLanguageStore((state) => state.language);
+    const [request, setRequest] = useState<PaginationRequest>({
+        pageNumber: 1,
+        pageSize: 10,
+        filter,
+        searchText: "",
+    });
+
+    const [result, setResult] =
+        useState<PaginatedResult<Caste>>();
 
     const loadCastes = useCallback(async () => {
         setLoading(true);
 
         try {
-            const response = await getCastes(filter);
+            const response = await getCastes(request);
 
-            if (response.success) {
-                setCastes(response.data);
-            } else {
-                setCastes([]);
-            }
+            if (response.success)
+                setResult(response.data);
+            else
+                setResult(undefined);
         } catch {
-            setCastes([]);
+            setResult(undefined);
         } finally {
             setLoading(false);
         }
-    }, [filter]);
+    }, [request]);
 
     useEffect(() => {
         loadCastes();
     }, [loadCastes, language]);
 
+    const setPageNumber = (pageNumber: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageNumber,
+        }));
+    };
+
+    const setPageSize = (pageSize: number) => {
+        setRequest((prev) => ({
+            ...prev,
+            pageSize,
+            pageNumber: 1,
+        }));
+    };
+
+    const setSearchText = (searchText: string) => {
+        setRequest((prev) => ({
+            ...prev,
+            searchText,
+            pageNumber: 1,
+        }));
+    };
+
+    const refresh = () => {
+        loadCastes();
+    };
+
     return {
-        castes,
         loading,
+        castes: result?.items ?? [],
+        pagination: result,
+        request,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
+        refresh,
         loadCastes,
     };
 }

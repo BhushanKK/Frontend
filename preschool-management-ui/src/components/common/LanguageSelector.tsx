@@ -1,6 +1,5 @@
 import { FormControl, MenuItem, Select, type SelectChangeEvent } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
-import { useTranslation } from "react-i18next";
 import { useLanguageStore } from "../../store/languageStore";
 
 const languages = [

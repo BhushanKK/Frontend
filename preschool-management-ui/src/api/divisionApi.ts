@@ -4,14 +4,17 @@ import type {
     Division,
     DivisionFormValues,
 } from "../masters/division/types/division";
+import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
 const BASE_URL = "/DivisionMaster";
 
 /**
  * Get All Divisions
  */
-export const getDivisions = async (filter: boolean): Promise<ApiResponse<Division[]>> => {
-    const response = await api.get<ApiResponse<Division[]>>(`${BASE_URL}/${filter}`);
+export const getDivisions = async (request: PaginationRequest): 
+Promise<ApiResponse<PaginatedResult<Division>>> => {
+    const response = await api.get<ApiResponse<PaginatedResult<Division>>>
+    (BASE_URL,{params: request});
     return response.data;
 };
 
