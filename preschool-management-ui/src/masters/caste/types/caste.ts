@@ -1,9 +1,15 @@
+export interface CasteTranslation {
+    languageCode: string;
+    casteName: string;
+}
+
 export interface Caste {
     casteId: number;
     categoryId: number;
     categoryName: string;
-    caste: string;
+    casteName: string;
     isActive: boolean;
+    translations: CasteTranslation[];
 }
 
 export interface CasteResponse {
@@ -15,6 +21,7 @@ export interface CasteResponse {
 
 export interface CasteFormValues {
     categoryId: number;
-    caste: string;
+    casteName: string;
     isActive: boolean;
+    translations: CasteTranslation[];
 }

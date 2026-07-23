@@ -1,35 +1,30 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
-import { Chip } from "@mui/material";
+import type { ColDef } from "ag-grid-community";
+import type { TFunction } from "i18next";
 import type { Caste } from "../types/caste";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const casteColumns: ColDef<Caste>[] = [
+export const getCasteColumns = (
+    t: TFunction
+): ColDef<Caste>[] => [
     {
-        headerName: "ID",
+        headerName: t("common:ID"),
         field: "casteId",
         width: 100,
     },
     {
-        headerName: "Category",
+        headerName: t("masters:category"),
         field: "categoryName",
         flex: 1,
     },
     {
-        headerName: "Caste",
-        field: "caste",
+        headerName: t("masters:caste"),
+        field: "casteName",
         flex: 1,
     },
     {
-        headerName: "Status",
+        headerName: t("common:status"),
         field: "isActive",
         flex: 1,
-        cellRenderer: (
-            params: ICellRendererParams<Caste, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
+        cellRenderer: StatusCellRenderer,
     },
 ];

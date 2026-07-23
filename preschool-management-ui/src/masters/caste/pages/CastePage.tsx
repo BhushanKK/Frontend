@@ -1,18 +1,26 @@
-import MasterGrid from "../../../components/master-grids/MasterGrid";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import PageContainer from "../../../components/common/PageContainer";
-import { DeleteDialog } from "../../../components/master-grids";
+import MasterGrid from "../../../components/master-grids/MasterGrid";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
+import { DeleteDialog } from "../../../components/master-grids";
+import usePermission from "../../../hooks/usePermission";
 import { useCaste } from "../hooks/useCaste";
 import { useCasteCrud } from "../hooks/useCasteCrud";
+import { getCasteColumns } from "../components/CasteColumns";
 import CasteForm from "../components/CasteForm";
-import { casteColumns } from "../components/CasteColumns";
-import type { Caste } from "../types/caste";
-import usePermission from "../../../hooks/usePermission";
+import type { Caste, CasteFormValues } from "../types/caste";
 
 export default function CastePage() {
-    const { castes, loading, loadCastes } = useCaste(false);
-    
+    const { t, i18n } = useTranslation("masters");
+
+    const {
+        castes,
+        loading,
+        loadCastes,
+    } = useCaste(false);
+
     const {
         canAdd,
         canEdit,
@@ -20,11 +28,13 @@ export default function CastePage() {
         canExport,
         canPrint,
     } = usePermission();
+
     const {
         openForm,
         editingRow,
         deleteOpen,
         selectedRow,
+
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
@@ -43,20 +53,45 @@ export default function CastePage() {
         loadCastes,
     });
 
+    const casteColumns = useMemo(() => {
+        return getCasteColumns(t);
+    }, [t, i18n.language]);
+
+    const defaultValues: CasteFormValues = {
+        categoryId: editingRow?.categoryId ?? 0,
+        casteName: editingRow?.casteName ?? "",
+        isActive: editingRow?.isActive ?? true,
+        translations:
+            editingRow?.translations?.length
+                ? editingRow.translations.map((x) => ({
+                      languageCode: x.languageCode,
+                      casteName: x.casteName,
+                  }))
+                : [
+                      {
+                          languageCode: "mr",
+                          casteName: "",
+                      },
+                  ],
+    };
+
     return (
         <PageContainer>
             <MasterGrid<Caste>
-                title="Caste Master"
+                title={t("casteMaster")}
                 rowData={castes}
                 columnDefs={casteColumns}
                 loading={loading}
-                addButtonText="Add Caste"
-                // Permission control
+                addButtonText={t("addCaste")}
+
+                // Permissions
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
+
+                // Events
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -64,10 +99,12 @@ export default function CastePage() {
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete Caste"
+                title={t("common:confirmDelete")}
                 description={
                     selectedRow
-                        ? `Are you sure you want to delete "${selectedRow.caste}"?`
+                        ? t("common:deleteConfirmation", {
+                              name: selectedRow.casteName,
+                          })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -76,12 +113,12 @@ export default function CastePage() {
 
             <MasterDialog
                 open={openForm}
-                title={editingRow ? "Edit Caste" : "Add Caste"}
-                defaultValues={{
-                    categoryId: editingRow?.categoryId ?? 0,
-                    caste: editingRow?.caste ?? "",
-                    isActive: editingRow?.isActive ?? true,
-                }}
+                title={
+                    editingRow
+                        ? t("editCaste")
+                        : t("addCaste")
+                }
+                defaultValues={defaultValues}
                 onClose={handleCloseForm}
                 onSave={handleSave}
             >
