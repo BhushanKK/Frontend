@@ -116,5 +116,9 @@
   "parentMenu":" मुख्य मेनू",
   "menuUrl":"मेनू लिंक",
   "displayOrder":"प्रदर्शन क्रम",
-  "menu":"मेनू"
+  "menu":"मेनू",
+
+  "roleMenuPermission": "रोल मेनू परवानगी",
+  "savePermissions": "परवानग्या जतन करा",
+  "selectRole":"रोल निवडा"
 }

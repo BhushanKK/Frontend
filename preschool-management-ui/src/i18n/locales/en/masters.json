@@ -105,7 +105,7 @@
   "optionalHoliday": "Optional Holiday",
   "festivalHoliday": "Festival Holiday",
 
-   "designationMaster": "Designation Master",
+  "designationMaster": "Designation Master",
   "designation": "Designation",
   "Designation": "Designation",
   "addDesignation": "Add Designation",
@@ -116,5 +116,9 @@
   "menuName": "Menu",
   "parentMenu":"Main Menu",
   "displayOrder":"Display Order",
-  "menu":"Menu"
+  "menu":"Menu",
+
+  "roleMenuPermission": "Role Menu Permission",
+  "savePermissions": "Save Permissions",
+  "selectRole":"Select Role"  
 }

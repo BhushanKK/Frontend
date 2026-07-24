@@ -35,7 +35,6 @@
   "ID":"आयडी",
   "status":"स्थिती",
   "action":"कार्यवाही",
-  "changePassword":"पासवर्ड बदला",
   "myProfile":"माझी प्रोफाइल",
   "logout":"लॉगआउट",
 
@@ -60,7 +59,14 @@
   "pleaseFillAllFields": "कृपया सर्व माहिती भरा.",
   "passwordMinimumEightChars": "पासवर्डमध्ये किमान ८ अक्षरे असावीत.",
   "passwordMismatch": "नवीन पासवर्ड आणि पुष्टी केलेला पासवर्ड जुळत नाही.",
-  "unableToChangePassword": "पासवर्ड बदलता आला नाही."
+  "unableToChangePassword": "पासवर्ड बदलता आला नाही.",
+
+  "roleMenuView": "पहा",
+  "roleMenuAdd": "जोडा",
+  "roleMenuEdit": "संपादित करा",
+  "roleMenuDelete": "हटवा",
+  "roleMenuPrint": "मुद्रित करा",
+  "roleMenuExport": "निर्यात करा"
 
 
 }

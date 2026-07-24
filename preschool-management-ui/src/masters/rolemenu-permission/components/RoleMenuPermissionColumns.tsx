@@ -5,6 +5,7 @@ import type {
 } from "ag-grid-community";
 
 import type { RoleMenuPermission } from "../types/roleMenuPermission";
+import { t } from "i18next";
 
 interface Props {
     onPermissionChange: (
@@ -43,14 +44,14 @@ export const RoleMenuPermissionColumns = ({
 }: Props): ColDef<RoleMenuPermission>[] => [
 
     {
-        headerName: "Menu",
+        headerName: t("masters:menu"),
         field: "menuName",
         minWidth: 250,
         pinned: "left",
     },
 
     {
-        headerName: "View",
+        headerName: t("masters:roleMenuView"),
         field: "canView",
         width: 90,
         sortable: false,
@@ -67,7 +68,7 @@ export const RoleMenuPermissionColumns = ({
     },
 
     {
-        headerName: "Add",
+        headerName: t("common:roleMenuAdd"),
         field: "canAdd",
         width: 90,
         sortable: false,
@@ -84,7 +85,7 @@ export const RoleMenuPermissionColumns = ({
     },
 
     {
-        headerName: "Edit",
+        headerName: t("common:roleMenuEdit"),
         field: "canEdit",
         width: 90,
         sortable: false,
@@ -101,7 +102,7 @@ export const RoleMenuPermissionColumns = ({
     },
 
     {
-        headerName: "Delete",
+        headerName: t("common:roleMenuDelete"),
         field: "canDelete",
         width: 90,
         sortable: false,
@@ -118,7 +119,7 @@ export const RoleMenuPermissionColumns = ({
     },
 
     {
-        headerName: "Print",
+        headerName: t("common:roleMenuPrint"),
         field: "canPrint",
         width: 90,
         sortable: false,
@@ -135,7 +136,7 @@ export const RoleMenuPermissionColumns = ({
     },
 
     {
-        headerName: "Export",
+        headerName: t("common:roleMenuExport"),
         field: "canExport",
         width: 90,
         sortable: false,

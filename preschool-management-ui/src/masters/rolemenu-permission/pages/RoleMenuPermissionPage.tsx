@@ -7,6 +7,7 @@ import { MasterGrid } from "../../../components/master-grids";
 import AppSnackbar from "../../../components/common/AppSnackbar";
 import type { RoleMenuPermission } from "../types/roleMenuPermission";
 import { useRoleDropdown } from "../../../hooks/useRoleDropdown";
+import { t } from "i18next";
 
 export default function RoleMenuPermissionPage() {
     const [roleId, setRoleId] = useState(0);
@@ -49,7 +50,7 @@ export default function RoleMenuPermissionPage() {
                     variant="h5"
                     sx={{ fontWeight: 600, mb: 2 }}
                 >
-                    Role Menu Permission
+                    {t("masters:roleMenuPermission")}
                 </Typography>
 
                 <Box
@@ -79,7 +80,7 @@ export default function RoleMenuPermissionPage() {
                         >
 
                             <MenuItem value={0}>
-                                Select Role
+                                {t("masters:selectRole")}
                             </MenuItem>
 
                             {roles.map(r => (
@@ -102,7 +103,7 @@ export default function RoleMenuPermissionPage() {
                         }
                         onClick={() => save(roleId)}
                     >
-                        Save Permissions
+                        {t("masters:savePermissions")}
                     </Button>
                 </Box>
             </Card>
