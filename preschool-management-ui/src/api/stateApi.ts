@@ -1,6 +1,6 @@
 import api from "./axios";
 import type { ApiResponse } from "../types/auth";
-import type { State, StateFormValues } from "../masters/state/types/state";
+import type { State, StateDropdown, StateFormValues } from "../masters/state/types/state";
 import type {
     PaginatedResult,
     PaginationRequest,
@@ -21,6 +21,15 @@ export const getStates = async (
         }
     );
 
+    return response.data;
+};
+
+/**
+ * Get State data for Dropdown bind
+ */
+export const getStateDropdown = async () => {
+    const response = await api.get<ApiResponse<StateDropdown[]>>(
+       `${BASE_URL}/Dropdown`);
     return response.data;
 };
 

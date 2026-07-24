@@ -162,7 +162,7 @@ export default function MasterGrid<T>({
           <MasterToolbar
             title={title}
             addButtonText={addButtonText}
-            onSearch={onSearch ?? (() => {})}
+            onSearch={onSearch}
             onExport={handleExport}
             onAdd={onAdd}
             showExport={canExport}

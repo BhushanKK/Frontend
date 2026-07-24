@@ -1,19 +1,40 @@
-import MasterGrid from "../../../components/master-grids/MasterGrid";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+
 import PageContainer from "../../../components/common/PageContainer";
-import { DeleteDialog } from "../../../components/master-grids";
+import MasterGrid from "../../../components/master-grids/MasterGrid";
 import MasterDialog from "../../../components/common/MasterDialog";
 import AppSnackbar from "../../../components/common/AppSnackbar";
-
+import { DeleteDialog } from "../../../components/master-grids";
 
 import usePermission from "../../../hooks/usePermission";
-import type { district } from "../types/district";
-import DistrictForm from "../components/districtForm";
-import { districtColumns } from "../components/districtColumns";
+
 import { useDistrict } from "../hooks/useDistrict";
 import { useDistrictCrud } from "../hooks/useDistrictCrud";
 
+import { getDistrictColumns } from "../components/DistrictColumns";
+import DistrictForm from "../components/DistrictForm";
+
+import type {
+    District,
+    DistrictFormValues,
+} from "../types/district";
+
 export default function DistrictPage() {
-    const {district,loading,loadDistricts} = useDistrict();
+    const { t, i18n } = useTranslation([
+        "common",
+        "masters",
+    ]);
+
+    const {
+        districts,
+        loading,
+        pagination,
+        setPageNumber,
+        setPageSize,
+        setSearchText,
+        loadDistricts,
+    } = useDistrict(false);
 
     const {
         canAdd,
@@ -26,53 +47,84 @@ export default function DistrictPage() {
     const {
         openForm,
         editingRow,
+
         deleteOpen,
-        selectRow,
+        selectedRow,
+
         snackbarOpen,
         snackbarMessage,
         snackbarSeverity,
 
         handleAdd,
         handleEdit,
-        handelSave,
+        handleSave,
         handleCloseForm,
 
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,
 
-        closeSnackbar
+        closeSnackbar,
     } = useDistrictCrud({
         loadDistricts,
     });
 
+    const districtColumns = useMemo(() => {
+        return getDistrictColumns(t);
+    }, [t, i18n.language]);
+
+    const defaultValues: DistrictFormValues = {
+        stateId: editingRow?.stateId ?? 0,
+        districtName: editingRow?.districtName ?? "",
+        isActive: editingRow?.isActive ?? true,
+        translations:
+            editingRow?.translations?.length
+                ? editingRow.translations.map((x) => ({
+                      languageCode: x.languageCode,
+                      districtName: x.districtName,
+                  }))
+                : [
+                      {
+                          languageCode: "mr",
+                          districtName: "",
+                      },
+                  ],
+    };
+
     return (
         <PageContainer>
-
-            <MasterGrid<district>
-                title="District Master"
-                rowData={district}
+            <MasterGrid<District>
+                title={t("masters:districtMaster")}
+                rowData={districts}
                 columnDefs={districtColumns}
                 loading={loading}
-                addButtonText="Add District"
 
-                // Permission control
+                pagination={pagination}
+                onPageChange={setPageNumber}
+                onPageSizeChange={setPageSize}
+                onSearch={setSearchText}
+
+                addButtonText={t("masters:addDistrict")}
+
                 canAdd={canAdd}
                 canEdit={canEdit}
                 canDelete={canDelete}
                 canExport={canExport}
                 canPrint={canPrint}
+
                 onAdd={handleAdd}
                 onEdit={handleEdit}
-                onDelete={handleDelete}       
+                onDelete={handleDelete}
             />
 
             <DeleteDialog
                 open={deleteOpen}
-                title="Delete District"
+                title={t("common:confirmDelete")}
                 description={
-                    selectRow
-                        ? `Are you sure you want to delete "${selectRow.districtName}"?`
+                    selectedRow
+                        ? t("common:deleteConfirmation", {
+                              name: selectedRow.districtName,
+                          })
                         : ""
                 }
                 onClose={handleCloseDelete}
@@ -83,15 +135,12 @@ export default function DistrictPage() {
                 open={openForm}
                 title={
                     editingRow
-                        ? "Edit District"
-                        : "Add District"
+                        ? t("masters:editDistrict")
+                        : t("masters:addDistrict")
                 }
-                defaultValues={{
-                    districtName: editingRow?.districtName ?? "",
-                    isActive: editingRow?.isActive ?? true,
-                }}
+                defaultValues={defaultValues}
                 onClose={handleCloseForm}
-                onSave={handelSave}
+                onSave={handleSave}
             >
                 <DistrictForm />
             </MasterDialog>

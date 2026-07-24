@@ -23,7 +23,7 @@ Promise<ApiResponse<PaginatedResult<Role>>> => {
  */
 export const getRoleDropdown = async () => {
     const response = await api.get<ApiResponse<Role[]>>(
-        "/RoleMaster/Dropdown"
+       `${BASE_URL}/Dropdown`
     );
 
     return response.data;

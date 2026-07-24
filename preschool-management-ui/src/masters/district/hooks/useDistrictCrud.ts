@@ -1,9 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
 
+import {
+    createDistrict,
+    updateDistrict,
+    deleteDistrict,
+    getDistrictById,
+} from "../../../api/districtApi";
+
+import type {
+    District,
+    DistrictFormValues,
+} from "../types/district";
+
 import type { ApiResponse } from "../../../types/auth";
-import type { district, districtFormValues } from "../types/district";
-import { createDistrict, deleteDistrict, updateDistrict } from "../../../api/districtApi";
 
 type SnackbarSeverity = "success" | "warning" | "error" | "info";
 
@@ -12,15 +22,26 @@ interface UseDistrictCrudProps {
 }
 
 export function useDistrictCrud({
-    loadDistricts }: UseDistrictCrudProps) {
+    loadDistricts,
+}: UseDistrictCrudProps) {
+    // Dialog State
     const [openForm, setOpenForm] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [editingRow, setEditingRow] = useState<district | null>(null);
-    const [selectRow, setSelectRow] = useState<district | null>(null);
 
+    // Selected Rows
+    const [editingRow, setEditingRow] =
+        useState<District | null>(null);
+
+    const [selectedRow, setSelectedRow] =
+        useState<District | null>(null);
+
+    // Snackbar
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>("success");
+    const [snackbarSeverity, setSnackbarSeverity] =
+        useState<SnackbarSeverity>("success");
+
+    //#region Snackbar
 
     const showSnackbar = (
         severity: SnackbarSeverity,
@@ -35,95 +56,164 @@ export function useDistrictCrud({
         setSnackbarOpen(false);
     };
 
+    //#endregion
+
+    //#region Form
+
     const handleAdd = () => {
         setEditingRow(null);
         setOpenForm(true);
     };
 
-    const handleEdit = (row: district) => {
-        setEditingRow(row);
-        setOpenForm(true);
-    }
-
-    const handleCloseForm = () => {
-        setOpenForm(false);
-        setEditingRow(null);
-    }
-
-    const handelSave = async (data: districtFormValues) => {
+    const handleEdit = async (row: District) => {
         try {
-            const response = editingRow
-                ? await updateDistrict(editingRow.districtId, data)
-                : await createDistrict(data);
+            const response = await getDistrictById(
+                row.districtId
+            );
 
-            switch (response.statusCode) {
-                case 409:
-                    showSnackbar("warning", response.message);
-                    break;
-
-                case 400:
-                    showSnackbar("error", response.message);
-                    break;
-
-                case 200:
-                case 201:
-                    handleCloseForm();
-                    await loadDistricts();
-                    showSnackbar("success", response.message)
-                    break;
-                default:
-                    showSnackbar("error", response.message);
-                    break;
+            if (!response.success) {
+                showSnackbar("error", response.message);
+                return;
             }
+
+            setEditingRow(response.data);
+            setOpenForm(true);
         } catch (error) {
+            console.error(
+                "Get District By Id Error:",
+                error
+            );
+
             showSnackbar(
                 "error",
-                axios.isAxiosError<ApiResponse<number>>(error)
-                    ? error.response?.data.message ?? "Something went wrong."
-                    : "Unexpected error."
+                "Failed to load district details."
             );
         }
     };
 
-    const handleDelete = (row: district) => {
-        setSelectRow(row);
+    const handleCloseForm = () => {
+        setOpenForm(false);
+        setEditingRow(null);
+    };
+
+    const handleSave = async (
+        data: DistrictFormValues
+    ) => {
+        try {
+            const response = editingRow
+                ? await updateDistrict(
+                      editingRow.districtId,
+                      data
+                  )
+                : await createDistrict(data);
+
+            switch (response.statusCode) {
+                case 200:
+                case 201:
+                    await loadDistricts();
+                    handleCloseForm();
+                    showSnackbar(
+                        "success",
+                        response.message
+                    );
+                    break;
+
+                case 400:
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
+                    break;
+
+                case 409:
+                    showSnackbar(
+                        "warning",
+                        response.message
+                    );
+                    break;
+
+                default:
+                    showSnackbar(
+                        "error",
+                        response.message
+                    );
+                    break;
+            }
+        } catch (error) {
+            if (axios.isAxiosError<ApiResponse<number>>(error)) {
+                showSnackbar(
+                    "error",
+                    error.response?.data.message ??
+                        "Something went wrong."
+                );
+            } else {
+                showSnackbar(
+                    "error",
+                    "Unexpected error occurred."
+                );
+            }
+        }
+    };
+
+    //#endregion
+
+    //#region Delete
+
+    const handleDelete = (
+        row: District
+    ) => {
+        setSelectedRow(row);
         setDeleteOpen(true);
     };
 
     const handleCloseDelete = () => {
         setDeleteOpen(false);
-        setSelectRow(null);
+        setSelectedRow(null);
     };
 
     const handleConfirmDelete = async () => {
-        if (!selectRow) return;
+        if (!selectedRow) return;
 
         try {
             const response = await deleteDistrict(
-                selectRow.districtId
+                selectedRow.districtId
             );
 
             if (response.success) {
                 await loadDistricts();
                 handleCloseDelete();
-                showSnackbar("info", response.message);
+                showSnackbar(
+                    "info",
+                    response.message
+                );
+            } else {
+                showSnackbar(
+                    "error",
+                    response.message
+                );
             }
         } catch {
-            showSnackbar("error", "Failed to delete Financial Year.");
+            showSnackbar(
+                "error",
+                "Failed to delete district."
+            );
         }
     };
+
+    //#endregion
+
     return {
         // Form
         openForm,
         editingRow,
         handleAdd,
         handleEdit,
-        handelSave,
+        handleSave,
         handleCloseForm,
 
         // Delete
         deleteOpen,
-        selectRow,
+        selectedRow,
         handleDelete,
         handleConfirmDelete,
         handleCloseDelete,

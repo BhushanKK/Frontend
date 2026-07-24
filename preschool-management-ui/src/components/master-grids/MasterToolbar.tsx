@@ -2,10 +2,12 @@ import { Stack, TextField, Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DownloadIcon from "@mui/icons-material/Download";
 import { t } from "i18next";
+import { useEffect, useState } from "react";
+import { useDebounce } from "../../hooks/useDebounce";
 
 interface MasterToolbarProps {
     title: string;
-    onSearch: (value: string) => void;
+    onSearch?: (value: string) => void;
     onAdd?: () => void;
     onExport?: () => void;
     addButtonText?: string;
@@ -22,6 +24,16 @@ export default function MasterToolbar({
     showExport = true,
     showAdd = true,
 }: MasterToolbarProps) {
+
+    const [search, setSearch] = useState("");
+
+    const debouncedSearch = useDebounce(search, 500);
+
+    useEffect(() => {
+        onSearch?.(debouncedSearch);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedSearch]);
+
     return (
         <Stack
             direction={{ xs: "column", md: "row" }}
@@ -47,9 +59,10 @@ export default function MasterToolbar({
                 spacing={2}
             >
                 <TextField
+                    value={search}
                     size="small"
                     placeholder={t("search")}
-                    onChange={(e) => onSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                     sx={{
                         width: {
                             xs: "100%",

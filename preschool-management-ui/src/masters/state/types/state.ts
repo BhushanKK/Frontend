@@ -29,3 +29,8 @@ export interface StateTranslationForm {
     languageCode: string;
     stateName: string;
 }
+
+export interface StateDropdown {
+    stateId: number;
+    stateName: string;
+}

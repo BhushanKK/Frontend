@@ -1,30 +1,30 @@
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
-import type { district } from "../types/district";
-import { Chip } from "@mui/material";
+import type { ColDef } from "ag-grid-community";
+import type { TFunction } from "i18next";
+import type { District } from "../types/district";
+import StatusCellRenderer from "../../../components/master-grids/StatusCellRenderer";
 
-export const districtColumns : ColDef<district>[] = [
+export const getDistrictColumns = (
+    t: TFunction
+): ColDef<District>[] => [
     {
-        headerName: "Id",
+        headerName: t("common:ID"),
         field: "districtId",
-        width: 100
+        width: 100,
     },
     {
-        headerName:"district",
-        field:"districtName",
-        width:100
+        headerName: t("masters:state"),
+        field: "stateName",
+        flex: 1,
     },
     {
-        headerName: "Status",
+        headerName: t("masters:district"),
+        field: "districtName",
+        flex: 1,
+    },
+    {
+        headerName: t("common:status"),
         field: "isActive",
         flex: 1,
-        cellRenderer: (
-            params: ICellRendererParams<district, boolean>
-        ) => (
-            <Chip
-                label={params.value ? "Active" : "Inactive"}
-                color={params.value ? "success" : "error"}
-                size="small"
-            />
-        ),
-    }
+        cellRenderer: StatusCellRenderer,
+    },
 ];
