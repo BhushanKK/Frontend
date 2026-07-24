@@ -25,6 +25,7 @@ import MediumPage from "../masters/Medium/pages/MediumPage";
 import StandardPage from "../masters/standard/pages/StandardPage";
 import DesignationPage from "../masters/designation/pages/DesignationPage";
 import StatePage from "../masters/state/pages/statePage";
+import UnauthorizedPage from "../features/auth/UnauthorizedPage";
 
 export default function AppRoutes() {
   return (
@@ -41,7 +42,11 @@ export default function AppRoutes() {
       <Route
         path="/reset-password"
         element={<ResetPasswordPage />}
-      /> 
+      />
+       <Route
+        path="/unauthorized"
+        element={<UnauthorizedPage />}
+    />
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>

@@ -51,7 +51,7 @@ export const RoleMenuPermissionColumns = ({
     },
 
     {
-        headerName: t("masters:roleMenuView"),
+        headerName: t("common:roleMenuView"),
         field: "canView",
         width: 90,
         sortable: false,

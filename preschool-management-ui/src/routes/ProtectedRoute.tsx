@@ -1,23 +1,36 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-
 import { useAuthStore } from "../store/authStore";
+import { usePermissionStore } from "../store/permissionStore";
 
 export default function ProtectedRoute() {
-  const isAuthenticated = useAuthStore(
-    (state) => state.isAuthenticated
-  );
+    const location = useLocation();
 
-  const location = useLocation();
-
-  if (!isAuthenticated) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-        state={{ from: location }}
-      />
+    const isAuthenticated = useAuthStore(
+        (state) => state.isAuthenticated
     );
-  }
 
-  return <Outlet />;
+    const hasPermission = usePermissionStore(
+        (state) => state.hasPermission
+    );
+
+    if (!isAuthenticated) {
+        return (
+            <Navigate
+                to="/login"
+                replace
+                state={{ from: location }}
+            />
+        );
+    }
+
+    if (!hasPermission(location.pathname, "canView")) {
+        return (
+            <Navigate
+                to="/unauthorized"
+                replace
+            />
+        );
+    }
+
+    return <Outlet />;
 }
