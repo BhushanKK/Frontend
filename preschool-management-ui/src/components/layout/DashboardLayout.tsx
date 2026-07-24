@@ -3,6 +3,7 @@ import { Box, Toolbar } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import Footer from "./Footer";
 
 export default function DashboardLayout() {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -37,25 +38,25 @@ export default function DashboardLayout() {
     component="main"
     sx={{
         flexGrow: 1,
-        background: "#F5F7FB",
+        display: "flex",
+        flexDirection: "column",
         minHeight: "100vh",
-        p: 1.5,
-        overflow: "hidden",
     }}
 >
-                {/* Header Spacer */}
-                <Toolbar />
+    <Toolbar />
 
-                {/* Page Content */}
-                <Box
-    sx={{
-        width: "100%",
-        height: "100%",
-    }}
->
-    <Outlet />
-                </Box>
-            </Box>
+    <Box
+        sx={{
+            flex: 1,
+            p: 3,
+            bgcolor: "#F4F7FC",
+        }}
+    >
+        <Outlet />
+    </Box>
+
+    <Footer />
+</Box>
         </Box>
     );
 }

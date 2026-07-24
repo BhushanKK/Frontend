@@ -25,10 +25,16 @@ export default function AppSnackbar({
       }}
     >
       <Alert
+        onClose={onClose}
         severity={severity}
         variant="filled"
-        onClose={onClose}
-        sx={{ width: "100%" }}
+        sx={{
+          width: "100%",
+          color: "#fff",           // Text color
+          "& .MuiAlert-icon": {
+            color: "#fff",         // Icon color
+          },
+        }}
       >
         {message}
       </Alert>

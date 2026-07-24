@@ -24,8 +24,9 @@ export const getReligionColumns = (t: TFunction): ColDef<Religion>[] => [
         ) => (
             <Chip
                 label={ params.value ? "Yes" : "No" }
-                color={ params.value ? "info" : "default" }
+                color={ params.value ? "info" : "warning" }
                 size="small"
+                sx={{ color: params.value ? "#fff" : "#fff" }}
             />
         ),
     },

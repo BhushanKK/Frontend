@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -27,6 +27,7 @@ import {
     LockReset,
     Logout,
     Language,
+    AccessTime,
 } from "@mui/icons-material";
 
 import { drawerWidth } from "./Sidebar";
@@ -43,13 +44,39 @@ export default function Header({
 }: HeaderProps) {
 
     const { t } = useTranslation("common");
+    const [currentTime, setCurrentTime] = useState(new Date());
 
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+    const language = useLanguageStore((s) => s.language);
+    const setLanguage = useLanguageStore((s) => s.setLanguage);
+
+    const formattedDateTime = currentTime.toLocaleString(
+        language === "mr"
+            ? "mr-IN"
+            : language === "hi"
+                ? "hi-IN"
+                : "en-IN",
+        {
+            weekday: "short",
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+           // second: "2-digit",
+        }
+    );
     const navigate = useNavigate();
 
     const logout = useAuthStore((s) => s.logout);
 
-    const language = useLanguageStore((s) => s.language);
-    const setLanguage = useLanguageStore((s) => s.setLanguage);
+
 
     const [anchorEl, setAnchorEl] =
         useState<null | HTMLElement>(null);
@@ -146,6 +173,34 @@ export default function Header({
                     />
                 </Box>
 
+                <Box
+                    sx={{
+                        display: { xs: "none", lg: "flex" },
+                        alignItems: "center",
+                        px: 0,
+                        py: 0.6,
+                        bgcolor: "#fff",
+                        border: "1px solid #EEF2F7",
+                        borderRadius: "12px",
+                        boxShadow: "0 2px 8px rgba(160, 150, 150, 0.04)",
+                    }}
+                >
+                    <AccessTime
+                        fontSize="small"
+                        color="primary"
+                        sx={{ mr: 1 }}
+                    />
+
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            fontWeight: 600,
+                            whiteSpace: "nowrap",
+                        }}
+                    >
+                        {formattedDateTime}
+                    </Typography>
+                </Box>
                 {/* Language */}
 
                 <Box

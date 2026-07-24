@@ -69,11 +69,11 @@ export default function RoleMenuPermissionPage() {
                         }}
                     >
                         <InputLabel>
-                            Role
+                            {t("masters:role")}
                         </InputLabel>
                         <Select
                             value={roleId}
-                            label="Role"
+                            label={t("masters:role")}
                             onChange={(e) =>
                                 setRoleId(Number(e.target.value))
                             }
