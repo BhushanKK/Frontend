@@ -26,6 +26,7 @@ import {
     Person,
     LockReset,
     Logout,
+    Language,
 } from "@mui/icons-material";
 
 import { drawerWidth } from "./Sidebar";
@@ -147,29 +148,58 @@ export default function Header({
 
                 {/* Language */}
 
-                <FormControl size="small">
-                    <Select
-                        value={language}
-                        onChange={(e) =>
-                            setLanguage(e.target.value as LanguageCode)
-                        }
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        bgcolor: "#FFFFFF",
+                        border: "1px solid #EEF2F7",
+                        borderRadius: "18px",
+                        px: 1.5,
+                        height: 46,
+                        boxShadow: "0 2px 8px rgba(0,0,0,.04)",
+                    }}
+                >
+                    <Language
                         sx={{
-                            bgcolor: "#FFFFFF",
-                            borderRadius: "18px",
-                            minWidth: 130,
-                            height: 46,
-                            "& fieldset": {
-                                borderColor: "#EEF2F7",
-                            },
+                            color: "primary.main",
+                            fontSize: 22,
                         }}
+                    />
+
+                    <FormControl
+                        size="small"
+                        variant="standard"
                     >
-                        {languages.map((lang) => (
-                            <MenuItem key={lang.code} value={lang.code}>
-                                {lang.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                        <Select
+                            disableUnderline
+                            value={language}
+                            onChange={(e) =>
+                                setLanguage(
+                                    e.target.value as LanguageCode
+                                )
+                            }
+                            sx={{
+                                minWidth: 90,
+                                fontWeight: 600,
+
+                                "& .MuiSelect-select": {
+                                    py: 0,
+                                },
+                            }}
+                        >
+                            {languages.map((lang) => (
+                                <MenuItem
+                                    key={lang.code}
+                                    value={lang.code}
+                                >
+                                    {lang.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
 
                 {/* Notification */}
 
