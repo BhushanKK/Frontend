@@ -12,25 +12,17 @@ import {
     InputLabel,
     Select,
 } from "@mui/material";
-
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-
-import {
-    Controller,
-    useFieldArray,
-    useFormContext,
-} from "react-hook-form";
-
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { CasteFormValues } from "../types/caste";
-import { useCategory } from "../../category/hooks/useCategory";
 import { languages } from "../../../utils/languages";
 import { t } from "i18next";
+import { useCategoryDropdown } from "../hooks/useCategoryDropdown";
 
 export default function CasteForm() {
     const { control } = useFormContext<CasteFormValues>();
-
-    const { categories, loading } = useCategory(true);
+    const { categories, loading } = useCategoryDropdown();
 
     const {
         fields,

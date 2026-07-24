@@ -1,5 +1,5 @@
 import api from "./axios";
-import type { Category,CategoryFormValues } from "../masters/category/types/category";
+import type { Category,CategoryDropdown,CategoryFormValues } from "../masters/category/types/category";
 import type { ApiResponse } from "../types/auth";
 import type { PaginatedResult, PaginationRequest } from "../types/pagination";
 
@@ -16,6 +16,15 @@ export const getCategoryById = async (id: number) => {
     const response = await api.get<ApiResponse<Category>>(
         `${BASE_URL}/${id}`
     );
+    return response.data;
+};
+
+/**
+ * Get State data for Dropdown bind
+ */
+export const getCategoryDropdown = async () => {
+    const response = await api.get<ApiResponse<CategoryDropdown[]>>(
+       `${BASE_URL}/dropdown`);
     return response.data;
 };
 

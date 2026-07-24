@@ -1,15 +1,14 @@
 import api from "./axios";
 import type { Caste, CasteFormValues } from "../masters/caste/types/caste";
-import { getCategories } from "../api/categoryApi";
 import type { ApiResponse } from "../types/auth";
 import type { PaginatedResult, PaginationRequest } from "../types/pagination";
+import { getCategoryDropdown } from "./categoryApi";
 
 const BASE_URL = "/CasteMaster";
 
-export const getAllCategories = async (
-    request: PaginationRequest
-) => {
-    return await getCategories(request);
+// State Dropdown
+export const getAllCategories = async () => {
+    return await getCategoryDropdown();
 };
 
 export const getCastes = async (request: PaginationRequest)

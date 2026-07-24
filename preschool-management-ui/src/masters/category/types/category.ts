@@ -22,3 +22,8 @@ export interface CategoryFormValues {
     isActive: boolean;
     translations: CategoryTranslation[];
 }
+
+export interface CategoryDropdown {
+    categoryId: number;
+    categoryName: string;
+}
